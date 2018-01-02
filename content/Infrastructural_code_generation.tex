@@ -1,0 +1,41 @@
+% !TeX spellcheck = en_US
+
+\chapter{Infrastructural code generation}
+\label{chap: Code generation}
+
+\section{Introduction}
+In the previous chapters we have seen model-driven software development approach that was centered on component-based techniques. Dijkstra's principle of separation of concerns was one of the corner principles which was part of the software reference architecture and the component model proposed. According to it the user design space should be limited to the internals of the components where only strictly sequential code needs to be used and the extra non-functional requirements are declaratively specified in the form of annotations on the component provided interfaces. 
+
+As discussed before in the previous chapters, the reference software architecture was found to be made up of a component model, computational model, programming model and a conforming execution platform. It was also understood that the component model should be statically bind to a computational model to formally define the computational entities, as well as the rules which govern their usage.
+
+A reference programming model was developed for this purpose and it was found that the Ada Ravenscar profile (RP) was found to be particularly attractive to help realize this goal as it does not allow all language constructs that are exposed to unbounded execution-time and non-determinism and RP was the backbone of the programming model. A set of code archetypes were also developed in accordance with this programming model.
+
+The component based approach was put into trial in two parallel and complementary efforts: Development of on-board software under European Space Agency (ESA) initiatives and in the CHESS project, which targets space, telecom and railway applications.
+
+For the realization of extra functional properties or more precisely for the generation of the complete infrastructure code consisting of two parts namely:
+\begin{itemize}
+\item Automated generation of the non-functional code, plus the interface code and the skeletons for the components
+\item Automated generation of component containers and component connectors 
+\end{itemize}
+a code generator is used and thence the third-party user has to solely implement the functional code of the components. This is in line with the principle of separation of concerns.
+
+The ASSERT project (Automated proof-based System and Software Engineering for Real-Time systems), was the first, large project which pursued this vision and showed the feasibility of a development approach for high-integrity real-time systems centered on separation of concerns, correctness-by-construction and property preservation.
+
+The code archetypes, which were one of the outcome of the ASSERT project complemented the Ada Ravenscar Profile, which used Ada run-time, which is more compact in foot-print and hence could fit the needs of typical embedded systems which were resource-constrained. The code archetypes were also amenable to automated code generation and were an evolution of previous work on code generation from HRT-HOOD to Ada.
+
+These code archetypes form the very basis of the programming model which is developed in this master thesis.
+
+\section{Mapping of design entities to the infrastructural code}    
+In this section, it is explained how the design entities could be mapped to the generated infrastructure code with the model-code transformations through the help of a simple example:
+
+\subsection{Problem description}
+Two components, namely \texttt{ComponentA} and \texttt{ComponentB} are constructed. 
+
+\texttt{ComponentA} has a requirement that the function that it implements \texttt{startOperation} needs to be called on the periodic basis with a period of two seconds. \texttt{ComponentA} also has two required interface ports. One required interface port allows \texttt{ComponentA} to call an operation named \texttt{operationAdd} in \texttt{ComponentB} with concurrency kind \texttt{immediate} and the other required interface port allows \texttt{ComponentA} to call the same operation \texttt{operationAdd} with concurrency kind as \texttt{deffered}. 
+
+\texttt{ComponentB} has a requirement that it must implement the operation \texttt{operationAdd} which can be called by any other component connected to it. As the component model does not restrict on the number of component implementations which can be part of a component, \texttt{ComponentB} implements two versions of the same operation \texttt{operationAdd}. \texttt{ComponentB} has two provided interface ports and they have non-functional requirements attached to them. First provided interface port works with the first version of component implementation and it requires \texttt{operationAdd} to be a \texttt{protected} operation. Second provided interface port works with the second version of component implementation and it requires \texttt{operationAdd} to be called in a sporadic way with a \texttt{Minimum Inter-Arrival Time (MIAT)} of two seconds.
+
+ 
+
+
+ 
