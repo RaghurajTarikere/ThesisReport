@@ -222,12 +222,12 @@ In OSRA, the first and second needs can be met by having correct representation 
 
 \subsubsection{Software entities}
 \label {section: Software entities}
-The software architecture of our component-model features three distinct entities: the component, the container and the connector \cite{CompBasedProcess}\cite{SAVOIR}\cite{SoftRefArch}.
+The principles of Component Based Software Engineering (CBSE) is used to build OBSW as an assembly of components, deployed on an execution platform which caters to the needs. The adoption of CBSE in the context of high-integrity real-time systems in general and in space domain in particular is not so obvious as in the other main-stream domains like enterprise computing \cite{SAVOIR}. Because the CBSE approach supports principle of separation of concerns, by allocation of concerns to three distinct software entities: the component, the container and the connector, CBSE is adopted. Another important property of CBSE is the possibility of verification of properties related to composability and compositionality \cite{CompBasedDev}. The following section describes more about components, containers and the connectors.
 
 \begin{description}
 \item[Component] Chaudron and Crnkovic describe that a Component model defines standards for properties that individual components must satisfy and the methods and possibly ways to compose components \cite{CompBasedProcess}.
 
-The OBSW is built as an assembly of components, deployed on an execution platform which caters to the needs. A component provides a set of services and exposes them to the external world as a "provided interface". The service which is needed from other components or the environment in general are declared in a "required interface". A particular component connects to other components in order to satisfy the needs of its required interfaces. An event based communication system is also possible between components and a component can register to an "event service" to get notified about events emitted by other components.
+A component provides a set of services and exposes them to the external world as a "provided interface". The service which is needed from other components or the environment in general are declared in a "required interface". A particular component connects to other components in order to satisfy the needs of its required interfaces. An event based communication system is also possible between components and a component can register to an "event service" to get notified about events emitted by other components.
 
 Non functional attributes are added to the component interfaces as discussed before in the previous section on separation of concerns
 
