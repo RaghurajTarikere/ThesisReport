@@ -164,7 +164,16 @@ COrDeT (Component Oriented Development Techniques) aimed at investigating variou
 These become the key ingredients for the very foundation of the MDE design methodology focused on the principle of correctness by construction and property preservation, which are high level requirements respectively.
 
 \subsection{Component Model}
-The software architectural concept is based on component based software engineering (CBSE) and the approach defines a component model that features three software entities: The Component (which is a design entity), the container and the connector (which are entities used in implementation only and do not appear in the design space). This approach allows creation of the OBSW as a connection of interconnected components. The execution platform defined in the software architecture provides the services to the components, container and the connectors. Finally, the entire software is deployed on the physical architecture (Computational units, equipment, and the network interconnections between them).
+Component Based Software Engineering (CBSE) is a software methodology centered on the systematic re-use of software by realizing the software as assembly of nits of composition called components \cite{CBSE}.
+The adoption of Component Based Software Engineering (CBSE) in the context of high-integrity real-time systems in general and in space domain in particular is not so obvious as in the other main-stream domains like enterprise computing \cite{SAVOIR} because of strong verification and validation requirements imposed in the space domain and the presence of non-functional dimensions \cite{SAVOIR}.
+
+The principles of Component Based Software Engineering (CBSE) when combined with the principles below can be used to build OBSW as an assembly of components \cite{SAVOIR}: 
+\begin{itemize}
+\item Principle of separation of concerns, by allocation of concerns to three distinct software entities: the component (which is a design entity), the container and the connector (which are entities used in implementation only and do not appear in the design space)
+\item Possibility of verification of properties related to composability and compositionality \cite{CompBasedDev} 
+\end{itemize}
+
+The execution platform defined in the software architecture then provides the services to the components, container and the connectors. Finally, the entire software is deployed on the physical architecture (Computational units, equipment, and the network interconnections between them).
 
 \subsubsection{Founding principles of choice}
 This section describes the founding principles of choice of the component model:
@@ -222,7 +231,7 @@ In OSRA, the first and second needs can be met by having correct representation 
 
 \subsubsection{Software entities}
 \label {section: Software entities}
-The principles of Component Based Software Engineering (CBSE) is used to build OBSW as an assembly of components, deployed on an execution platform which caters to the needs. The adoption of CBSE in the context of high-integrity real-time systems in general and in space domain in particular is not so obvious as in the other main-stream domains like enterprise computing \cite{SAVOIR}. Because the CBSE approach supports principle of separation of concerns, by allocation of concerns to three distinct software entities: the component, the container and the connector, CBSE is adopted. Another important property of CBSE is the possibility of verification of properties related to composability and compositionality \cite{CompBasedDev}. The following section describes more about components, containers and the connectors.
+The following section describes more about components, containers and the connectors.
 
 \begin{description}
 \item[Component] Chaudron and Crnkovic describe that a Component model defines standards for properties that individual components must satisfy and the methods and possibly ways to compose components \cite{CompBasedProcess}.
