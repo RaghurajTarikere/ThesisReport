@@ -40,7 +40,7 @@ Component implementation should also provide constructs to store the attributes 
 
 It is also possible in this step to trace bindings between an event emitter port of one component and an event receiver port of another component.
 
-\item [Step 7: Specifiction of non-functional attributes] After component instances and component bindings have been defined, the software architect adds non-functional attributes to the services of the provided interfaces. 
+\item [Step 7: Specification of non-functional attributes] After component instances and component bindings have been defined, the software architect adds non-functional attributes to the services of the provided interfaces. 
 
 In this step, the software architect specifies the timing and the synchronization attributes. At first, the concurrency kind of the operation is established, and they can be \texttt{immediate} or \texttt{deferred} operations. In case of \texttt{immediate} operation, it is executed in the flow of control of the caller (synchronous) and in case of \texttt{deferred} operation, the operation is executed by a dedicated flow of control in the callee. 
 
@@ -48,8 +48,8 @@ An \texttt{immediate} operation is said to be \texttt{protected} if it needs to 
 
 \begin{description}
 \item [Periodic operation] The execution platform executes the operation at fixed periods with a dedicated flow of control.
-\item [Sporadic operation] Two subsequent execution requests are separated by a minimum timespan called the minimum nter-arrival time (MIAT). The execution platform and the infrastructural code  guarantees this MIAT separation between two subsequent calls to the operation and the component implementor does not have to worry about it.
-\item [Bursty operation] Only particular number of activations of an operation is allowed in a bounded interval of time. Again the execution platform and the infrastructure code guarantees this and the component implementor does not have to worry about it as for the sporadic operation.
+\item [Sporadic operation] Two subsequent execution requests are separated by a minimum timespan called the minimum inter-arrival time (MIAT). The execution platform and the infrastructural code  guarantees this MIAT separation between two subsequent calls to the operation and the component implementer does not have to worry about it.
+\item [Bursty operation] Only particular number of activations of an operation is allowed in a bounded interval of time. Again the execution platform and the infrastructure code guarantees this and the component implementer does not have to worry about it as for the sporadic operation.
 \end{description}
 
 For all the operations which have concurrency as \texttt{deferred}, the softare architect must provide the worst case execution time (WCET) of the operation. A preliminary value of WCET is initially provided based on previous use of operations in other projects (if any) and they can be refined with bounds at later stages after performing a timing analysis for a given target platform.
@@ -92,7 +92,8 @@ In order for the OBSW to interact with the external world, sensors and actuators
 \end{description}
 
 \section{Design flow and design views}
-When the component model is defined, it also defines implicitly a design flow that needs to be followed to be able to create an OBSW meet all its user needs and high level requirements. 
+\label{section: Design flow and views}
+When the component model is defined, it also defines implicitly a design flow that needs to be followed to be able to create an OBSW meet all its user needs and high level requirements and the design flow is as explained in the previous section. 
 
 The component model is accompanied by the following design views:
 \begin{description}
@@ -101,7 +102,43 @@ The component model is accompanied by the following design views:
 \item [Hardware view] For the specification of the hardware and the network topology
 \item [Deployment view] For the allocation of components to computational nodes
 \item [Non-functional view] In this view, the non-functional attributes are attached to the functional description of components
-\item [Space-specific view] In this view, the services related to te commandability and observability of the spacecraft are specified
-\end{description}        
+\item [Space-specific view] In this view, the services related to the commandability and observability of the spacecraft are specified
+\end{description}  
+
+\section{Language units of the OSRA}
+The modeling language provided to the software architect to model the OBSW is divided for the ease of construction of the OBSW models into a set of language units. Each language unit consists of closely related metamodel entities. OSRA Component model is composed of the following language units:
+
+\begin{description}
+\item [\texttt{CommonKernel}] Defines the basic entities that are used as the base elements of the language architecture
+\item [\texttt{DataTypes}] Defines all the possible data and the data types that can be used in an OBSW model
+\item [\texttt{SCM Kernel}] Defines the infrastructural part of the Space Component Model (SCM) which can be considered as the language to express all the concerns expressed by an OBSW model
+\item [\texttt{Component}] Defines a complete set of interfacing features (interfaces, events, datasets), component types and implementations, interface ports
+\item [\texttt{Non-functional properties}] Defines the non-functional properties that can be applied to the modeling entities and a new language called the Value Specification Language (VSL) to specify values characterized by the measurement units
+\item [\texttt{Deployment}] Defines instantiation and deployment entities such as component instances, connection between them and their deployment on the hardware architecture
+\item [\texttt{Monitor and Control (M\&C)}] Defines the means to specify the technical properties related to M\&C that shall be provided in the OBSW model
+\item [\texttt{Hardware execution platform}] Defines entities related to the execution platform, Time Space Partitioning (TSP) and the hardware architecture   
+\end{description}
+
+\section{OSRA SCM Model Editor}
+\label{OSRA editor} 
+The toolset that the software architect can use to build OBSW models is organised as a set of Eclipse features and Eclipse plugins. 
+
+The toolset is available as
+\begin{itemize}
+\item A pre-installed Eclipse (Eclipse Neon) for Windows 64-bit  
+\item An update site which consists of a set of static files which can be placed locally, on a web-server or on a file-server. 
+\end{itemize}
+In the latter case, the software architect would have to use the Eclipse Update Manager to install the plugins. 
+
+In line with the design flow and design views explained in section \cref{section: Design flow and views}, different OSRA diagrams can be created with the help of OSRA SCM Model editor namely:
+\begin{description}
+\item [Interfaces, Events and Datasets diagram] This is the first diagram of the OSRA activity and allows to define the data types, events, datasets and the interfaces that would be used by the components in the Component Types diagram.
+\item [Component Types diagram] This is the second diagram of the OSRA activity and it allows to define the component types, device types, execution platform service types, partition proxy types, required ports whose implementation would be used by the Component instances diagram
+\item [Component Instance diagram] This is the third diagram of the OSRA activity and it allows to define the component instances, device instances, execution platform service instances, partition proxy instances, provided interface slots, data receiver slots and event receiver slots.
+\item [Hardware diagram] This is the last diagram of the OSRA activity and it allows to define the hardware elements such as processor boards, mass memory, devices, buses.
+\end{description}
+
+There are also tables which are provided for diagram elements (if applicable) and they are usually found as tabs in pop-up window associated with the group that the element belongs to. Tables are usually classical tables where rows represents an element and each column represent a potentially computed property of the element. Rows can also contain sub-rows recursively which represent the sub-elements and the software architect can collapse or exapand these sub-elements as desired.    
+    
 
   

@@ -26,14 +26,158 @@ The code archetypes, which were one of the outcome of the ASSERT project complem
 These code archetypes form the very basis of the programming model which is developed in this master thesis.
 
 \section{Mapping of design entities to the infrastructural code}    
-In this section, it is explained how the design entities could be mapped to the generated infrastructure code with the model-code transformations through the help of a simple example:
+In this section, it is explained how the design entities could be mapped to the infrastructure code that needs to be generated with the model-code transformations through the help of a simple example:
 
 \subsection{Problem description}
-Two components, namely \texttt{ComponentA} and \texttt{ComponentB} are constructed. 
+A very simple OBSW model consists of two components, namely \texttt{ComponentA} and \texttt{ComponentB} 
 
-\texttt{ComponentA} has a requirement that the function that it implements \texttt{startOperation} needs to be called on the periodic basis with a period of two seconds. \texttt{ComponentA} also has two required interface ports. One required interface port allows \texttt{ComponentA} to call an operation named \texttt{operationAdd} in \texttt{ComponentB} with concurrency kind \texttt{immediate} and the other required interface port allows \texttt{ComponentA} to call the same operation \texttt{operationAdd} with concurrency kind as \texttt{deffered}. 
+\texttt{ComponentA} has the following requirements:
+\begin{itemize}
+\item The function \texttt{startOperation} implemented in the component implementation needs to be called on the periodic basis with a period of two seconds.
 
-\texttt{ComponentB} has a requirement that it must implement the operation \texttt{operationAdd} which can be called by any other component connected to it. As the component model does not restrict on the number of component implementations which can be part of a component, \texttt{ComponentB} implements two versions of the same operation \texttt{operationAdd}. \texttt{ComponentB} has two provided interface ports and they have non-functional requirements attached to them. First provided interface port works with the first version of component implementation and it requires \texttt{operationAdd} to be a \texttt{protected} operation. Second provided interface port works with the second version of component implementation and it requires \texttt{operationAdd} to be called in a sporadic way with a \texttt{Minimum Inter-Arrival Time (MIAT)} of two seconds.
+\item There should be two required interface ports. 
+\begin{itemize}
+\item First required interface port allows \texttt{ComponentA} to call an operation named \texttt{operationAdd}, set and get the status value \texttt{statusValue} with concurrency kind \texttt{immediate}
+\item Second required interface port allows \texttt{ComponentA} to call the same operation \texttt{operationAdd}, allows to set and get the same status value \texttt{statusValue} with concurrency kind as \texttt{deffered}. 
+\end{itemize}
+
+\item Can receive messages or events asynchronously and there should be a event receiver port which listens to a particular event called the \texttt{FailureEvent} 
+
+\item Can receive a report \texttt{OperationAddReport} for the operation \texttt{operationAdd} which is called. The report has status of the operation \texttt{operationAdd} called the \texttt{operationAddStatus} and the exception for the operation \texttt{operationAdd} called the \texttt{OperationAddException} 
+\end{itemize}
+
+\texttt{ComponentB} has the following requirements:
+\begin{itemize}
+\item Provides two component implementations. Both the implementations provides their own
+\begin{itemize}
+\item Versions of the operation \texttt{operationAdd} which can be called by any other components
+\item Instances of the status value \texttt{statusValue} which can be written to and read from other components 
+\end{itemize}
+
+\item Two provided interface ports and they have non-functional requirements attached to them 
+\begin{itemize}
+\item First provided interface port works with the first version of component implementation and it requires \texttt{operationAdd} to be a \texttt{protected} operation and needs the status value \texttt{statusValue} to be set and get in an unprotected way
+\item Second provided interface port works with the second version of component implementation and it requires \texttt{operationAdd} to be called in a sporadic way with a \texttt{Minimum Inter-Arrival Time (MIAT)} of two seconds and needs the status value \texttt{statusValue} to be set and get in an protected way.
+\end{itemize}
+
+\item Can send messages or events asynchronously and there should be a event emitter port which emits a particular event called the \texttt{FailureEvent}
+
+\item Can send report report \texttt{OperationAddReport} for the operation \texttt{operationAdd} which is called. The report has status of the operation \texttt{operationAdd} called the \texttt{operationAddStatus} and the exception for the operation \texttt{operationAdd} called the \texttt{OperationAddException} 
+\end{itemize}  
+
+From the above description it is clear that these components can be connected to each other or in particular the first required interface port can be connected to the first provided interface port and the second required interface port can be connected to the second provided interface port. The following different design entities are thereby constructed:
+
+\subsection{Design entities}
+\subsubsection{Interfaces}
+Interfaces are implemented as C++ pure virtual classes and they have entries for the interface operations, interface attribute access operations and interface attributes. Concrete implementations for the interface operations and the interface attribute access operations need to be provided by the classes that implement these interfaces
+
+For the above example:
+ 
+Two primary interfaces can be created based on the problem description namely: 
+\begin{description}
+\item [\texttt{InterfaceA}] This specifies a single operation \texttt{startOperation}
+\item [\texttt{InterfaceB}] This specifies 
+\begin{itemize}
+\item The operation \texttt{operationAdd}
+\item Actual status value \texttt{statusValue}
+\item Getter operation for the status value \texttt{statusValue} called \texttt{getStatusValue}
+\item Setter operation for the status value \texttt{statusValue} called \texttt{setStatusValue}
+\end{itemize}
+\end{description}
+
+Three secondary interfaces for \texttt{InterfaceB} are created: 
+\begin{description}
+\item [\texttt{InterfaceB\textunderscore Synchronous}] which redefines the interface \texttt{InterfaceB} for cases where the operations in the interface \texttt{InterfaceB} are called synchronously
+\item [\texttt{InterfaceB\textunderscore Asynchronous}] which redefines the interface \texttt{InterfaceB} for cases where the operations in the interface \texttt{InterfaceB} are called asynchronously
+\item [\texttt{InterfaceB\textunderscore extension}] which inherits the interface \texttt{InterfaceB} to add additional operations to handle the situation when the operations in the interface \texttt{InterfaceB} are called asynchronously
+\end{description}
+
+\subsubsection{Operation parameter structures}
+As the operations can be called with concurrency kind defined as \texttt{deferred}, it is necessary to pack in C++ structures the parameters of the operation (if any) and the address of the component to which the result of the operation (if any), status report of the operation (if any) needs to be sent. This encapsulates all the data necessary to compute the operation, to store the result of the operation and the location to which the result of the operation needs to be sent.  
+
+For the above example:
+
+Two operation parameter structures are required namely:
+\begin{description}
+\item [\texttt{operationAddStruct}] which holds the parameters of the operation \texttt{operationAdd} and also the address of the component to which the result of the operation \texttt{operationAdd} needs to be sent back
+\item [\texttt{statusValueStruct}] which holds the status value and also the address of the component to which the result of the operation \texttt{getStatusValue} needs to be sent
+\end{description}
+
+\subsubsection{Operation exceptions}
+As the operations executed can lead to different kind of exceptions, they must be delivered back to the component which called the operation. They can be defined as enums in C++.
+
+For the above example:
+
+As the operation \texttt{operationAdd} can raise an exception \texttt{OperationAddException}, it is defined as an enum with enum parameters \texttt{OperandException, MemoryException, OverflowException, none}
+
+\subsubsection{Operation status}
+The execution status of the operations may be necessary to be delivered to the caller and the statuses are defined as an enums in C++.
+
+For the above example:
+
+The status of the operation \texttt{operationAdd} can be sent to the component which makes the call. It is defined as an enum \texttt{OperationAddStatus} with enum parameters \texttt{Started, Running, Finished}  
+
+\subsubsection{Operation reports}
+For a particular operation, the enums of exceptions and status descriptions can be instantiated in a report. These reports are realized as C++ structs.
+
+For the above example:
+
+One operation report is required namely:
+\begin{description}
+\item [\texttt{OperationAddReport}] holds the instantiation of the enum \texttt{OperationAddException} and of the enum \texttt{OperationAddStatus} 
+\end{description}     
+
+\subsubsection{Call back operations and event receptions}
+Pure virtual C++ classes are needed for specifying:
+\begin{itemize}
+\item The call back operations for 
+\begin{itemize}
+\item Results of the operations (if any)
+\item The statuses of the operations (if any)
+\end{itemize}
+\item The call back operations for interface attribute getter operations
+\item Event reception operations
+\end{itemize}
+
+For the above example:
+
+Three pure virtual classes are required namely:
+\begin{description}
+\item [\texttt{AsynchronousRequirementsOperationAdd}] specifies the call back operation for operation \texttt{operationAdd} which consist of the result of the operation available in operation parameter structure \texttt{OperationAddStruct} and the report for the operation \texttt{OperationAddReport}
+\item [\texttt{AsynchronousRequirementsStatusValue}] specifies the call back operation for getter operation of the status \texttt{statusValue}
+\item [\texttt{AsynchronousRequirementsFailureEventReception}] specifies the event reception operation 
+\end{description}
+
+\subsubsection{Component types}
+Component types are implemented as pure virtual classes in C++. A component type specifies the means for instances of it to connect with other components. They realize the interfaces and also realize the pure virtual classes which specify the call back operations and the event receptions.
+
+For the above example:
+
+There are two component types namely:
+\begin{description}
+\item [\texttt{ComponentType\textunderscore Caller}] implements three pure virtual classes namely:
+\begin{itemize}
+\item \texttt{InterfaceA}
+\item \texttt{AsynchronousRequirementsOperationAdd} as it calls operation \texttt{operationAdd} with concurrency kind \texttt{deferred}
+\item \texttt{AsynchronousRequirementsStatusValue} as it calls operation \texttt{getStatusValue} with concurrency kind \texttt{deferred}
+\item \texttt{AsynchronousRequirementsFailureEventReception} as it receives event \texttt{FailureEvent}
+\end{itemize}
+\item [\texttt{ComponentType\textunderscore Callee}] implements \texttt{InterfaceB} only
+\end{description}
+
+\subsubsection{Component implementations}
+Component implementations contain the definition of the component type and contains concrete implementations for all the operations in the interfaces it inherits from, for all the call back operations and the event reception operations which were specified in their respective classes. Component implementations are implemented as instantiable C++ classes.
+
+For the above example:
+
+There are two component implementations namely:
+\begin{description}
+\item [\texttt{ComponentImplementation\textunderscore Caller}] inherits from the \texttt{ComponentType\textunderscore Caller} and provides concrete implementations for all the classes that it indirectly inherits from
+\item [\texttt{ComponentImplementation\textunderscore Callee}] A    
+
+   
+
+
 
  
 
