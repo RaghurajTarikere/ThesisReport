@@ -123,7 +123,7 @@ The user needs are translated into a set of high-level requirements for OSRA \ci
 
 \item [HW/SW Independence] Software should be developed independent from the hardware features. It is necessary to separate parts of the software that interact directly with the hardware, into separate modules and make them accessible through defined interfaces. In this way, as long as the interface does not change, the software is isolated from the changes in the hardware-dependent layers.
 	  	
-\item [Component based approach] The whole software should be designed as a composition of components that are reusable in nature. The architecture shall respect preservation of properties of individual building blocks, once they are integrated into the architecture and it should be possible to calculate the system's property as a function of components' individual properties. The former is called composability and the latter is called compositionality. Chapter \cref{chap: Software development process} explains this approach in more detail.
+\item [Component based approach] The whole software should be designed as a composition of components that are reusable in nature. The architecture shall respect preservation of properties of individual building blocks, once they are integrated into the architecture and it should be possible to calculate the system's property as a function of components' individual properties. The former is called composability and the latter is called compositionality \cite{CompBasedDev}. Chapter \cref{chap: Software development process} explains this approach in more detail.
   
 \item [Software observability] The software architecture should provide means to observe the software specific parts and extract current and past status of the software using the services specified by its operational scenarios.
 
@@ -144,6 +144,11 @@ These properties have to be preserved or enforced so that these properties are n
 \end{description}  
 
 \section{The Software Architectural Concept}
+\subsection{Fitting Model-Driven Engineering}
+MDE is a novel trend for software development in the space domain, but has been successfully applied to enterprise computing \cite{CompBasedDev}. The validation-intensive real-time high-integrity systems such as on-board software systems make the adoption of the MDE considerable more arduous. Positive experiences on the application of MDE to the design of these kind of systems do exist and it can be found in the CHESS: space case study \cite{CompBasedProcess} and the ESA: reference Earth Observation case study \cite{CompBasedProcess}.
+
+In MDE, the principal design artifact is a model, which is an abstract representation of the system under development which encompasses systems and software architecture. Each model conforms with a metamodel, which describes the syntax of entities that my populate the models, as well as their relationships and the constraints in place between them. The metamodel constrains the design space of the MDE infrastructure \cite{Metamodelling}.  
+
 COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation. The study came up with the concept of software reference architecture which is to be made up of: \cite{CORDET} \cite{SoftRefArch} \cite{SAVOIR}
 
 \begin{description}
@@ -155,6 +160,8 @@ COrDeT (Component Oriented Development Techniques) aimed at investigating variou
 
 \item [A conforming Execution Platform] An execution platform helps to preserve at run-time, the properties asserted by the static analysis, and is able to react to possible violations of them.  
 \end{description}
+
+These become the key ingredients for the very foundation of the MDE design methodology focused on the principle of correctness by construction and property preservation, which are high level requirements respectively.
 
 \subsection{Component Model}
 The software architectural concept is based on component based software engineering (CBSE) and the approach defines a component model that features three software entities: The Component (which is a design entity), the container and the connector (which are entities used in implementation only and do not appear in the design space). This approach allows creation of the OBSW as a connection of interconnected components. The execution platform defined in the software architecture provides the services to the components, container and the connectors. Finally, the entire software is deployed on the physical architecture (Computational units, equipment, and the network interconnections between them).
@@ -215,7 +222,7 @@ In OSRA, the first and second needs can be met by having correct representation 
 
 \subsubsection{Software entities}
 \label {section: Software entities}
-The software architecture of our component-model features three distinct entities: the component, the container and the connector \cite{CompBasedProcess}\cite{SAVOIR}.
+The software architecture of our component-model features three distinct entities: the component, the container and the connector \cite{CompBasedProcess}\cite{SAVOIR}\cite{SoftRefArch}.
 
 \begin{description}
 \item[Component] Chaudron and Crnkovic describe that a Component model defines standards for properties that individual components must satisfy and the methods and possibly ways to compose components \cite{CompBasedProcess}.
@@ -228,7 +235,7 @@ The adoption of hierarchical decomposition of components can be an effective way
     
 \item [Container] The container is a software entity that wraps around the component, which is directly responsible for realizing the non-functional properties. The relation between the component and the container is a famous software design pattern called the "inversion of control" \cite{CompBasedProcess} \cite{InvOfCntrlurl}. All in all, the reusable code (the container), controls the execution of the problem-specific code (the component).
 
-The container exposes the same provided and required interfaces as that of the component and is able to support the component's execution with the desired, relevant non functional concerns attached to the component interface. The container also intercepts the calls made by the component to the other components/services requested from the target platform and transparently forward them to the container of the target component/target platform pseudo component. The former principle is called interface "promotion" and the latter is called the interface "subsumption" \cite{PhdThesis}. The container and the component interact with each other according to the inversion of control design pattern, but the binding between components are still defined at software initialization time.
+The container exposes the same provided and required interfaces as that of the component and is able to support the component's execution with the desired, relevant non functional concerns attached to the component interface \cite{CompBasedDev}. The container also intercepts the calls made by the component to the other components/services requested from the target platform and transparently forward them to the container of the target component/target platform pseudo component. The former principle is called interface "promotion" and the latter is called the interface "subsumption" \cite{CompBasedDev}. The container and the component interact with each other according to the inversion of control design pattern, but the binding between components are still defined at software initialization time.
 
 \item [Connector] The connector is a software entity responsible for the interaction between the components (actually between the containers that wrap around them). Connectors assist in implementing separation of concerns as the concerns of interaction is separated from the functional concerns. Components are thus void of code anything related to interactions with other components, however the the component model requires that the user specifies the interaction style in the component interfaces.
 
@@ -261,6 +268,7 @@ The execution platform is a part of the software architecture proving all the ne
 \item [Services to components] These services are supposed to be used by the components which implement the functional constraints. Typical services include: provision of on-board time for time-stamps, context management and data recovery. Access to these services are intercepted by the container wrapped around the component (refer section \cref{section: Software entities})
 
 \item [Services to implement "abstract components"] These services include PUS monitoring, OBCPs, hardware representation etc.
+\end{description}
 
 It is important to note that different implementation of containers and connectors are necessary for each execution platform of interest.
 
@@ -273,5 +281,4 @@ The programming model realizes a given computational model and together with a c
 
 The achievement of those two goals would then warrant that the system represented for the analysis purposes is a faithful representation of its implementation and the results of the analysis performed on the system model would be valid prediction of the system at at run-time \cite{PhdThesis}.
 
-The programming model, which is the subject of this Master thesis, is realized by adopting Tasking framework as a computational model whose concurrency semantics would conform to the analysis model.  
-\end{description}   
+The programming model, which is the subject of this Master thesis, is realized by adopting Tasking framework as a computational model whose concurrency semantics would conform to the analysis model.     
