@@ -34,27 +34,25 @@ A component type can have more than one implementation and all of these implemen
 
 Component implementation should also provide constructs to store the attributes exposed through its provided interfaces and its component type. Technical budgets such as worst-case execution time (WCET) for a particular operation, maximum memory foot-print for component implementation, maximum number of calls to a certain operation on a required interface, can be placed on the entire component or on the operations and the implementation of the component shall respect this budget. Component implementation is thence a particularly attractive unit to be subcontracted to third-party because the software architect can define components, attach technical budgets to it and delegate the implementation to he third parties. The third party might add additional operations to the component implementation as and when necessary for the implementation \cite{CompBasedProcess}.  
 
-\item [Step 5: Definition of component instances] A component instance is an instance of a component implementation. It is the deployment unit subject to allocation on a processing unit and it is on which the non-functional properties are specified. Specifically, they are attached to the provided interface side of the component, as they are specifically the expression of a property or a provision of the component instance. There will not be any non-functional concerns attached to the required interface side of the component. 
+\item [Step 5: Definition of component instances] A component instance is an instance of a component implementation. It is a deployment unit which is subjected to allocation on a processing unit and it is an entity on which the non-functional properties are specified. Specifically, the non-functional properties are attached to the provided interface side of the component, as they are the expression of a property or a provision of the component instance.
 
-\item [Step 6: Definition of component bindings] Component bindings, as the name suggests are the connections between one required interface of a component and the provided interface of another component and these bindings are set at design time and is subjected to static type matching to ensure that correct required and provided interfaces are connected to one another. This can be done by asserting the compatibility of the two interfaces (by type system or by inspection of the signature of their operations). If the binding is legal then whenever a call is made to an operation in the required interface, the call is dispatch to the correct operation in the bound provided interface. The signature of the call calling operation in the RI (required interface) and the called operation in the PI (provided interface) are different and the connector is in charge of performing this step and a tool support (possibly a back-end code generator) should help the configuration of the connector to perform this kind of binding.
+\item [Step 6: Definition of component bindings] Component bindings, as the name suggests, are the connections between one required interface of a component and the provided interface of another component. These bindings are set at design time and is subjected to static type matching to ensure that correct required and provided interfaces are connected to one another. This can be done by asserting the compatibility of the two interfaces (by type system or by inspection of the signature of their operations). If the binding is legal then whenever a call is made to an operation in the required interface, the call is dispatched to the correct operation in the bound provided interface. The signature of the calling operation in the RI (required interface) and the called operation in the PI (provided interface) are different and the connector, connecting these two interfaces, is in charge of performing this step. A tool support (possibly a back-end code generator) should help the configuration of the connector to perform this kind of binding.
 
-It is also possible in this step to trace bindings between an event emitter port of one component and an event receiver port of another component.
+It is also possible in this step to define bindings between an event emitter port of one component and an event receiver port of another component.
 
 \item [Step 7: Specification of non-functional attributes] After component instances and component bindings have been defined, the software architect adds non-functional attributes to the services of the provided interfaces. 
 
-In this step, the software architect specifies the timing and the synchronization attributes. At first, the concurrency kind of the operation is established, and they can be \texttt{immediate} or \texttt{deferred} operations. In case of \texttt{immediate} operation, it is executed in the flow of control of the caller (synchronous) and in case of \texttt{deferred} operation, the operation is executed by a dedicated flow of control in the callee. 
+In this step, the software architect specifies the timing and the synchronization attributes \cite{CompBasedProcess}. At first, the concurrency kind of the operation is established, and they can be \texttt{immediate} or \texttt{deferred} operations. In case of \texttt{immediate} operation, it is executed in the flow of control of the caller (synchronous) and in case of \texttt{deferred} operation (asynchronous), the operation is executed by a dedicated flow of control on the side of the callee. 
 
-An \texttt{immediate} operation is said to be \texttt{protected} if it needs to be protected from data races in case of concurrent calls and it is said to be \texttt{unprotected} if it is free from such risks. In case of a \texttt{deferred} operation type, the architect must chose one of the following release patterns of the operation:
+An \texttt{immediate} operation is said to be \texttt{protected} if it needs to be protected from data races in case of concurrent calls. The operation is said to be \texttt{unprotected} if it is free from such risks. In case of a \texttt{deferred} operation type, the architect can choose one of the following release patterns for the operation:
 
 \begin{description}
 \item [Periodic operation] The execution platform executes the operation at fixed periods with a dedicated flow of control.
-\item [Sporadic operation] Two subsequent execution requests are separated by a minimum timespan called the minimum inter-arrival time (MIAT). The execution platform and the infrastructural code  guarantees this MIAT separation between two subsequent calls to the operation and the component implementer does not have to worry about it.
-\item [Bursty operation] Only particular number of activations of an operation is allowed in a bounded interval of time. Again the execution platform and the infrastructure code guarantees this and the component implementer does not have to worry about it as for the sporadic operation.
+\item [Sporadic operation] Two subsequent execution requests are separated by a minimum timespan called the minimum inter-arrival time (MIAT). The execution platform and the infrastructural code should guarantee this MIAT separation between two subsequent calls to the operation and the component implementer does not have to worry about it.
+\item [Bursty operation] Only particular number of activations of an operation is allowed in a bounded interval of time. Again the execution platform and the infrastructure code guarantees this and the component implementer does not have to worry about it, as in the case for sporadic operation.
 \end{description}
 
-For all the operations which have concurrency as \texttt{deferred}, the softare architect must provide the worst case execution time (WCET) of the operation. A preliminary value of WCET is initially provided based on previous use of operations in other projects (if any) and they can be refined with bounds at later stages after performing a timing analysis for a given target platform.
-
-The Component model of the OSRA also provides the software architect an option to define measurement units (conversion factors between them) and reuse the definitions across other projects. Non-functional attributes eg. Period of a deferred operation has a value and a measurement unit with it.
+For all the operations which have concurrency kind set as \texttt{deferred}, the software architect must provide the worst case execution time (WCET) of the operation. A preliminary value of WCET is initially provided based on previous use of operations in other projects (if any) and they can be refined with bounds at later stages after performing a timing analysis for a given target platform.
 
 \item [Step 8: Definition of physical architecture] The hardware topology provides a description of the system hardware limited to the aspects related to communication, analysis and code generation. It also provides a model-level description of the relevant hardware of the system. In the hardware topology, following elements are described:
 \begin{itemize}
@@ -68,18 +66,19 @@ For the specification of these elements, following attributes are used:
 \item [Processor frequency] This is used for processors to re-scale WCET values expressed in processor cycles in Step 6
 \item [Bandwidth] This is used for buses and point-to-point links and it indicates maximum blocking time due to non-preemptability of the lower priority message transmission (for whatever reason), minimum and maximum size of packets, minimum and maximum propagation delay, the maximum time that the bus arbiter/driver needs to prepare and send a message on the physical channel and maximum time for the message to reach the receiver    
 \end{description}
+Please note that, this step is not of concern in this Master thesis, as it deals deals with hardware modeling which is outside the current scope. However, this step was mentioned for sake of continuity and clarity.
 
-\item [Step 9: Component instances and component bindings deployment] In this step the component instances are allocated on the processing units defined in the hardware topology (refer Step 8). In majority of the cases, it is straight-forward to allocate the bindings between the components as they are deployed on the same processing units. In other cases, they need to be specifically allocated.
+\item [Step 9: Component instances and component bindings deployment] In this step, the component instances are allocated on the processing units defined in the hardware topology (refer Step 8). In majority of the cases, it is straight-forward to allocate the bindings between the components as they are deployed on the same processing units \cite{CompBasedProcess}. In other cases, they need to be specifically allocated.
 
-\item [Step 10: Model-based analysis] The system model developed within the software reference architecture is subjected to schedulability analysis to determine whether the timing requirements set o the interfaces can be met.
+\item [Step 10: Model-based analysis] The system model developed within the software reference architecture is subjected to schedulability analysis to determine whether the timing requirements set in the interfaces can be met.
 
-From the user model which is a PIM (Platform Independent Model), a Schedulability Analysis Model (SAM) which is a PSM (Platform Specific Model) is created. This model is subjected to analysis and the results of the analysis is available for the software architect as read-only result. 
+From the user model which is a PIM (Platform Independent Model), a Schedulability Analysis Model (SAM) which is a PSM (Platform Specific Model) is created. This model is subjected to analysis and the results of the analysis is available for the software architect as a read-only result. 
 
 The analysis transformation chain requires a model representation of the generated containers and connectors to be defined in the SAM for an accurate analysis.
 
-Note: As the model based analysis requires a model representation of the containers and connectors, and as the topic of this master thesis is to generate containers and connectors, it is not possible to do an accurate model based schedulability analysis at the current phase of development. More about model based schedulability analysis done in another project ASSERT is available in the Appendix section.
+Note: As the model based analysis of the user-model requires a model representation of the containers and connectors, and as the main concern of this master thesis is to generate containers and connectors amongst many others, it is not possible to do an accurate model based schedulability analysis as it is outside the scope of the Master thesis 
 
-\item [Step 11: Generation of containers and connectors]  This step is one of the main focus points of the master thesis. Containers and connectors are generated and they specify:
+\item [Step 11: Generation of containers and connectors]  This step is one of the main focus points of this Master thesis as mentioned before. Containers and connectors are generated and they specify:
 \begin{itemize}
 \item The structure of each container in terms of the required and provided interfaces of the enclosed component that they delegate and subsume
 \item The structure of each connector 
@@ -88,14 +87,14 @@ The non-functional attributes and the component instance and component connector
 
 Concurrency can be achieved by encapsulating sequential procedures into tasks which reside in containers and the protection from concurrent accesses can be provided by attaching them concurrency control structures. All of this can be achieved without modifying he sequential code and simply by following the use relations among the components.
 
-In order for the OBSW to interact with the external world, sensors and actuators need to be provided. These hardware entities are represented as pseudo (which indicates that this component is for interaction purpose only) components and software capability is attached to these components at the component instance level.    
+In order for the OBSW to interact with the external world, sensors and actuators need to be provided. These hardware entities are represented as pseudo components (A pseudo-component indicates that a component is for interaction purposes only) and software capability is attached to these components at the component instance level.    
 \end{description}
 
 \section{Design flow and design views}
 \label{section: Design flow and views}
-When the component model is defined, it also defines implicitly a design flow that needs to be followed to be able to create an OBSW meet all its user needs and high level requirements and the design flow is as explained in the previous section. 
+When the component model is defined, it also defines implicitly a design flow, that needs to be followed, to be able to create an OBSW that meet all its user needs and high level requirements \cite{SAVOIR} \cite{PhdThesis} \cite{CompBasedProcess}. The design flow is as explained in the previous section. 
 
-The component model is accompanied by the following design views:
+One of the advantages of the design views is to promote or enforce a certain design flow \cite{CompBasedProcess}. The component model is accompanied by the following design views:
 \begin{description}
 \item [Data view] This view is for the description of data types and events
 \item [Component view] For definition of interfaces, components and the binding between them to fulfill their required needs
@@ -106,13 +105,14 @@ The component model is accompanied by the following design views:
 \end{description}  
 
 \section{Language units of the OSRA}
-The modeling language provided to the software architect to model the OBSW is divided for the ease of construction of the OBSW models into a set of language units. Each language unit consists of closely related metamodel entities. OSRA Component model is composed of the following language units:
+\label{Language units}
+The modeling language provided to the software architect to model the OBSW is divided for the ease of construction of the OBSW models into a set of language units \cite{SpecMetamodel}. Each language unit consists of closely related metamodel entities. OSRA Component model is composed of the following language units:
 
 \begin{description}
 \item [\texttt{CommonKernel}] Defines the basic entities that are used as the base elements of the language architecture
 \item [\texttt{DataTypes}] Defines all the possible data and the data types that can be used in an OBSW model
 \item [\texttt{SCM Kernel}] Defines the infrastructural part of the Space Component Model (SCM) which can be considered as the language to express all the concerns expressed by an OBSW model
-\item [\texttt{Component}] Defines a complete set of interfacing features (interfaces, events, datasets), component types and implementations, interface ports
+\item [\texttt{Component}] Defines a complete set of interfacing features (interfaces, events, datasets), component types implementations and interface ports
 \item [\texttt{Non-functional properties}] Defines the non-functional properties that can be applied to the modeling entities and a new language called the Value Specification Language (VSL) to specify values characterized by the measurement units
 \item [\texttt{Deployment}] Defines instantiation and deployment entities such as component instances, connection between them and their deployment on the hardware architecture
 \item [\texttt{Monitor and Control (M\&C)}] Defines the means to specify the technical properties related to M\&C that shall be provided in the OBSW model
@@ -121,24 +121,24 @@ The modeling language provided to the software architect to model the OBSW is di
 
 \section{OSRA SCM Model Editor}
 \label{OSRA editor} 
-The toolset that the software architect can use to build OBSW models is organised as a set of Eclipse features and Eclipse plugins. 
+The toolset that the software architect can use to build OBSW models is organized as a set of Eclipse features and Eclipse plugins. 
 
 The toolset is available as
 \begin{itemize}
 \item A pre-installed Eclipse (Eclipse Neon) for Windows 64-bit  
 \item An update site which consists of a set of static files which can be placed locally, on a web-server or on a file-server. 
 \end{itemize}
-In the latter case, the software architect would have to use the Eclipse Update Manager to install the plugins. 
+In the latter case, the software architect would have to use the Eclipse Update Manager to install the plugins \cite{OSRAEditor}. 
 
 In line with the design flow and design views explained in section \cref{section: Design flow and views}, different OSRA diagrams can be created with the help of OSRA SCM Model editor namely:
 \begin{description}
-\item [Interfaces, Events and Datasets diagram] This is the first diagram of the OSRA activity and allows to define the data types, events, datasets and the interfaces that would be used by the components in the Component Types diagram.
-\item [Component Types diagram] This is the second diagram of the OSRA activity and it allows to define the component types, device types, execution platform service types, partition proxy types, required ports whose implementation would be used by the Component instances diagram
+\item [Interfaces, Events and Datasets diagram] This is the first diagram of the OSRA activity and allows to define the data types, events, data sets and the interfaces that would be used by the components in the Component Types diagram.
+\item [Component Types diagram] This is the second diagram of the OSRA activity and it allows to define the component types, device types, execution platform service types, partition proxy types, required ports whose implementation would be used by the component instance diagram
 \item [Component Instance diagram] This is the third diagram of the OSRA activity and it allows to define the component instances, device instances, execution platform service instances, partition proxy instances, provided interface slots, data receiver slots and event receiver slots.
-\item [Hardware diagram] This is the last diagram of the OSRA activity and it allows to define the hardware elements such as processor boards, mass memory, devices, buses.
+\item [Hardware diagram] This is the last diagram of the OSRA activity and it allows to define the hardware elements such as processor boards, mass memory units, devices, buses.
 \end{description}
 
-There are also tables which are provided for diagram elements (if applicable) and they are usually found as tabs in pop-up window associated with the group that the element belongs to. Tables are usually classical tables where rows represents an element and each column represent a potentially computed property of the element. Rows can also contain sub-rows recursively which represent the sub-elements and the software architect can collapse or exapand these sub-elements as desired.    
+There are also tables which are provided for diagram elements (if applicable) and they are usually found as tabs in pop-up window associated with the group that the element belongs to. Tables are usually classical tables where rows represents an element and each column represent a potentially computed property of the element. Rows can also contain sub-rows recursively which represent the sub-elements and the software architect can collapse or expand these sub-elements as desired. More information and details about install requirements and procedure, usage of the OSRA editor can be found in the reference \cite{OSRAEditor}.    
     
 
   
