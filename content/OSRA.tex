@@ -39,7 +39,7 @@ completely instantiated, designed, and proven for use in particular business and
 texts, together with supporting artifacts to enable their use. Often, these artifacts are harvested
 from previous projects"} 
 
-A software reference architecture prescribes the form of concrete software architectures for a set of system for which it was developed. So, reference architecture is a form of "generic" software architecture which prescribes the founding principles, the underlying methodology and the architectural practices that were recognized by the domain stakeholders as the best solution to the construction of a certain class of software systems \cite{PhdThesis} \cite{SoftRefArch}.
+A software reference architecture prescribes the form of concrete software architectures for a set of system for which it was developed. So, reference architecture is a form of "generic" software architecture which prescribes the founding principles, the underlying methodology and the architectural practices that were recognized by the domain stakeholders as the best solution to the construction of a certain class of software systems \cite{PhdThesis,SoftRefArch}.
 
 Elevating a software architecture to a software reference architecture permits to gather and re-use lessons learned and architectural best practices, give new projects a consolidated running start and promote a product line approach \cite{SAVOIR}.
 
@@ -80,7 +80,7 @@ The OBSW life-cycle needs to be consistent with the system life-cycle, which fea
 
 \subsection{User needs}
 
-The COrDeT study, with the slogan "Faster, Later, Software", represented a summary of the above programmatic stakes for the on-board-software life-cycle \cite{CORDET}\cite{SAVOIR}. These stakes are included and defined as the user needs \cite{SAVOIR} \cite{PhdThesis} for the development of OSRA:
+The COrDeT study, with the slogan "Faster, Later, Software", represented a summary of the above programmatic stakes for the on-board-software life-cycle \cite{CORDET,SAVOIR}. These stakes are included and defined as the user needs \cite{SAVOIR,PhdThesis} for the development of OSRA:
 
 \begin{description}
 \item [Shorter software development time] Need for faster software development in the context of a shorter schedule.
@@ -112,7 +112,7 @@ The COrDeT study, with the slogan "Faster, Later, Software", represented a summa
 
 \subsection{High level requirements}
 \label{subsection: High level requirements}
-The user needs are translated into a set of high-level requirements for OSRA \cite{SAVOIR} \cite{PhdThesis}.
+The user needs are translated into a set of high-level requirements for OSRA \cite{SAVOIR,PhdThesis}.
 
 \begin{description}
 \item [Software reuse] The architecture shall be designed in such a way that the reuse of the functional aspects should be independent of the reuse of the non-functional aspects, reuse of the unit, integration and validation tests are made possible.
@@ -149,7 +149,7 @@ MDE is a novel trend for software development in the space domain, but has been 
 
 In MDE, the principal design artifact is a model, which is an abstract representation of the system under development which encompasses systems and software architecture. Each model conforms with a metamodel, which describes the syntax of entities that my populate the models, as well as their relationships and the constraints in place between them. The metamodel constrains the design space of the MDE infrastructure \cite{Metamodelling}.  
 
-COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation. The study came up with the concept of software reference architecture which is to be made up of: \cite{CORDET} \cite{SoftRefArch} \cite{SAVOIR}
+COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation. The study came up with the concept of software reference architecture which is to be made up of: \cite{CORDET,SoftRefArch,SAVOIR}
 
 \begin{description}
 \item [Component Model] A component model is the basis for designing the software as a composition of individually verifiable and reusable software units \cite{ComponentModel}.
@@ -179,7 +179,7 @@ The execution platform defined in the software architecture then provides the se
 This section describes the founding principles of choice of the component model:
 
 \begin{description}
-\item[Correctness by construction] E.W. Dijkstra in his ACM Turing lecture in 1972 suggested that the program construction should be done after a valid proof of correctness of construction has been developed \cite{CompBasedProcess}. Two decades later, a software development approach called Correctness by Construction (C-by-C) was proposed which advocated the detection and removal of errors at early stages, which leads to safer, cheaper and more reliable software \cite{CompBasedProcess} \cite{PhdThesis}. The Correctness by Construction practice follows:
+\item[Correctness by construction] E.W. Dijkstra in his ACM Turing lecture in 1972 suggested that the program construction should be done after a valid proof of correctness of construction has been developed \cite{CompBasedProcess}. Two decades later, a software development approach called Correctness by Construction (C-by-C) was proposed which advocated the detection and removal of errors at early stages, which leads to safer, cheaper and more reliable software \cite{CompBasedProcess,PhdThesis}. The Correctness by Construction practice follows:
 \begin{itemize}
 \item To give a solid reasoning on the correctness of the document or code, it is necessary to use formal and precise tools and notations for their development and verification 
 \item Defining things only once so as to avoid contradictions and repetitions
@@ -196,7 +196,7 @@ In OSRA and the component model developed along with it, the Correctness by Cons
 
 \item [Separation of concerns] 
 \label{section: Founding principle-Separation of concerns} 
-Separation of concerns was first advocated by Dijkstra \cite{CompBasedProcess} and it helps to separate the aspects of software design and implementation. OSRA and its associated component model promotes separation of concerns\cite{CompBasedProcess}\cite{PhdThesis}:
+Separation of concerns was first advocated by Dijkstra \cite{CompBasedProcess} and it helps to separate the aspects of software design and implementation. OSRA and its associated component model promotes separation of concerns\cite{CompBasedProcess,PhdThesis}:
 
 \begin{itemize}
 \item The components are restricted to hold the functional code only. The non-functional requirements which has effects on the run-time behavior e.g. tasking, synchronization and timing are dealt by the component infrastructure, which is external to the component which realizes the functional code. The component infrastructure mainly consists of containers, connectors and their run-time support.
@@ -222,7 +222,7 @@ When composability and compositionality can be assured by static analysis, guara
  
 Composability is guaranteed when the properties of individual components are preserved on component composition, deployment on target and execution. The components, as mentioned before, implement functional code, most part of which is sequential only and they do not have to worry about the non-functional semantics. The components behave like black-boxes and showcase to the external world only provided and required interfaces. Other components or infrastructural components are expected to communicate through these defined interfaces only. Hence, when components are composed with each other with matching required and provided interfaces, the functional composability is guaranteed which is necessary but not sufficient.
 
-The non-functional requirements/constraints are annotated on the components (specifically the component interfaces) and they are realized by the container which encapsulates the respective component \cite{SAVOIR}\cite{ComponentModel}. The provided interface determines the semantics of the invocation and adds to the functional capabilities provided by the component. These semantics must match with the execution semantics described by the computational model, to which the component model is attached.
+The non-functional requirements/constraints are annotated on the components (specifically the component interfaces) and they are realized by the container which encapsulates the respective component \cite{SAVOIR,ComponentModel}. The provided interface determines the semantics of the invocation and adds to the functional capabilities provided by the component. These semantics must match with the execution semantics described by the computational model, to which the component model is attached.
 
 The computational model chosen should help extend composability to the non-functional constraints e.g. concurrency and the ones related to real-time and make it possible to get a compositional view of how execution occurs at the system level. Compositionality is said to be achieved when the properties of the system as a whole is a function of the properties of the constituting components. Finally, the binding of the computational model to the component should allow the execution semantics of the components with non-functional descriptors to be completely understood.
 
@@ -242,7 +242,7 @@ Non functional attributes are added to the component interfaces as discussed bef
 
 The adoption of hierarchical decomposition of components can be an effective way of defining components instead of defining a containment relationships. A child component can be developed to any component which would delegate and subsume the relationships between the interfaces of the child component and its parent. But the drawback is that various non-functional dimensions applicable to the space domain complicate the picture and hence is hierarchical decomposition of components not allowed at the current stage pf development \cite{PhdThesis}.
     
-\item [Container] The container is a software entity that wraps around the component, which is directly responsible for realizing the non-functional properties. The relation between the component and the container is a famous software design pattern called the "inversion of control" \cite{CompBasedProcess} \cite{InvOfCntrlurl}. All in all, the reusable code (the container), controls the execution of the problem-specific code (the component).
+\item [Container] The container is a software entity that wraps around the component, which is directly responsible for realizing the non-functional properties. The relation between the component and the container is a famous software design pattern called the "inversion of control" \cite{CompBasedProcess,InvOfCntrlurl}. All in all, the reusable code (the container), controls the execution of the problem-specific code (the component).
 
 The container exposes the same provided and required interfaces as that of the component and is able to support the component's execution with the desired, relevant non functional concerns attached to the component interface \cite{CompBasedDev}. The container also intercepts the calls made by the component to the other components/services requested from the target platform and transparently forward them to the container of the target component/target platform pseudo component. The former principle is called interface "promotion" and the latter is called the interface "subsumption" \cite{CompBasedDev}. The container and the component interact with each other according to the inversion of control design pattern, but the binding between components are still defined at software initialization time.
 
