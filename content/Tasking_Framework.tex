@@ -1,3 +1,46 @@
 % !TeX spellcheck = en_US
 
 \chapter{Tasking Framework}
+\section{Introduction}
+Future unmanned space missions have a great demand on computing resources for the on-board data processing or for control algorithms and also future space missions are requested to achieve more and more challenging scientific goals \cite{PhdThesis}. Besides the pre-processing of scientific data to reduce the data amount for the downlink, it is also necessary to handle the control systems with optical sensors which come into play, for example for extra terrestrial navigation and landing systems. Space missions like the Rosetta mission or the landing of the Mars rover Curiosity were based on pre-defined timed command lists to control the landing \cite{TaskFr}. Because of this and the uncertainty of propulsion and parachute maneuver, the amount of different landing targets with low risks are considerably reduced \cite{TaskFr}. But the interesting areas of planetary research might also include risky landing areas and hence an autonomous control is needed for the spacecraft to control the trajectory and is is also needed to integrate hazard avoiding algorithms. However, these algorithms have a huge demand for computing power \cite{TaskFr}. In TET-1 satellite mission (Technology demonstrator) and BIRD (Bi-spectral Infrared Detection) missions, the estimator and predictor modules were computed in a fixed order and fixed time in the control-cycle \cite{TETBIRD}. The timing was a combination of sensor latency and an additional gap time to satisfy the availability of data for computation and this led to a scant timing problem for the control torque computation due to over-estimated static safe-gap times \cite{TETBIRD,TETtoEUCROPIS}. During the launch and early orbit phase (LEOP), a timing violation in another bus application occurred which resulted in an unexpected AOCS state caused by change in the ordering of independent computations \cite{TETBIRD}.
+
+On the other hand, current on-board systems for the space environment do not provide the needed computing power \cite{TaskFr}. The space systems offer several controller boards on the spacecraft, most of them dedicated to only one subsystem and often twice for cold and hot redundancy. Such designs usually raise the power consumption and increase budgets like the mass, envelop and cost \cite{TaskFr}. Hence a concept, which allows sharing of computing resources based on predefined configurations for different flight phases and fault scenarios is necessary \cite{TaskFr}.
+
+\section{Usage of Tasking Framework}
+The Tasking framework is based on C++ and provides base classes, one of which is named 'execute', which the application developer can overload to develop application specific computations. The Tasking Framework is designed to split the computations into small pieces, which are called tasks and they can be scheduled on the availability of the input data
+
+For each task, a number of task inputs can be specified and each input can be associated with a data container which provides memory space and the synchronization for channels associated with the task. In order to start a task, the task input needs to be configured with the expected number of pushes on the associated task channel and when the number of pushes on the task channel meets the expectation set, the respective task input is activated. When all the inputs of a particular task is activated, the task is automatically started by the scheduler of the Tasking Framework, provided a free computing core is available. If no computing core is available, then the task is queued.
+
+Any of the task input of a particular task can be marked as final and when such an input is activated, the respective task is started immediately by the scheduler irrespective of the activation states of the other task inputs. As a result, the task can push onto another channel, which can trigger the other task associated with this channel. This leads to a kind of behavior similar to petrinets, where the activation of the task input is a token and the task execution is a transition \cite{TaskFr}. The input associated to a task is reset when all its inputs are activated or when the activated input is marked as final. Such a reset operation on a task input sets the number of arrived data items on the associated task channel back to zero.
+
+To specify timings in the Tasking framework, a special channel called 'event'is provided \cite{TaskFr}. An event is associated with a clock and a push is executed on the task input to which it is attached, on each clock tick. It can be configured to work with absolute timing or with a relative timing and behavior is different is both the cases.
+
+To support mapping of tasks in a distributed system, task channels are associated with interfaces to read and write from and to networks and devices. These associations are set up by the configuration manager and are not visible to the application developer.
+
+Current implementation of Tasking framework sits on top of POSIX, composed by a real-time clock interface, signaling mechanism, memory access and the tasks scheduler.
+
+\section{Use cases for Tasking Framework}
+In the project OBC-NG (On-Board Computer - Next Generation) by DLR, a decision is made to design the on-board computer systems as a combination of space qualified processing node, COTS (Commercial off-the-shelf) processing nodes and network nodes \cite{TaskFr}. As an operating system for this project, an enhancement of RODOS is used \cite{TaskFr, OBC-NG}. The enhancement covers mainly the support for multi-core and reconfigurable distributed systems \cite{RODOS} and the core element which makes it possible is the Tasking Framework \cite{TaskFr}. The configuration manager used in OBC-NG holds predefined mappings of tasks and resources for different hardware configurations of computing resources and mission phases \cite{OBC-NG}. The communication infrastructure would be set up based on the mappings during the configuration phases of the system. 
+
+The first usage of the Tasking framework was in the ATON (Autonomous Terrain-based Optical navigation) project \cite{TaskFr}. The project was about the navigation system for a moon landing scenario. The project showed that the Tasking framework was a useful way for the parallelization of computations.
+
+Another use-case of Tasking Framework is in AOCS of Eu:CROPIS (Euglena Combined Regenerative Organic food Production In Space) mission \cite{TETtoEUCROPIS}. Eu:CROPIS uses a porting of the Tasking framework from Linux to ROBOSS operating system API on top of RTEMS \cite{TETtoEUCROPIS}
+
+Tasking framework is also used in MAIUS mission (Atom-optical experiments on sounding rockets) \cite{TETtoEUCROPIS}.
+
+\section{Use of Tasking Framework in this thesis}
+Tasking framework is used as a computational model, as discussed in the previous chapter. The reasons for adopting so is that:
+
+\begin{itemize}
+\item The Tasking framework guarantees that the timing behavior of the system is deterministic and amenable to static analysis
+\item The Tasking framework has been proven to be expressive enough to handle real-world application (refer previous section on use cases for Tasking framework)
+\item Tasks do not interact with each other directly, but their communications are mediated by protected objects (task channels). These channels are shared resources equipped with a synchronization protocol in the form of priority based scheduling and FIFO scheduling for tasks with same priorities which uses these shared resources \cite{TaskFr}.  
+\end{itemize}  
+
+However, during the course of this Master thesis, certain short-comings of Tasking framework have been identified and they would be topics for discussion in the upcoming chapters
+
+             
+
+
+
+          
