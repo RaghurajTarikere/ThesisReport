@@ -73,7 +73,7 @@ For the specification of these elements, following attributes are used:
 
 From the user model which is a PIM (Platform Independent Model), a Schedulability Analysis Model (SAM) which is a PSM (Platform Specific Model) is created. This model is subjected to analysis and the results of the analysis is available for the software architect as a read-only result. 
 
-The analysis transformation chain requires a model representation of the generated containers and connectors to be defined in the SAM for an accurate analysis.
+The analysis transformation chain requires a model representation of the generated containers and connectors to be defined in the SAM for an accurate analysis \cite{CompBasedProcess}.
 
 Please note that, step 10 is not of concern in this Master thesis as this Master thesis deals only with automatic generation of containers and connectors and hence an accurate model based schedulability analysis is outside the scope. Steps 8-9 are not of concern in this Master thesis, as it deals with hardware modeling and they are again outside the current scope of this Master thesis. However, these steps were mentioned for the sake of clarity and continuity.
 
@@ -93,7 +93,7 @@ In order for the OBSW to interact with the external world, sensors and actuators
 \label{section: Design flow and views}
 When the component model is defined, it also defines implicitly a design flow, that needs to be followed, to be able to create an OBSW that meet all its user needs and high level requirements \cite{SAVOIR, PhdThesis, CompBasedProcess}. The design flow is as explained in the previous section. 
 
-One of the advantages of the design views is to promote or enforce a certain design flow \cite{CompBasedProcess}. The component model is accompanied by the following design views:
+The Obeo Designer Framework provides a concept called 'Viewpoint' and using this concept, the design views are implemented \cite{CompBasedProcess}. One of the advantages of the design views is to promote or enforce a certain design flow \cite{CompBasedProcess}. The component model is accompanied by the following design views:
 \begin{description}
 \item [Data view] This view is for the description of data types and events
 \item [Component view] For definition of interfaces, components and the binding between them to fulfill their required needs
