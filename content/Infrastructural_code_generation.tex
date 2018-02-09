@@ -7,7 +7,7 @@ After designing an OBSW model using the OSRA editor and following the component-
 
 Similar efforts were are also performed in the Artemis JU CHESS project \cite{EvoRAVCodeAr} and these efforts provides the perfect base for discussions in this chapter of the Master thesis.   
 
-\section{User model entities in the Platform Independent Model phase}
+\section{User model entities in the Platform Independent Model (PIM) phase}
 A detailed description of all the modeling entities that the software architect can use, can be found in the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}. However a brief description of them is useful here:
  
 \begin{description}
@@ -31,7 +31,34 @@ A detailed description of all the modeling entities that the software architect 
 \end{description}
 
 \section{Mapping of design entities to the infrastructural code}
+As the generated code should target the Tasking framework, which is the target computational model in this Master thesis and because the Tasking framework is written in C++, the following sections explains mapping of design entities to the infrastructure code that will be generated in C++. Certain terms specific to C++ only are used in this section.
 
+On analyzing the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}, it is clear that there might be different corner cases that might possibly arise in the construction of the OBSW models using OSRA component model and it is necessary that these corner cases are effectively handled in the software design for the infrastructural code. An effort is made to first of all build an OBSW model which incorporates these corner cases and in the following sections, an attempt is made to answer the questions at hand.
+
+\subsection{An example OBSW model}
+Our simple OBSW model, yet effective to serve the intended purpose, is built as per the proposed component-based development approach explained in the section \cref{Design steps} in chapter \cref{Software development process}. As already mentioned in that section the component-based approach puts a lot of emphasis on the definition of component interfaces \cite{CompBasedProcess} and it is followed here as well. Components are built from scratch using newly defined interfaces
+
+\begin{description}
+\item [Step 1: Definition of data types and events] As the Master thesis requires to emphasize more on capturing interaction and concurrency semantics required for communication between the designed components effectively, the data types chosen in this example are fairly simple. But it is important to note that the scheme of mapping of these simple datatypes to the infrastructural code, can be scaled to fairly complex datatypes as well.
+
+Two datatypes namely \texttt{FixedLengthStringType} and \texttt{IntegerType} with \texttt{integerKind} set to \texttt{UNSIGNED} are defined (instantiated from the OSRA Component Model \cite{SpecMetamodel}) and they are named as \texttt{StringType} and \texttt{IntegerType} respectively. Three exception types, named as \texttt{OperandException}, \texttt{MemoryException} and \texttt{OverflowException} are defined. An \texttt{Event} type, which can be used for asynchronous notification \cite{SpecMetamodel} is instantiated and it is named as \texttt{FailureEvent}. Two parameters namely \texttt{m\_Param} and \texttt{m\_Description} with datatypes \texttt{IntegerType} and \texttt{StringType} are instantiated as parameters of the event \texttt{FailureEvent}
+
+\item [Step 2: Definition of interfaces] Two interface namely \texttt{InterfaceA} and \texttt{InterfaceB} are designed. \texttt{InterfaceA} has only one single operation by name \texttt{callOperationAdd} and \texttt{InterfaceB} has an operation by name \texttt{OperationAdd} and an interface attribute of datatype \texttt{IntegerType} named as \texttt{m\_StatusValue}.
+
+The \texttt{OperationAdd} has three parameters, out of which two parameters have \texttt{ParameterDirectionKind} set to \texttt{in} and the third parameter has the \texttt{ParameterDirectionKind} set to \texttt{out}. The \texttt{OperationAdd} is also configured to return any of the three exception kinds mentioned in the previous step. The interface attribute \texttt{m\_StatusValue} has the \texttt{AttributeKind} set to \texttt{CFG} which indicates that the interface attribute parameter is a configurable parameter \texttt{SpecMetamodel}  
+
+\item [Step 3: Component types] Component types namely \texttt{Component\_Caller} and \texttt{Component\_Callee} which form the basis for a reusable software asset are defined. 
+
+\texttt{Component\_Caller} has one provided interface port named as \texttt{ProvidedInterfacePort} and two required interface ports named as \texttt{RequiredInterfacePortType1} and \texttt{RequiredInterfacePortType2}. \texttt{ProvidedInterfacePort} refers to \texttt{InterfaceA} and both \texttt{RequiredInterfacePortType1} and \texttt{RequiredInterfacePortType2} refer to \texttt{InterfaceB}. All the operations in the \texttt{RequiredInterfacePortType1} have the desired interaction kind set to \texttt{synchronous} and all the operations in the \texttt{RequiredInterfacePortType2} have the desired interaction kind set to \texttt{asynchronous} (Note that, it is possible to independently choose the desired interaction kind for each operation \cite{SpecMetamodel}).
+
+\texttt{Component\_Callee} has two provided interface ports named as \texttt{ProvidedInterfacePort1} and \texttt{ProvidedInterfacePort2} and no required interface port. Both \texttt{ProvidedInterfacePort1} and \texttt{ProvidedInterfacePort2} refer to \texttt{InterfaceB}.
+
+\item [Step 4: Component implementation]
+
+\end{description}
+   
+\subsection{Interface}
+An interface can be mapped as a pure virtual base class in C++. For each operation in the interface, a function is added to this virtual base class. The possible parameters of the operation are also added   
 
 \section{Mapping of design entities to the infrastructural code}    
 In this section, it is explained how the design entities could be mapped to the infrastructure code that needs to be generated with the model-code transformations through the help of a simple example:
