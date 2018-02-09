@@ -3,7 +3,35 @@
 \chapter{Infrastructural code generation}
 \label{chap: Code generation}
 \section{Introduction}
-After understanding the programming model for OSRA, it 
+After designing an OBSW model using the OSRA editor and following the component-based software development approach that comes it, the OBSW model entities need to be mapped to the infrastructure code. The reference programming model discussed in the previous chapter could be used with OSRA helps us in progressing towards this goal. But, it is necessary to understand the overall design approach for the generated code and briefly present the abstractions that will be offered to the software supplier and these topics are dealt with in detail in this chapter.
+
+Similar efforts were are also performed in the Artemis JU CHESS project \cite{EvoRAVCodeAr} and these efforts provides the perfect base for discussions in this chapter of the Master thesis.   
+
+\section{User model entities in the Platform Independent Model phase}
+A detailed description of all the modeling entities that the software architect can use, can be found in the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}. However a brief description of them is useful here:
+ 
+\begin{description}
+\item [Datatypes] The software architect can create a set of project-specific data types and constants using the Datatypes language unit of the CommponTypes metamodel and the language unit is designed to provide the software architect an expressive power comparable to languages with strong types (e.g. Ada).\cite{SpecMetamodel}. The supported type definitions are boolean types, integer types, float types, enumeration types, fixed point types, array types, structured types, string types, union types, alias types, opaque types, external types and unconstrained types. Some of the datatype definitions are obvious for readers with programming skills in types languages such as Ada, C or C++. 
+
+\item [Interfaces] An interface is a specification of coherent set of services and it represents the definition of a contract. An interface is defined independently of the entities implementing it (e.g. Component type). An interface may enlist declaration of operations, which are the functional services that shall be offered by the entities implementing it. The services include a name, set of ordered parameters. Parameters are typed with one of the types mentioned above and have a mode (in, out or inout). A component type may expose one or more interfaces and the same interface can be exposed by different component types. An interface may also contain the declaration of one or more interface attributes, which are the parameters that are accessible via the interface implementation.
+
+\item [Component type] Component type is an entity which specifies the external interface of a software component and are defined in isolation and used to declare relationships with the other components and system in general. It conforms to the principle of encapsulation and a consequence all the interactions with other components are performed exclusively via its explicitly declared interface. Component type usually encompasses:
+\begin{itemize}
+\item List of provided interface ports
+\item List of required interface ports
+\item List of dataset emitter ports 
+\item List of dataset receiver ports
+\item List of event emitter ports
+\item List of event receiver ports 
+\end{itemize}
+
+\item [Component implementation] It is the entity that represents a concrete realization of a component type. It is functionally identical to the component type and the source code is added to the component implementation and may also define number of component implementation attributes
+
+\item [Component instance] It is an instantiation of a component implementation and hence contains all the instantiations of the structural features (Different ports). It also contains instantiation of all attributes (interface attributes, component type attributes and component implementation attributes). It is also the elementary deployment unit for the OSRA component model.        
+\end{description}
+
+\section{Mapping of design entities to the infrastructural code}
+
 
 \section{Mapping of design entities to the infrastructural code}    
 In this section, it is explained how the design entities could be mapped to the infrastructure code that needs to be generated with the model-code transformations through the help of a simple example:
