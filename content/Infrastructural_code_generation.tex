@@ -36,7 +36,7 @@ As the generated code should target the Tasking framework, which is the target c
 On analyzing the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}, it is clear that there might be different corner cases that might possibly arise in the construction of the OBSW models using OSRA component model and it is necessary that these corner cases are effectively handled in the software design for the infrastructural code. An effort is made to first of all build an OBSW model which incorporates these corner cases and in the following sections, an attempt is made to answer the questions at hand.
 
 \subsection{An example OBSW model}
-Our simple OBSW model, yet effective to serve the intended purpose, is built as per the proposed component-based development approach explained in the section \cref{section: Design steps} in chapter \cref{chap: Software development process}. As already mentioned in that section, the component-based approach puts a lot of emphasis on the definition of component interfaces \cite{CompBasedProcess} and it is followed here as well. Components are built from scratch using newly defined interfaces. All model entities defined here are instantiations of the modeling entities specified in the metamodel \cite{SpecMetamodel}. The OBSW model is designed using the OSRA OBSW model editor mentioned in the section \cref{section: OSRA editor} in chapter \cref{chap: Software development process}.
+Our simple OBSW model, yet effective to serve the intended purpose, is built as per the proposed component-based development approach explained in the section \cref{section: Design steps} in chapter \cref{chap: Software development process}. As already mentioned in that section, the component-based approach puts a lot of emphasis on the definition of component interfaces \cite{CompBasedProcess} and it is followed here as well. Components are built from scratch using newly defined interfaces. All model entities defined here are instantiations of the modeling entities specified in the metamodel \cite{SpecMetamodel}. The OBSW model is designed using the OSRA model editor mentioned in the section \cref{section: OSRA editor} in chapter \cref{chap: Software development process}.
 
 \begin{description}
 \item [Step 1: Definition of data types and events] As the Master thesis requires to emphasize more on effectively capturing interactions and concurrency semantics required for communication between the designed components, the data types chosen in this example are fairly simple. But it is important to note that the scheme of mapping of these simple data types to the infrastructural code (explained in the later sections), can be scaled to fairly complex data types as well.
@@ -101,77 +101,116 @@ A processor board with a processor and a processor core is designed. Two connect
 
 This OBSW model is subjected to model validation against the OSRA Specification Compliance and the SCM meta-model compliance, in the OSRA SCM editor \cite{OSRAEditor}. Only after the OBSW model is successfully validated, can the OBSW model be considered as a suitable candidate for automatic generation of infrastructure code.  
 
-\subsection{Corner cases addressed in the above example model}
+\subsection{Corner cases arising during the construction of OBSW model using OSRA component model}
+The different corner cases which might arise are:
+
+\begin{itemize}
+\item Multiple provided interfaces which refer to the same interface are promoted by the container of the same component
+\item Multiple required interfaces which refer to the same interface are subsumed by the container of the same component
+\item Multiple interfaces provide similar operations
+\item Multiple implementations per component type
+\end{itemize}
+
+The first and second corner cases are already handled in the example. But, the other cases will be handled directly in the following section, which deals with the software design for the generated infrastructure code. 
    
-\subsection{Interface}
-An interface can be mapped as a pure virtual base class in C++. For each operation in the interface, a function is added to this virtual base class. The possible parameters of the operation are also added   
+\subsection{Software design approach for the generated code}
+This section deals with the software design approach for the generated infrastructure code. UML class diagrams are used to show a high level representation of the generated C++ classes.  
+
+\subsubsection{\textbf{Data types and events}}
+A data types from the OBSW model is translated into simple \texttt{typedef} statement from C++.
+
+In case of the above example:
+\begin{itemize}
+\item The data type \texttt{IntegerType}, is translated to a \texttt{typedef} statement as \texttt{typedef\allowbreak  int8\_t IntegerType}
+\item The data type \texttt{StringType}, is translated to a \texttt{typedef} statement as \texttt{typedef\allowbreak std::string StringType} 
+\end{itemize}
+
+A subset of all possible data types from the OSRA Component Model can be translated to simple \texttt{typedef} statements as shown in the above example. The chosen subset is not of concern in this section and is handled in the next chapter. 
+
+The exception types from the OBSW models are translated into simple enumeration literals from C++. These enumeration literals, which can be thrown by a particular operation are grouped to form an enumeration.
+
+In case of the above example, the three exceptions \texttt{OperandException}, \texttt{MemoryException} and \texttt{OverflowException} are translated into enumeration literals with the similar names. The three exceptions can be thrown from the operation \texttt{OperationAdd} defined in interface \texttt{InterfaceB}. Hence these enumeration literals are stored together as an enumeration named \texttt{OperationAdd\allowbreak InterfaceB\allowbreak Exception}.
+
+An event from the OBSW model is mapped to an abstract base class and a concrete implementation class. Appropriate setters and getters for the event parameters are declared as pure virtual methods in the abstract base class for the event and they are implemented in the concrete implementation class for the event.
+
+In case of the above example, the event \texttt{FailureEvent} is mapped as an abstract base class named \texttt{FailureEvent\allowbreak Interface} and concrete implementation class named \texttt{FailureEvent}. Appropriate setters and getters for the event parameters \texttt{m\_Param} and \texttt{m\_ParamDescription} are declared as pure virtual methods in the \texttt{FailureEvent\allowbreak Interface} abstract base class and redefined in the \texttt{FailureEvent} concrete implementation class.   
+
+All the infrastructure code entities mentioned above are present in a namespace, named as \texttt{General}.  
+
+\subsubsection{\textbf{Interfaces}}
+An interface can be mapped as an abstract base class in C++. For each operation and interface attribute in the interface, pure virtual methods with all its parameters and its corresponding data types are added to the abstract base class.
+
+In case of the above example:
+\begin{itemize}
+\item \texttt{InterfaceA} along with the operation \texttt{CallOperationAdd} is mapped to an abstract base class \texttt{InterfaceA} with a pure virtual method \texttt{CallOperationAdd}. 
+\item \texttt{InterfaceB} has one operation \texttt{OperationAdd} and one interface attribute parameter \texttt{m\_StatusValue} with \texttt{AttributeKind} as \texttt{CFG}. These are mapped to an abstract base class named \texttt{InterfaceB} with the following operations:
+\begin{itemize}
+\item A pure virtual method \texttt{OperationAdd} with its two \texttt{in} parameters and one \texttt{out} parameter.
+\item A pure virtual getter method for the interface attribute \texttt{m\_StatusValue}
+\item A pure virtual setter method for the interface attribute \texttt{m\_StatusValue}
+\end{itemize} 
+\end{itemize}
+
+Because of the corner case that multiple interfaces can have similar operations, as explained in the previous section, it is necessary to refine these interfaces using the interface helper abstract base classes.
+
+In the above example:
+\begin{itemize}
+\item \texttt{InterfaceA\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceA} and which implements the pure virtual method in the parent interface \texttt{InterfaceA}. The implementation contains a simple call to the new pure virtual method which has a  \texttt{\_InterfaceA} added to the original method signature from the parent interface
+
+\item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. The implementations contain a simple call to the new pure virtual methods which have \texttt{\_InterfaceB} added to the original method signatures from the parent interface    
+\end{itemize}
+
+The combined effect is that now, original parent interfaces (resembling model entities) can have similar operations, but the refined interfaces redefine the methods from the original parent interfaces, so that there are no confusions between similar operations from different interfaces. Of course, a straight forward solution would have been to incorporate namespaces from C++, but it is not suitable for this design and the explanation is given later in this section.
+
+For each interface operation and interface attribute in an interface, a C++ struct is defined to carry around the values of the operation parameters or the values of the interface attributes respectively. These data structures come in handy when the interface operations or interface attribute access operations need to be accessed as asynchronous operations. The data structures also hold general purpose polymorphic function wrappers from C++11 to store the callable target call-back functions. 
+
+For the above example:
+\begin{itemize}
+\item A struct \texttt{operationAdd\allowbreak Struct\_\allowbreak InterfaceB} is defined
+\item A struct \texttt{statusValue\allowbreak Struct\_\allowbreak InterfaceB} is defined
+\end{itemize}  
+
+All the infrastructure code entities mentioned above are present in a namespace, named as \texttt{General}.
+
+\subsubsection{\textbf{Event emitter ports and event receiver ports}}
+The event emitter port for a particular event is mapped as an abstract base classes and a corresponding concrete implementation class. The event receiver port for a particular event is mapped as an abstract base class.  
+
+In case of the above example, the \texttt{FailureEvent\allowbreak EmitterPort} is mapped as a pair of abstract base class and a concrete implementation class. The abstract base class consists of a function that could be used by external actors to emit a \texttt{FailureEvent}.  
+
+In case of the above example, the \texttt{FailureEvent\allowbreak ReceiverPort} is mapped as a pair of abstract base class and a concrete implementation class. The abstract base class consists of a method to receive the \texttt{FailureEvent} and it can be used by an external actor to send an event to the corresponding component.
+
+The \texttt{FailureEvent\allowbreak EmitterPort} is present in a namespace, named as \texttt{Component\_Callee} and the \texttt{FailureEvent\texttt ReceiverPort} is present in a namespace, named as \texttt{Component\_Caller}.    
+
+\subsubsection{\textbf{Component types}}
+A component type can be mapped to an abstract base class in C++. A component type must provide all the operations that are listed in the provided interfaces of the component. Hence it inherits from all the interface helper classes which are referenced by its provided interfaces. This is where interface helper classes, with redefined operations come in handy, because C++ does not distinguish between operations with same signatures, although they are inherited from different namespaces. A component type must also inherits from the mapped abstract base class for event receiver ports.
+
+A component type must also have pure virtual methods which obtain and release the semaphores on the different operations which it provides. It must also provided pure virtual methods which are necessary to obtain and release semaphores meant for event receptions. In addition to these, pure virtual methods which act as call-back functions for the operations that the component type's required interface ports request with an asynchronous release pattern.   
+
+In case of the above example:
+\begin{itemize}
+\item \texttt{ComponentType} in the namespace \texttt{Component\_Caller} inherits from the \texttt{InterfaceA\allowbreak\_Helper} and also inherits from the abstract base class \texttt{FailureEvent\allowbreak ReceiverPort}. It has pure virtual methods meant for the purpose of obtaining and releasing of semaphores for the operation \texttt{CallOperationAdd\allowbreak\_InterfaceA} and reception of \texttt{FailureEvent}. It also has pure virtual methods which act as call-back functions, for the operation \texttt{OperationAdd}, getter operation for the interface attribute \texttt{m\_StatusValue} that the subsumed required interface port \texttt{RequiredInterfacePortType2} might request with an asynchronous release pattern.
+\item \texttt{ComponentType} in the namespace \texttt{Component\_Callee} inherits from the \texttt{InterfaceB\allowbreak\_Helper}. It has pure virtual methods for the purpose of obtaining and releasing of semaphores for operations \texttt{OperationAdd\allowbreak\_InterfaceB}, setter and getter operations for the interface attribute \texttt{m\_StatusValue} of \texttt{InterfaceB}.  
+\end{itemize}        
+
+\subsubsection{\textbf{Component Implementations}}
+A component implementation can be mapped in C++ as a concrete implementation of its abstract component type base class. It implements all the pure virtual methods that are inherited from its component type. The actual instances of semaphores for allowing safe concurrent accesses to the implemented methods and for safe interleaving between concurrent receptions of events of the same kind.
+
+In case of components which promote multiple provided interface ports which refer to the same interface, it is necessary to provide multiple implementations for the operations in the provided interfaces. In order to solve this problem, a component implementation abstract base class is considered. This contains the implementations for the semaphore acquire and release pure virtual methods in the component type class. This component implementation abstract base class is further extended by dummy abstract base classes, one for each of the provided interface ports which refer to the same interface. These dummy abstract base classes are extended by concrete implementation classes of the operations in the corresponding provided interface. As it is a necessity to have only one instantiable concrete implementation per instantiated component, all the concrete implementations are inherited one last time in a component implementation class. Instances of this component implementation are deployable on the hardware platform.
+ 
+In case of the above example:
+\begin{itemize}
+\item \texttt{ComponentImplementation} concrete implementation class in the namespace \texttt{Component\_Caller} inherits from the abstract base class \texttt{Component\_Type} in the same namespace. It implements all the pure virtual methods in the \texttt{Component\_Type} namely:
+\begin{itemize}
+\item \texttt{CallOperationAdd\allowbreak\_InterfaceA} inherited from \texttt{InterfaceA\allowbreak\_Helper} through \texttt{Component\_Type}
+\item Accessing and releasing of semaphore for concurrent access of \texttt{CallOperationAdd\allowbreak\_InterfaceA}
+\item For safe interleaving of concurrent receptions of \texttt{FailureEvent}  
+\end{itemize} 
+\end{itemize} 
 
 \section{Mapping of design entities to the infrastructural code}    
 In this section, it is explained how the design entities could be mapped to the infrastructure code that needs to be generated with the model-code transformations through the help of a simple example:
 
-\subsection{Problem description}
-A very simple OBSW model consists of two components, namely \texttt{ComponentA} and \texttt{ComponentB} 
-
-\texttt{ComponentA} has the following requirements:
-\begin{itemize}
-\item The function \texttt{startOperation} implemented in the component implementation needs to be called on the periodic basis with a period of two seconds.
-
-\item There should be two required interface ports. 
-\begin{itemize}
-\item First required interface port allows \texttt{ComponentA} to call an operation named \texttt{operationAdd}, set and get the status value \texttt{statusValue} with concurrency kind \texttt{immediate}
-\item Second required interface port allows \texttt{ComponentA} to call the same operation \texttt{operationAdd}, allows to set and get the same status value \texttt{statusValue} with concurrency kind as \texttt{deffered}. 
-\end{itemize}
-
-\item Can receive messages or events asynchronously and there should be a event receiver port which listens to a particular event called the \texttt{FailureEvent} 
-
-\item Can receive a report \texttt{OperationAddReport} for the operation \texttt{operationAdd} which is called. The report has status of the operation \texttt{operationAdd} called the \texttt{operationAddStatus} and the exception for the operation \texttt{operationAdd} called the \texttt{OperationAddException} 
-\end{itemize}
-
-\texttt{ComponentB} has the following requirements:
-\begin{itemize}
-\item Provides two component implementations. Both the implementations provides their own
-\begin{itemize}
-\item Versions of the operation \texttt{operationAdd} which can be called by any other components
-\item Instances of the status value \texttt{statusValue} which can be written to and read from other components 
-\end{itemize}
-
-\item Two provided interface ports and they have non-functional requirements attached to them 
-\begin{itemize}
-\item First provided interface port works with the first version of component implementation and it requires \texttt{operationAdd} to be a \texttt{protected} operation and needs the status value \texttt{statusValue} to be set and get in an unprotected way
-\item Second provided interface port works with the second version of component implementation and it requires \texttt{operationAdd} to be called in a sporadic way with a \texttt{Minimum Inter-Arrival Time (MIAT)} of two seconds and needs the status value \texttt{statusValue} to be set and get in an protected way.
-\end{itemize}
-
-\item Can send messages or events asynchronously and there should be a event emitter port which emits a particular event called the \texttt{FailureEvent}
-
-\item Can send report report \texttt{OperationAddReport} for the operation \texttt{operationAdd} which is called. The report has status of the operation \texttt{operationAdd} called the \texttt{operationAddStatus} and the exception for the operation \texttt{operationAdd} called the \texttt{OperationAddException} 
-\end{itemize}  
-
-From the above description it is clear that these components can be connected to each other or in particular the first required interface port can be connected to the first provided interface port and the second required interface port can be connected to the second provided interface port. The following different design entities are thereby constructed:
-
 \subsection{Design entities}
-\subsubsection{Interfaces}
-Interfaces are implemented as C++ pure virtual classes and they have entries for the interface operations, interface attribute access operations and interface attributes. Concrete implementations for the interface operations and the interface attribute access operations need to be provided by the classes that implement these interfaces
-
-For the above example:
- 
-Two primary interfaces can be created based on the problem description namely: 
-\begin{description}
-\item [\texttt{InterfaceA}] This specifies a single operation \texttt{startOperation}
-\item [\texttt{InterfaceB}] This specifies 
-\begin{itemize}
-\item The operation \texttt{operationAdd}
-\item Actual status value \texttt{statusValue}
-\item Getter operation for the status value \texttt{statusValue} called \texttt{getStatusValue}
-\item Setter operation for the status value \texttt{statusValue} called \texttt{setStatusValue}
-\end{itemize}
-\end{description}
-
-Three secondary interfaces for \texttt{InterfaceB} are created: 
-\begin{description}
-\item [\texttt{InterfaceB\textunderscore Synchronous}] which redefines the interface \texttt{InterfaceB} for cases where the operations in the interface \texttt{InterfaceB} are called synchronously
-\item [\texttt{InterfaceB\textunderscore Asynchronous}] which redefines the interface \texttt{InterfaceB} for cases where the operations in the interface \texttt{InterfaceB} are called asynchronously
-\item [\texttt{InterfaceB\textunderscore extension}] which inherits the interface \texttt{InterfaceB} to add additional operations to handle the situation when the operations in the interface \texttt{InterfaceB} are called asynchronously
-\end{description}
 
 \subsubsection{Operation parameter structures}
 As the operations can be called with concurrency kind defined as \texttt{deferred}, it is necessary to pack in C++ structures the parameters of the operation (if any) and the address of the component to which the result of the operation (if any), status report of the operation (if any) needs to be sent. This encapsulates all the data necessary to compute the operation, to store the result of the operation and the location to which the result of the operation needs to be sent.  
