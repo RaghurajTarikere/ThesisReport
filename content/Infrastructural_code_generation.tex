@@ -3,19 +3,17 @@
 \chapter{Infrastructural code generation}
 \label{chap: Code generation}
 \section{Introduction}
-After designing an OBSW model using the OSRA editor and following the component-based software development approach that comes with it, the OBSW model entities need to be mapped to the infrastructure code. The reference programming model for OSRA, discussed in the previous chapter helps us in progressing towards this goal. But, it is necessary to understand the overall design approach for the generated code and briefly present the abstractions that will be offered to the software supplier. This chapter, deals with this in detail.
-
-Similar efforts from the Artemis JU CHESS project \cite{EvoRAVCodeAr}, provides the perfect base for discussions in this chapter of the Master thesis.   
+After designing an OBSW model using the OSRA editor and following the component-based software development approach that comes with it, the OBSW model entities need to be mapped to the infrastructure code. The reference programming model for OSRA, discussed in the previous chapter helps us in progressing towards this goal. But, it is necessary to understand the overall design approach for the generated code and briefly present the abstractions that will be offered to the software supplier. This chapter, deals with these things in detail. Similar efforts from the Artemis JU CHESS project \cite{EvoRAVCodeAr}, provide the perfect base for discussions in this chapter of the Master thesis.   
 
 \section{User model entities in the Platform Independent Model (PIM) phase}
 A detailed description of all the modeling entities that the software architect can use, can be found in the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}. However a brief description of them is useful here:
  
 \begin{description}
-\item [Datatypes] The software architect can create a set of project-specific data types and constants using the Datatypes language unit of the CommponTypes metamodel and the language unit is designed to provide the software architect an expressive power comparable to languages with strong types (e.g. Ada).\cite{SpecMetamodel}. The supported type definitions are boolean types, integer types, float types, enumeration types, fixed point types, array types, structured types, string types, union types, alias types, opaque types, external types and unconstrained types. Some of the data type definitions are obvious for readers with programming skills in types languages such as Ada, C or C++. 
+\item [Datatypes] The software architect can create a set of project-specific data types and constants using the Datatypes language unit of the CommponTypes metamodel and the language unit is designed to provide the software architect an expressive power comparable to the languages with strong types (e.g. Ada).\cite{SpecMetamodel}. The supported type definitions are boolean types, integer types, float types, enumeration types, fixed point types, array types, structured types, string types, union types, alias types, opaque types, external types and unconstrained types. Some of the data type definitions are obvious for readers with programming skills in typed languages such as Ada, C or C++. 
 
-\item [Interfaces] An interface is a specification of coherent set of services and it represents the definition of a contract. An interface is defined independently of the entities implementing it (e.g. Component type). An interface may enlist declaration of operations, which are the functional services that shall be offered by the entities implementing it. The services include a name, set of ordered parameters. Parameters are typed with one of the types mentioned above and have a mode (\texttt{in, out or inout}). A component type may expose one or more interfaces and the same interface can be exposed by different component types. An interface may also contain the declaration of one or more interface attributes, which are the parameters that are accessible via the interface implementation.
+\item [Interfaces] An interface is a specification of coherent set of services and it represents the definition of a contract. An interface is defined independently of the entities implementing it (e.g. Component type). An interface may enlist declaration of operations, which are the functional services that shall be offered by the entities implementing it. The services include a name, set of ordered parameters and one or more exceptions that they might throw when things go wrong during the handling of the service. Parameters are typed with one of the types mentioned above and have a mode (\texttt{in, out or inout}). A component type may expose one or more interfaces and the same interface can be exposed by different component types. An interface may also contain the declaration of one or more interface attributes, which are the parameters that are accessible via the interface implementations.
 
-\item [Component type] Component type is an entity which specifies the external interface of a software component and are defined in isolation and used to declare relationships with the other components and system in general. It conforms to the principle of encapsulation and as a consequence, all the interactions with other components are performed exclusively via its explicitly declared interface. Component type usually encompasses:
+\item [Component type] Component type is an entity which specifies the external interfaces of a software component and are defined in isolation and are used to declare relationships with the other components and system in general. It conforms to the principle of encapsulation and as a consequence, all the interactions with other components are performed exclusively via its explicitly declared interface. Component type usually encompasses:
 \begin{itemize}
 \item List of provided interface ports
 \item List of required interface ports
@@ -25,7 +23,7 @@ A detailed description of all the modeling entities that the software architect 
 \item List of event receiver ports 
 \end{itemize}
 
-\item [Component implementation] It is the entity that represents a concrete realization of a component type. It is functionally identical to the component type and the source code is added to the component implementation and may also define number of component implementation attributes
+\item [Component implementation] It is an entity that represents a concrete realization of a component type. It is functionally identical to the component type except that the source code is added to the component implementation and may also define number of component implementation attributes
 
 \item [Component instance] It is an instantiation of a component implementation and hence contains all the instantiations of the structural features (Different ports). It also contains instantiation of all attributes (interface attributes, component type attributes and component implementation attributes). It is also the elementary deployment unit for the OBSW model \cite{SpecMetamodel}.        
 \end{description}
@@ -33,7 +31,19 @@ A detailed description of all the modeling entities that the software architect 
 \section{Mapping of design entities to the infrastructural code}
 As the generated code should target the Tasking framework, which is the target computational model in this Master thesis and because the Tasking framework is written in C++, the following sections explains mapping of design entities to the infrastructure code that will be generated in C++. Certain terms specific to C++ only, are used in this section.
 
-On analyzing the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}, it is clear that there might be different corner cases that might possibly arise in the construction of the OBSW models using OSRA component model and it is necessary that these corner cases are effectively handled in the software design for the infrastructural code. An effort is made to first of all build an OBSW model which incorporates these corner cases and in the following sections, an attempt is made to answer the questions at hand.
+On analyzing the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}, it is clear that there might be different corner cases that might possibly arise during the construction of the OBSW models using OSRA component model and it is necessary that these corner cases are effectively handled in the software design for the infrastructural code. The following sections try to build an OBSW model keeping the the corners cases in mind and attempt to explain the overall design approach.
+
+\subsection{Corner cases arising during the construction of OBSW model using OSRA component model}
+The different corner cases which might arise are:
+
+\begin{itemize}
+\item Multiple provided interfaces which refer to the same interface are promoted by the container of the same component
+\item Multiple required interfaces which refer to the same interface are subsumed by the container of the same component
+\item Multiple interfaces provide similar operations
+\item Multiple implementations per component type
+\end{itemize}
+
+The first and second corner cases are handled in the following example. But, the other cases will be treated directly in the later section, which deals with the software design for the generated infrastructure code. 
 
 \subsection{An example OBSW model}
 Our simple OBSW model, yet effective to serve the intended purpose, is built as per the proposed component-based development approach explained in the section \cref{section: Design steps} in chapter \cref{chap: Software development process}. As already mentioned in that section, the component-based approach puts a lot of emphasis on the definition of component interfaces \cite{CompBasedProcess} and it is followed here as well. Components are built from scratch using newly defined interfaces. All model entities defined here are instantiations of the modeling entities specified in the metamodel \cite{SpecMetamodel}. The OBSW model is designed using the OSRA model editor mentioned in the section \cref{section: OSRA editor} in chapter \cref{chap: Software development process}.
@@ -41,23 +51,23 @@ Our simple OBSW model, yet effective to serve the intended purpose, is built as 
 \begin{description}
 \item [Step 1: Definition of data types and events] As the Master thesis requires to emphasize more on effectively capturing interactions and concurrency semantics required for communication between the designed components, the data types chosen in this example are fairly simple. But it is important to note that the scheme of mapping of these simple data types to the infrastructural code (explained in the later sections), can be scaled to fairly complex data types as well.
 
-Two datatypes namely \texttt{Fixed\allowbreak Length\allowbreak String\allowbreak Type} and \texttt{IntegerType} with \texttt{integerKind} set to \texttt{UNSIGNED} are defined and they are named as \texttt{StringType} and \texttt{IntegerType} respectively. Three exception types, named as \texttt{OperandException}, \texttt{MemoryException} and \texttt{Overflow\allowbreak Exception} are defined. An \texttt{Event} type, which can be used for asynchronous notification \cite{SpecMetamodel} is instantiated and it is named as \texttt{FailureEvent}. Two parameters namely \texttt{m\_Param} and \texttt{m\_Description} with data types \texttt{IntegerType} and \texttt{StringType} respectively are instantiated as parameters of the event \texttt{FailureEvent}
+Two datatypes namely \texttt{Fixed\allowbreak Length\allowbreak String\allowbreak Type} and \texttt{IntegerType} (with \texttt{integerKind} set to \texttt{UNSIGNED}) are defined and they are named as \texttt{StringType} and \texttt{IntegerType} respectively. Three exception types, named as \texttt{OperandException}, \texttt{MemoryException} and \texttt{Overflow\allowbreak Exception} are defined. An \texttt{Event} type, which can be used for asynchronous notifications \cite{SpecMetamodel} is instantiated and it is named as \texttt{FailureEvent}. Two parameters namely \texttt{m\_Param} and \texttt{m\_Description} with data types \texttt{IntegerType} and \texttt{StringType} respectively are instantiated as parameters of the \texttt{FailureEvent}
 
 \item [Step 2: Definition of interfaces] Two interface namely \texttt{InterfaceA} and \texttt{InterfaceB} are designed. \texttt{InterfaceA} has only one single operation by name \texttt{CallOperationAdd} and \texttt{InterfaceB} has an operation by name \texttt{OperationAdd} and an interface attribute of data type \texttt{IntegerType} and named as \texttt{m\_StatusValue}.
 
-The \texttt{OperationAdd} has three parameters, out of which two parameters have \texttt{Parameter\allowbreak Direction\allowbreak Kind} set to \texttt{in} and the third parameter has the \texttt{Parameter\allowbreak Direction\allowbreak Kind} set to \texttt{out}. The \texttt{OperationAdd} is also configured to return any of the three exception kinds mentioned in the previous step. The interface attribute \texttt{m\_StatusValue} has the \texttt{AttributeKind} set to \texttt{CFG} which indicates that the interface attribute parameter is a configurable parameter \texttt{SpecMetamodel}. As a result, two operations for the purpose of setting and getting the values of the interface attribute are implicitly defined.   
+The \texttt{OperationAdd} has three parameters, out of which two parameters have \texttt{Parameter\allowbreak Direction\allowbreak Kind} set to \texttt{in} and the third parameter has the \texttt{Parameter\allowbreak Direction\allowbreak Kind} set to \texttt{out}. The \texttt{OperationAdd} is also configured to return any of the three exception kinds mentioned in the previous step. The interface attribute \texttt{m\_StatusValue} has the \texttt{AttributeKind} set to \texttt{CFG} which indicates that the interface attribute parameter is a configurable parameter \texttt{SpecMetamodel}. As a result, two operations for the purpose of setting and getting the values of the interface attribute are defined.   
 
 \item [Step 3: Definition of component types] Component types namely \texttt{Component\allowbreak\_Caller} and \texttt{Component\allowbreak\_Callee} which form the basis for a reusable software asset are defined. 
 
-\texttt{Component\allowbreak\_Caller} has one provided interface port named as \texttt{ProvidedInterface\allowbreak Port} and two required interface ports named as \texttt{RequiredInterface\allowbreak PortType1} and \texttt{RequiredInterfaceP\allowbreak PortType2}. \texttt{ProvidedInterface\allowbreak Port} refers to \texttt{InterfaceA} and both \texttt{RequiredInterface\allowbreak PortType1} and \texttt{RequiredInterface\allowbreak PortType2} refer to \texttt{InterfaceB}. All the operations in the \texttt{RequiredInterface\allowbreak PortType1} have the desired interaction kind set to \texttt{synchronous} and all the operations in the \texttt{RequiredInterface\allowbreak PortType2} have the desired interaction kind set to \texttt{asynchronous} (Note that, it is possible to independently choose the desired interaction kind for each operation \cite{SpecMetamodel}). \texttt{Component\allowbreak\_Calller} also has one event receiver port \texttt{FailureEvent\allowbreak ReceiverPort} which refers to the event \texttt{FailureEvent}.
+\texttt{Component\allowbreak\_Caller} has one provided interface port named as \texttt{ProvidedInterface\allowbreak Port} and two required interface ports named as \texttt{RequiredInterface\allowbreak PortType1} and \texttt{RequiredInterfaceP\allowbreak PortType2}. \texttt{ProvidedInterface\allowbreak Port} refers to \texttt{InterfaceA} and both \texttt{RequiredInterface\allowbreak PortType1} and \texttt{RequiredInterface\allowbreak PortType2} refer to \texttt{InterfaceB}. All the operations in the \texttt{RequiredInterface\allowbreak PortType1} have the desired interaction kind set to \texttt{synchronous} and all the operations in the \texttt{RequiredInterface\allowbreak PortType2} have the desired interaction kind set to \texttt{asynchronous} (Note that, it is also possible to independently choose the desired interaction kind for each operation \cite{SpecMetamodel}). \texttt{Component\allowbreak\_Calller} also has one event receiver port, named as \texttt{FailureEvent\allowbreak ReceiverPort} and it refers to the \texttt{FailureEvent}.
 
-\texttt{Component\_Callee} has two provided interface ports named as \texttt{ProvidedInterface\allowbreak Port1} and \texttt{ProvidedInterface\allowbreak Port2} and no required interface port. Both \texttt{ProvidedInterface\allowbreak Port1} and \texttt{ProvidedInterface\allowbreak Port2} refer to \texttt{InterfaceB}. \texttt{Component\allowbreak\_Callee} also has an event emitter port called the \texttt{FailureEvent\allowbreak EmitterPort} which refers to the event \texttt{FailureEvent}.
+\texttt{Component\_Callee} has two provided interface ports named as \texttt{ProvidedInterface\allowbreak Port1} and \texttt{ProvidedInterface\allowbreak Port2} and no required interface port. Both \texttt{ProvidedInterface\allowbreak Port1} and \texttt{ProvidedInterface\allowbreak Port2} refer to \texttt{InterfaceB}. \texttt{Component\allowbreak\_Callee} also has an event emitter port called the \texttt{FailureEvent\allowbreak EmitterPort} which refers to the \texttt{FailureEvent}.
 
-\item [Step 4: Definition of component implementation] Component implementations are created from the component types.
+\item [Step 4: Definition of component implementations] Component implementations are created from the component types.
 
-\texttt{Component\allowbreak\_Caller} has one component implementation named as \texttt{Component\allowbreak\_Caller\_impl} and \texttt{Component\allowbreak\_Callee} has one component implementation named as \texttt{Component\allowbreak\_Callee\_impl}. The component implementation \texttt{Component\allowbreak\_Callee\_impl} implements the means to store the attribute \texttt{m\_Param} of \texttt{InterfaceB} which is exposed through its provided interface ports namely \texttt{ProvidedInterface\allowbreak Port1} and \texttt{ProvidedInterface\allowbreak Port2}.
+\texttt{Component\allowbreak\_Caller} has one component implementation named as \texttt{Component\allowbreak\_Caller\_impl} and \texttt{Component\allowbreak\_Callee} has one component implementation named as \texttt{Component\allowbreak\_Callee\_impl}. The component implementation \texttt{Component\allowbreak\_Callee\_impl} implements the means to store the attribute \texttt{m\_Param} of \texttt{InterfaceB}, that is exposed through its provided interface ports namely \texttt{ProvidedInterface\allowbreak Port1} and \texttt{ProvidedInterface\allowbreak Port2}.
 
-No maximum memory footprint for component implementations are defined or no detail design activity of the component implementations are performed as they are not of concern in this Master thesis.
+No maximum memory footprint for component implementations are defined or no detailed design activity of the component implementations are performed as they are not of concern in this Master thesis.
 
 \item [Step 5: Definition of component instances] The component instances are the instances of component implementations \cite{CompBasedProcess}.
 
@@ -71,9 +81,9 @@ Two component instances namely \texttt{Component\allowbreak\_Caller\_impl\_inst}
 \item The event emitter slot \texttt{FailureEvent\allowbreak EmitterSlot} of the component instance \texttt{Component\allowbreak\_callee\_impl\_inst} is connected to the required interface slot \texttt{FailureEvent\allowbreak ReceiverSlot} of the component instance \texttt{Component\allowbreak\_caller\_impl\_inst}
 \end{itemize}
 
-\item [Step 7: Specification of non-functional attributes] The non-functional properties are defined on the component instances and the component bindings. The non-functional properties language unit of the specification of a metamodel provides a Value Specification Language (VSL) unit and it permits the specification of the the non-functional properties qualified with a measurement unit \cite{SpecMetamodel}. VSL is used here to define values of non-functional properties with a measurement unit. 
+\item [Step 7: Specification of non-functional attributes] The non-functional properties are defined on the component instances and the component bindings defined in the previous step. The non-functional properties language unit of the specification of a metamodel provides a Value Specification Language (VSL) unit, which permits the specification of the the non-functional properties qualified with a measurement unit \cite{SpecMetamodel}. VSL is used here to define values of non-functional properties with a measurement unit. 
 
-The operations in the provided interface slots, which are the instances of the provided interface ports, that are promoted by the component containers of the respective components are assigned different non-functional properties namely: 
+The operations in the provided interface slots, that are instances of the provided interface ports, that are promoted by the component containers of the respective components are assigned different non-functional properties namely: 
 \begin{itemize}
 \item The operation \texttt{CallOperationAdd} provided by the \texttt{ProvidedInterface\allowbreak Slot} which refers the \texttt{InterfaceA}, in component instance \texttt{Component\allowbreak\_caller\_impl\_inst} is marked as a cyclic operation with period as 2s
 \item The operations in the provided interface port \texttt{ProvidedInterface\allowbreak Slot1} which refers to the interface \texttt{InterfaceB}, in component instance \texttt{Component\allowbreak\_callee\_impl\_inst}, are marked with the following non-functional properties:
@@ -92,62 +102,69 @@ The operations in the provided interface slots, which are the instances of the p
 
 The event receiver slot \texttt{FailureEvent\allowbreak ReceiverSlot}, which is an instantiation of the event receiver port \texttt{FailureEvent\allowbreak ReceiverPort}, in the component instance \texttt{Component\allowbreak\_caller\_impl\_inst}, is set with the reception of the event \texttt{FailureEvent} as a protected operation.
 
-It is important to note that the WCET and deadline values for the operation in the provided interface slots are not set, as the safeguarding of these properties are not of concern in this Master thesis. 
+It is important to note that the WCET and deadline values for the operations in the provided interface slots are not handled, as the safeguarding of these properties are not of concern in this Master thesis. 
 
 \item [Step 8: Definition of the physical architecture] The hardware topology provides a description of the system hardware. As hardware modeling is not of concern of this Master thesis, a simple hardware topology is considered. 
 
-A processor board with a processor and a processor core is designed. Two connection docks are attached to the processor board and a bus is attached between between the connection docks. The component instances are deployed on the processor core and the component bindings are deployed on the bus. 
+A processor board with a processor and a processor core is designed. Two connection docks are attached to the processor board and a bus is used to connect the connection docks. The component instances are deployed on the processor core and the component bindings are deployed on the bus. 
 \end{description}
 
-This OBSW model is subjected to model validation against the OSRA Specification Compliance and the SCM meta-model compliance, in the OSRA SCM editor \cite{OSRAEditor}. Only after the OBSW model is successfully validated, can the OBSW model be considered as a suitable candidate for automatic generation of infrastructure code.  
-
-\subsection{Corner cases arising during the construction of OBSW model using OSRA component model}
-The different corner cases which might arise are:
-
-\begin{itemize}
-\item Multiple provided interfaces which refer to the same interface are promoted by the container of the same component
-\item Multiple required interfaces which refer to the same interface are subsumed by the container of the same component
-\item Multiple interfaces provide similar operations
-\item Multiple implementations per component type
-\end{itemize}
-
-The first and second corner cases are already handled in the example. But, the other cases will be handled directly in the following section, which deals with the software design for the generated infrastructure code. 
+This OBSW model is subjected to model validation against the OSRA Specification Compliance and the SCM meta-model compliance, in the OSRA SCM editor \cite{OSRAEditor}. Only after the OBSW model is successfully validated, can the OBSW model be considered as a suitable candidate for automatic generation of infrastructure code \cite{OSRAEditor}.  
    
 \subsection{Software design approach for the generated code}
 This section deals with the software design approach for the generated infrastructure code. UML class diagrams are used to show a high level representation of the generated C++ classes.  
 
 \subsubsection{\textbf{Data types and events}}
-A data types from the OBSW model is translated into simple \texttt{typedef} statement from C++.
+A data type from the OBSW model is translated into simple \texttt{typedef} statement from C++.
 
 In case of the above example:
 \begin{itemize}
-\item The data type \texttt{IntegerType}, is translated to a \texttt{typedef} statement as \texttt{typedef\allowbreak  int8\_t IntegerType}
-\item The data type \texttt{StringType}, is translated to a \texttt{typedef} statement as \texttt{typedef\allowbreak std::string StringType} 
+\item The data type \texttt{IntegerType}, is translated to \texttt{typedef\allowbreak  int8\_t IntegerType}
+\item The data type \texttt{StringType}, is translated to \texttt{typedef\allowbreak std::string StringType} 
 \end{itemize}
 
-A subset of all possible data types from the OSRA Component Model can be translated to simple \texttt{typedef} statements as shown in the above example. The chosen subset is not of concern in this section and is handled in the next chapter. 
+A subset of all possible data types from the OSRA Component Model can be translated to simple \texttt{typedef} statements as shown above. More information about the subset of data types for which this successfully works is given in the next chapter. 
 
-The exception types from the OBSW models are translated into simple enumeration literals from C++. These enumeration literals, which can be thrown by a particular operation are grouped to form an enumeration.
+The exception types from the OBSW models are translated into simple enumeration literals from C++. These exceptions, which can be thrown by a particular operation are grouped under an enumeration.
 
-In case of the above example, the three exceptions \texttt{OperandException}, \texttt{MemoryException} and \texttt{OverflowException} are translated into enumeration literals with the similar names. The three exceptions can be thrown from the operation \texttt{OperationAdd} defined in interface \texttt{InterfaceB}. Hence these enumeration literals are stored together as an enumeration named \texttt{OperationAdd\allowbreak InterfaceB\allowbreak Exception}.
+In case of the above example, the three exceptions \texttt{OperandException}, \texttt{MemoryException} and \texttt{OverflowException} and each exception is translated into an enumeration literal which has the same name as the corresponding exception. Three exceptions can be thrown by \texttt{OperationAdd}, which is defined in \texttt{InterfaceB}. Hence the enumeration literals, corresponding to the exceptions, are stored together as an enumeration named \texttt{OperationAdd\allowbreak InterfaceB\allowbreak Exception}.
 
-An event from the OBSW model is mapped to an abstract base class and a concrete implementation class. Appropriate setters and getters for the event parameters are declared as pure virtual methods in the abstract base class for the event and they are implemented in the concrete implementation class for the event.
+An event from the OBSW model is mapped to an abstract base class and a concrete implementation class. Appropriate setters and getters for the event parameters are declared as pure virtual methods in the abstract base class for the event and they are implemented in the concrete implementation corresponding to the evnt.
 
-In case of the above example, the event \texttt{FailureEvent} is mapped as an abstract base class named \texttt{FailureEvent\allowbreak Interface} and concrete implementation class named \texttt{FailureEvent}. Appropriate setters and getters for the event parameters \texttt{m\_Param} and \texttt{m\_ParamDescription} are declared as pure virtual methods in the \texttt{FailureEvent\allowbreak Interface} abstract base class and redefined in the \texttt{FailureEvent} concrete implementation class.   
+In case of the above example, the \texttt{FailureEvent} is mapped as an abstract base class named \texttt{FailureEvent\allowbreak Interface} and concrete implementation class named \texttt{FailureEvent}. Appropriate setters and getters for the event parameters \texttt{m\_Param} and \texttt{m\_ParamDescription} are declared as pure virtual methods in the \texttt{FailureEvent\allowbreak Interface} abstract base class and redefined in the \texttt{FailureEvent} concrete implementation class.   
 
 All the infrastructure code entities mentioned above are present in a namespace, named as \texttt{General}.  
 
 \subsubsection{\textbf{Interfaces}}
-An interface can be mapped as an abstract base class in C++. For each operation and interface attribute in the interface, pure virtual methods with all its parameters and its corresponding data types are added to the abstract base class.
+An interface can be mapped to an abstract base class in C++. Constituents of this abstract base class are:
+
+\begin{itemize}
+\item For each interface operation, corresponding operation parameters and corresponding data types of the operation parameters, a pure virtual method is added. The names and data types of the input parameters for this pure virtual method corresponds to the names and data types of the interface operation parameters 
+\item For each interface attribute parameter of type \texttt{CFG}:
+\begin{itemize}
+\item A class variable of name and data type corresponding to the name and data type of interface attribute is added
+\item Pure virtual setter and getter methods for the interface attribute are added. The data types and names of the input parameters in the setter and getter methods mimic the name and data type of the interface attribute.
+\end{itemize} 
+\item For each interface attribute parameter of type \texttt{MIS}: 
+\begin{itemize}
+\item A \texttt{const} class variable of name and data type corresponding to the name and data type of interface attribute is added
+\item No getter and setter methods are added as they are fixed once and for all \cite{SpecMetamodel}
+\end{itemize}
+\item For each interface attribute of type \texttt{DAT}:
+\begin{itemize}
+\item A class variable of name and data type corresponding to the name and data type of interface attribute is added
+\item No getter and setter methods are added as they are modifiable by the component only and not by external entities \cite{SpecMetamodel}  
+\end{itemize}   
+\end{itemize}
 
 In case of the above example:
 \begin{itemize}
 \item \texttt{InterfaceA} along with the operation \texttt{CallOperationAdd} is mapped to an abstract base class \texttt{InterfaceA} with a pure virtual method \texttt{CallOperationAdd}. 
-\item \texttt{InterfaceB} has one operation \texttt{OperationAdd} and one interface attribute parameter \texttt{m\_StatusValue} with \texttt{AttributeKind} as \texttt{CFG}. These are mapped to an abstract base class named \texttt{InterfaceB} with the following operations:
+\item \texttt{InterfaceB} has one operation \texttt{OperationAdd} and one interface attribute parameter \texttt{m\_StatusValue} of type \texttt{CFG}. These are mapped to an abstract base class named \texttt{InterfaceB} with the following pure virtual methods:
 \begin{itemize}
-\item A pure virtual method \texttt{OperationAdd} with its two \texttt{in} parameters and one \texttt{out} parameter.
-\item A pure virtual getter method for the interface attribute \texttt{m\_StatusValue}
-\item A pure virtual setter method for the interface attribute \texttt{m\_StatusValue}
+\item \texttt{OperationAdd} with two input parameters of type \texttt{const\allowbreak  IntegerType\&} and one input parameter of type \texttt{IntegerType\&}
+\item getter method for the interface attribute \texttt{m\_StatusValue} with an input parameter of type \texttt{IntegerType\&}
+\item setter method for the interface attribute \texttt{m\_StatusValue} with an input parameter of type \texttt{const\allowbreak  IntegerType\&}
 \end{itemize} 
 \end{itemize}
 
@@ -155,14 +172,14 @@ Because of the corner case that multiple interfaces can have similar operations,
 
 In the above example:
 \begin{itemize}
-\item \texttt{InterfaceA\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceA} and which implements the pure virtual method in the parent interface \texttt{InterfaceA}. The implementation contains a simple call to the new pure virtual method which has a  \texttt{\_InterfaceA} added to the original method signature from the parent interface
+\item \texttt{InterfaceA\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceA} and which implements the pure virtual method in the parent interface \texttt{InterfaceA}. The implementation contains a simple call to a new pure virtual method which has \texttt{\_InterfaceA} added to the original method signature from the parent interface
 
-\item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. The implementations contain a simple call to the new pure virtual methods which have \texttt{\_InterfaceB} added to the original method signatures from the parent interface    
+\item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. Each implementation contain a simple call to the new pure virtual methods which has \texttt{\_InterfaceB} added to the original method signature from the parent interface    
 \end{itemize}
 
-The combined effect is that now, original parent interfaces (resembling model entities) can have similar operations, but the refined interfaces redefine the methods from the original parent interfaces, so that there are no confusions between similar operations from different interfaces. Of course, a straight forward solution would have been to incorporate namespaces from C++, but it is not suitable for this design and the explanation is given later in this section.
+The combined effect is that now, more than one original parent interfaces (resembling model entities) can have same operations. The refined interfaces redefine the methods from the original parent interfaces, so that there are no confusions between similar operations from different interfaces. Of course, a straight forward solution would have been to incorporate namespaces from C++, but it is not suitable for this design and the reason is explained later in this section. 
 
-For each interface operation and interface attribute in an interface, a C++ struct is defined to carry around the values of the operation parameters or the values of the interface attributes respectively. These data structures come in handy when the interface operations or interface attribute access operations need to be accessed as asynchronous operations. The data structures also hold general purpose polymorphic function wrappers from C++11 to store the callable target call-back functions. 
+For each interface operation and interface attribute in an interface, a C++ struct is defined to carry around the values of the operation parameters or the values of the interface attributes. These data structures come in handy, when the interface operations or interface attribute access operations need to be accessed asynchronously. The data structures also hold general purpose polymorphic function wrappers from C++11 standard to store the call-back functions. 
 
 For the above example:
 \begin{itemize}
@@ -199,12 +216,13 @@ In case of components which promote multiple provided interface ports which refe
  
 In case of the above example:
 \begin{itemize}
-\item \texttt{ComponentImplementation} concrete implementation class in the namespace \texttt{Component\_Caller} inherits from the abstract base class \texttt{Component\_Type} in the same namespace. It implements all the pure virtual methods in the \texttt{Component\_Type} namely:
+\item \texttt{ComponentImplementation} concrete implementation class in the namespace \texttt{Component\_Caller} inherits from the abstract base class \texttt{Component\_Type} in the same namespace. It implements all the pure virtual methods in the \texttt{ComponentType} namely:
 \begin{itemize}
-\item \texttt{CallOperationAdd\allowbreak\_InterfaceA} inherited from \texttt{InterfaceA\allowbreak\_Helper} through \texttt{Component\_Type}
+\item \texttt{CallOperationAdd\allowbreak\_InterfaceA} inherited from \texttt{InterfaceA\allowbreak\_Helper} through \texttt{ComponentType}
 \item Accessing and releasing of semaphore for concurrent access of \texttt{CallOperationAdd\allowbreak\_InterfaceA}
 \item For safe interleaving of concurrent receptions of \texttt{FailureEvent}  
-\end{itemize} 
+\end{itemize}
+\item Because the component typ 
 \end{itemize} 
 
 \section{Mapping of design entities to the infrastructural code}    
