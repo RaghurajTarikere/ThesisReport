@@ -47,7 +47,15 @@ A software reference architecture is made up of two main parts: \cite{SAVOIR}
 \begin{itemize}
 \item A software architectural concept addressing the pure software architectural related issues
 \item Architectural building blocks related to functional aspects and the corresponding interface definitions which express functions derived from the analysis of the functional chains of the core on-board software domain 
-\end{itemize} 
+\end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{SoftwareReferenceArchitecture.pdf}
+	\caption{Parts of a software reference architecture}
+	\source{\cite{SAVOIR}}
+	\label{}
+\end{figure} 
 
 As mentioned in the previous section, in order to increase the efficiency and cost-effectiveness in the development process of on-board avionics and to incorporate more number of functionality in the on-board software, the overall objective of space industry would be to standardize the avionics systems and therefore the on-board software.
 
@@ -82,7 +90,15 @@ The OBSW life-cycle needs to be consistent with the system life-cycle, which fea
 The COrDeT study, with the slogan "Faster, Later, Software", represented a summary of the above programmatic stakes for the on-board-software life-cycle \cite{CORDET,SAVOIR}. These stakes are included and defined as the user needs \cite{SAVOIR,PhdThesis} for the development of OSRA:
 
 \begin{description}
-\item [Shorter software development time] Need for faster software development in the context of a shorter schedule.
+\item [Shorter software development time] Need for faster software development in the context of a shorter schedule. The figure \cref{fig:RedSWSched} depicts the reduction in the schedule for software development in the future projects. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{ReductionSWSchedule.pdf}
+	\caption{Reduction in the schedule for software development}
+	\source{\cite{SAVOIR}}
+	\label{fig:RedSWSched}
+\end{figure}
 
 \item [Reduce recurring costs] Identification and reduction of recurring costs by providing the same set of functions eg. device drivers, real-time operating systems, communication services etc.   
 
