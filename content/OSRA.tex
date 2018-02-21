@@ -38,11 +38,11 @@ According to the "Rational Unified Process"(RUP)\cite{RUP}, the software referen
 completely instantiated, designed, and proven for use in particular business and technical contexts, together with supporting artifacts to enable their use. Often, these artifacts are harvested
 from previous projects"} 
 
-A software reference architecture prescribes the form of concrete software architectures for a set of systems for which it was developed. So, reference architecture is a form of "generic" software architecture which prescribes the founding principles, the underlying methodology and the architectural practices that were recognized by the domain stakeholders as the best solution to the construction of a certain class of software systems \cite{PhdThesis,SoftRefArch}.
+A software reference architecture prescribes the form of concrete software architectures for a set of systems for which it was developed. So, a reference architecture is a form of "generic" software architecture which prescribes the founding principles, the underlying methodology and the architectural practices that were recognized by the domain stakeholders as the best solution to the construction of a certain class of software systems \cite{PhdThesis,SoftRefArch}.
 
 Elevating a software architecture to a software reference architecture permits to gather and re-use lessons learned and architectural best practices, give new projects a consolidated running start and promote a product line approach \cite{SAVOIR}.
 
-A software reference architecture is made up of two main parts: \cite{SAVOIR}
+A generic software reference architecture is made up of two main parts: \cite{SAVOIR}
 
 \begin{itemize}
 \item A software architectural concept addressing the pure software architectural related issues
@@ -90,7 +90,7 @@ The OBSW life-cycle needs to be consistent with the system life-cycle, which fea
 The COrDeT study, with the slogan "Faster, Later, Software", represented a summary of the above programmatic stakes for the on-board-software life-cycle \cite{CORDET,SAVOIR}. These stakes are included and defined as the user needs \cite{SAVOIR,PhdThesis} for the development of OSRA:
 
 \begin{description}
-\item [Shorter software development time] Need for faster software development in the context of a shorter schedule. The figure \cref{fig:RedSWSched} depicts the reduction in the schedule for software development in the future projects. 
+\item [Shorter software development time] Need for faster software development in the context of a shorter schedule. The \cref{fig:RedSWSched} depicts the reduction in the schedule for software development in the future projects. 
 
 \begin{figure}[h]
 	\centering
@@ -104,7 +104,7 @@ The COrDeT study, with the slogan "Faster, Later, Software", represented a summa
 
 \item [Quality of the product] Need for high quality software (timing predictability, dependability, etc.) and the quality must be at least the same as one of OBSW developed with current approaches.
 
-\item [Increase cost-efficiency] Increase in the "value" of the software product that is developed with a certain amount of budge.
+\item [Increase cost-efficiency] Increase in the "value" of the software product that is developed for a given amount of budget.
 
 \item [Reduce Verification and Validation effort] The new development approaches shall foster the reduction of effort for Verification and Validation efforts, which is one of the main contributor to the cost of software development.
 
@@ -118,7 +118,7 @@ The COrDeT study, with the slogan "Faster, Later, Software", represented a summa
 
 \item [Industrial policy support] Enable multi-team software development, so that sub-contracting to the non-primes is possible, while still being in-charge of the integration.
 
-\item [Role of software suppliers] Increase competence of supplier and foster competition amongst them. 
+\item [Role of software suppliers] Increase competence of supplier and foster competition among them. 
 
 \item [Dissemination activities] System engineers should be exposed to the core principles of the process.
 
@@ -164,7 +164,7 @@ MDE is a novel trend for software development in the space domain, but has been 
 
 In MDE, the principal design artifact is a model, which is an abstract representation of the system under development which encompasses systems and software architecture. Each model conforms with a metamodel, which describes the syntax of entities that populate the models, as well as their relationships and the constraints in place between them. The metamodel constrains the design space of the MDE infrastructure \cite{Metamodelling}.  
 
-COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation. The study came up with the concept of software reference architecture which is to be made up of: \cite{CORDET,SoftRefArch,SAVOIR}
+COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation \cite{CORDET}. Based on this study, the concept of overall software reference architecture, in the development of OSRA, is considered to be made up of {SoftRefArch,SAVOIR}:
 
 \begin{description}
 \item [Component Model] A component model is the basis for designing the software as a composition of individually verifiable and reusable software units \cite{ComponentModel}.
@@ -176,7 +176,15 @@ COrDeT (Component Oriented Development Techniques) aimed at investigating variou
 \item [A conforming Execution Platform] An execution platform helps to preserve at run-time, the properties asserted by the static analysis, and is able to react to possible violations of them.  
 \end{description}
 
-These become the key ingredients for the very foundation of the MDE design methodology focused on the principle of correctness by construction and property preservation, which are high level requirements respectively.
+These become the key ingredients for the very foundation of the MDE design methodology focused on the principle of correctness by construction and property preservation, which are high level requirements respectively and \cref{fig: Constituents of OSRA} gives a pictorial representation of it.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{ConstituentsOfSWArchitecture.pdf}
+	\caption{The four constituents of the software reference architecture}
+	\source{\cite{PhdThesis}}
+	\label{fig: Constituents of OSRA}
+\end{figure}
 
 \subsection{Component Model}
 Component Based Software Engineering (CBSE) is a software methodology centered on the systematic re-use of software by realizing the software as assembly of nits of composition called components \cite{CBSE}.
@@ -237,9 +245,25 @@ When composability and compositionality can be assured by static analysis, guara
  
 Composability is guaranteed when the properties of individual components are preserved on component composition, deployment on target and execution. The components, as mentioned before, implement functional code, most part of which is sequential only and they do not have to worry about the non-functional semantics. The components behave like black-boxes and showcase to the external world only provided and required interfaces. Other components or infrastructural components are expected to communicate through these defined interfaces only. Hence, when components are composed with each other with matching required and provided interfaces, the functional composability is guaranteed which is necessary but not sufficient.
 
-The non-functional requirements/constraints are annotated on the components (specifically the component interfaces) and they are realized by the container which encapsulates the respective component \cite{SAVOIR,ComponentModel}. The provided interface determines the semantics of the invocation and adds to the functional capabilities provided by the component. These semantics must match with the execution semantics described by the computational model, to which the component model is attached.
+The non-functional requirements/constraints are annotated on the components (specifically the component interfaces) and they are realized by the container which encapsulates the respective component \cite{SAVOIR,ComponentModel}. The provided interface determines the semantics of the invocation and adds to the functional capabilities provided by the component. These semantics must match with the execution semantics described by the computational model, to which the component model is attached. An example for composable property is shown in \cref{fig: Composability}. In this case, the number of threads and protected objects generated per component, which entirely depends on the extra functional notations to the component interface should be invariant across component composition for the composable property to hold true.  
 
-The computational model chosen should help extend composability to the non-functional constraints e.g. concurrency and the ones related to real-time and make it possible to get a compositional view of how execution occurs at the system level. Compositionality is said to be achieved when the properties of the system as a whole is a function of the properties of the constituting components. Finally, the binding of the computational model to the component should allow the execution semantics of the components with non-functional descriptors to be completely understood.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{Composability.pdf}
+	\caption{Example for composability}
+	\source{\cite{PhdThesis}}
+	\label{fig: Composability}
+\end{figure}
+
+The computational model chosen should help extend composability to the non-functional constraints e.g. concurrency and the ones related to real-time and make it possible to get a compositional view of how execution occurs at the system level. Compositionality is said to be achieved when the properties of the system as a whole is a function of the properties of the constituting components. Finally, the binding of the computational model to the component should allow the execution semantics of the components with non-functional descriptors to be completely understood. An example for compositionality in shown in \cref{fig: Compositionality}. In this case, it should be possible to calculate the overall latency for the delivery of an output (i.e., the worst-case response time of the end-to-end chain of activities) from individual latencies of different components for the property of compositionality to hold true.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Compositionality.pdf}
+	\caption{Example for compositionality}
+	\source{\cite{PhdThesis}}
+	\label{fig: Compositionality}
+\end{figure} 
 
 In OSRA, the first and second needs can be met by having correct representation of non-functional attributes in the component interfaces and the third need is taken care of by the generation of proper code artifacts, which is the main concern of this Master thesis.     
 \end{description}
@@ -267,6 +291,16 @@ The component can be specified independently of the components it eventually bin
 
 No complex connectors are necessary in this Master thesis because, a simple linux based PC is chosen as a target system for component deployment and this greatly reduces the variety of connectors needed. Connectors necessary for function/procedure calls (which are usually straight-forward) are sufficient in this Master thesis. One of the major reasons, to go for a simple system is because this Master thesis does not deal with the hardware design or hardware modeling of the on-board software systems.           
 \end{description} 
+
+\cref{fig: Components containers and connectors} shows a connector mediating a connection between components A and B. The figure also shows components A and B being enveloped by their containers respectively. The containers would be responsible for the realization of the non-functional properties of the respective components they envelop. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{ComponentContainerConnector.pdf}
+	\caption{Components, containers and a connector connecting them}
+	\source{\cite{SpecMetamodel}}
+	\label{fig: Components containers and connectors}
+\end{figure} 
 
 \subsection{Computational model}
 \label{section: Computational model} 

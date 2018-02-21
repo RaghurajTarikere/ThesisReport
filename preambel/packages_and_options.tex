@@ -233,6 +233,13 @@ inkscape -z -D --file=\getgraphicspath#1.svg %
 	\newcolumntype{d}[1]{D{.}{.}{#1}}
 \fi
 
+\usepackage{makecell}
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
 %
 %%%
 
