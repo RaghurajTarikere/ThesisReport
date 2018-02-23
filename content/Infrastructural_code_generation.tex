@@ -173,7 +173,7 @@ For the provided interface slots in the component instance \texttt{Component\all
 
 It is important to note that the WCET and deadline values for the operations in the provided interface slots are not handled, as the safeguarding of these properties are not of concern in this Master thesis.
 
-For the event receiver slot in the component instance \texttt{Component\allowbreak\_caller\_impl\_inst}, the following non-functional property is specified as shown in \cref{table: NFP ER Port}
+For the event receiver slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_impl\allowbreak\_inst}, the following non-functional property is specified as shown in \cref{table: NFP ER Port}
 
 \begin{center}
 \captionof{table}{Non-functional property for event reception} \label{table: NFP ER Port}
@@ -294,7 +294,7 @@ Because of the corner case that multiple interfaces can have exactly same operat
 \begin{itemize}
 \item Implementations for all the inherited pure virtual methods from the parent interface are provided
 \item The implementations consist of simple method calls to new pure virtual methods
-\item These new pure virtual methods have method signatures similar to the inherited and implemented pure virtual methods. However, it is important to note that the names of these new pure virtual methods are different from the inherited pure virtual methods. \cref{fig: Interface helper Impl} shows a code excerpt of a interface helper class. 
+\item These new pure virtual methods have method signatures similar to the inherited and implemented pure virtual methods. However, it is important to note that the names of these new pure virtual methods are different from the inherited pure virtual methods, as shown in the \cref{Listing: Interface helper Impl} 
 \end{itemize}
 
 \begin{figure}[h]
@@ -304,19 +304,33 @@ Because of the corner case that multiple interfaces can have exactly same operat
 	\label{fig: Interface helpers UML}
 \end{figure}
 
+\begin{Listing}
+\begin{lstlisting}[language=C++]
+class InterfaceA {
+public:
+	InterfaceA(){}
+	virtual ~InterfaceA(){}
+	virtual void callOperationAdd(void) = 0;
+};
+
+class InterfaceA_Helper: public InterfaceA {
+public:
+	InterfaceA_Helper(){}
+	virtual InterfaceA_Helper(){}
+	virtual void callOperationAdd_InterfaceA(void) = 0;
+	virtual void callOperationAdd(void)final {return (callOperationAdd_InterfaceA());}
+};
+\end{lstlisting}
+\caption{Code excerpt from the generated code for \texttt{InterfaceA\allowbreak\_Helper}}
+\label{Listing: Interface helper Impl}
+\end{Listing}
+
 \textbf{For our example OBSW model}:
 \begin{itemize}
-\item \texttt{InterfaceA\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceA} and which implements the pure virtual method in the parent interface \texttt{InterfaceA}. The implementation contains a simple call to a new pure virtual method added to the original method name from the parent interface as shown in \cref{fig: Interface helper Impl}.
+\item \texttt{InterfaceA\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceA} and which implements the pure virtual method in the parent interface \texttt{InterfaceA}. The implementation contains a simple call to a new pure virtual method added to the original method name from the parent interface as shown in the \cref{Listing: Interface helper Impl}.
 
-\item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. Each implementation contain a simple call to the new pure virtual methods added to the original method name from the parent interface . The \texttt{InterfaceB\allowbreak\_Helper} class is constructed is designed and implemented the same way as \texttt{InterfaceA\allowbreak\_Helper} in \cref{fig: Interface helper Impl}    
+\item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. Each implementation contain a simple call to the new pure virtual methods added to the original method name from the parent interface . The \texttt{InterfaceB\allowbreak\_Helper} class is constructed is designed and implemented the same way as \texttt{InterfaceA\allowbreak\_Helper} is designed in the code excerpt in \cref{Listing: Interface helper Impl}   
 \end{itemize}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.0\textwidth]{InterfaceHelperImpl.pdf}
-	\caption{A screenshot of the generated code for \texttt{InterfaceA\allowbreak\_Helper}}
-	\label{fig: Interface helper Impl}
-\end{figure}
 
 The combined effect is that now, more than one original parent interfaces (resembling model entities) can have same operations and interface attributes. The refined interfaces redefine the methods from the original parent interfaces, so that there are no confusions between operations from different interfaces. Of course, a straight forward solution would have been to incorporate namespaces from C++, but it is not suitable for this design and the reason is explained later in this section. 
 
@@ -436,14 +450,38 @@ In case of interface attributes:
 \item If the desired interaction kind for the getter operation is \texttt{asynchronous}, then the signature of the method in the abstract base class bears no resemblance to the corresponding method in the abstract base class for the interface. It is changed as shown in \cref{fig: Required interface port2 UML} to replace the method parameter with a single pointer to the desired call-back function  
 \end{itemize} 
 
-The concrete implementation for the method (as shown in code excerpt in \cref{fig: Required interface port1 Impl}) is fairly simple, if the desired interaction kind for the corresponding operation is \texttt{synchronous}. The implementation consists of a simple method call to the corresponding operation in the abstract base class of the bound provided interface port.
+The concrete implementation for the method (as shown in code excerpt in\cref{Listing: Required interface port1 Impl}) is fairly simple, if the desired interaction kind for the corresponding operation is \texttt{synchronous}. The implementation consists of a simple method call to the corresponding operation in the abstract base class of the bound provided interface port.
 
-The concrete implementation for the method (as shown in code excerpt in \cref{fig: Required interface port2 Impl}) is fairly complex, if the desired interaction kind for the corresponding operation is \texttt{asynchronous}. It would do the following things: 
+\begin{Listing}
+\begin{lstlisting}[language=C++]
+General::OperationAddReport_InterfaceB RequiredInterfacePortType1::OperationAdd (const IntegerType& a,const IntegerType& b,IntegerType& c) {
+	General::OperationAddReport_InterfaceB myReport;
+	myReport = m_targetProvidedInterfacePort.OperationAdd(a,b,c);
+	return myReport;
+}
+\end{lstlisting}
+\caption{Code excerpt from the generated code for requesting service \texttt{OperationAdd} in \texttt{Required\allowbreak InterfacePort\allowbreak Type1}}
+\label{Listing: Required interface port1 Impl}
+\end{Listing}
+
+The concrete implementation for the method (as shown in code excerpt in \cref{Listing: Required interface port2 Impl}) is fairly complex, if the desired interaction kind for the corresponding operation is \texttt{asynchronous}. It would do the following things: 
 \begin{itemize}
 \item Make local copies of all the method parameters
 \item Pack them in the instances of data structures designed to carry the corresponding parameters
 \item Simple method call to the corresponding operation in the abstract base class of the bound provided interface port
 \end{itemize}
+
+\begin{Listing}
+\begin{lstlisting}[language=C++]
+void RequiredInterfacePortType2::getStatusValue(callBackStatusValue_RequiredInterfacePortType2 callBackFunctionPtr) {
+	StatusValueStruct_InterfaceB myStruct;
+	myStruct.callBackFunctionPtr = std::bind(callBackFunctionPtr,m_myCallerInstance,std::placeholder::_1);
+	m_targetProvidedInterfaceSlot.getStatusValue_Receiver(myStruct);
+}
+\end{lstlisting}
+\caption{Code excerpt from the generated code for interface attribute \texttt{StatusValue} access in \texttt{Required\allowbreak InterfacePort\allowbreak Type2}}
+\label{Listing: Required interface port2 Impl}
+\end{Listing}
 
 It is obvious that local copies of the method parameters need to be made because the desired interaction kind is \texttt{asynchronous}.             
 
@@ -469,20 +507,6 @@ The \texttt{RequiredInterface\allowbreak PortType1Base} and \texttt{RequiredInte
 	\label{fig: Required interface port2 UML}
 \end{figure}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.0\textwidth]{RequiredInterfacePort1Impl.pdf}
-	\caption{Code excerpt from the generated code for requesting service \texttt{OperationAdd} in \texttt{Required\allowbreak InterfacePort\allowbreak Type1}}
-	\label{fig: Required interface port1 Impl}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.0\textwidth]{RequiredInterfacePort2Impl.pdf}
-	\caption{Code excerpt from the generated code for interface attribute \texttt{StatusValue} access in \texttt{Required\allowbreak InterfacePort\allowbreak Type2}}
-	\label{fig: Required interface port2 Impl}
-\end{figure}
-
 All the C++ classes mentioned above are present in the namespace \texttt{Component\allowbreak\_Caller}. As the component type \texttt{Component\allowbreak\_Callee} does not have any required interface ports, no C++ classes related to required interface ports are defined in the namespace \texttt{Component\allowbreak\_Callee}. 
 
 \subsubsection{\textbf{Component implementations}}
@@ -503,9 +527,9 @@ In case of components that promote multiple provided interface ports which refer
 \item Because the \texttt{ComponentType} in the namespace \texttt{Component\_Callee} has two provided interface ports namely, \texttt{Provided\allowbreak Interface\allowbreak Port1} and \texttt{Provided\allowbreak Interface\allowbreak Port2}, which refer to \texttt{InterfaceB}, the following classes as shown in \cref{fig: Component implementation Callee UML} are created in the namespace \texttt{Component\_Callee}:
 \begin{itemize}
 \item \texttt{ComponentImplementation\allowbreak Base} which is an abstract base class, but provides implementation for inherited pure virtual methods related to acquiring and releasing of semaphores
-\item \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface1\allowbreak Base} and \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface2\allowbreak Base} which are two dummy abstract base classes
-\item \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface2} which provide different implementations for all the inherited operations except the ones implemented in \texttt{Component\allowbreak Implementation\allowbreak Base}
-\item \texttt{Component\allowbreak Implementation} which inherits from both \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface2}
+\item \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface1\allowbreak Base} and \texttt{Component\allowbreak Implemen\allowbreak tation\allowbreak Provided\allowbreak Interface2\allowbreak Base} which are two dummy abstract base classes
+\item \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Impl\allowbreak emen\allowbreak tation\allowbreak Provided\allowbreak Interface2} which provide different implementations for all the inherited operations except the ones implemented in \texttt{Component\allowbreak Implementation\allowbreak Base}
+\item \texttt{Component\allowbreak Implementation} which inherits from both \texttt{Component\allowbreak Implemen\allowbreak tation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Inter\allowbreak face2}
 \end{itemize}   
 \end{itemize}
 
@@ -559,18 +583,52 @@ The following additional pure virtual methods are added to the abstract class fo
 	\label{fig: Provided interface port2 UML}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=1.0\textwidth]{ProvidedInterfacePortUML.pdf}
 	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port} for \texttt{Component\allowbreak\_Caller} in the example OBSW model}
 	\label{fig: Provided interface port UML}
 \end{figure}   
 
-The concrete implementation for the methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in \cref{fig: Provided interface port1 Impl}. If the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in \cref{fig: Provided interface port1 Impl}. 
+The concrete implementation for the methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. If the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. 
 
-The concrete implementation for the methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in \cref{fig: Provided interface port2 Impl}. A diagrammatic representation of the push that is required, is already shown in Step 2 of each of these figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty} in the section which deals mentions the required code archetypes in the programming model for asynchronous release patterns.
+\begin{Listing}
+\begin{lstlisting}[language=C++]
+General::OperationAddReport ProvidedInterfacePort1::OperationAdd (const IntegerType& a,const IntegerType& b,IntegerType& c) {
+	General::OperationAddReport_InterfaceB myReport;
+	m_myComponent->lockOperationAdd_InterfaceB();
+	myReport = m_myComponent->OperationAdd(a,b,c);
+	m_myComponent->releaseOperationAdd_InterfaceB();
+	return myReport;
+}
+\end{lstlisting}
+\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port1} which is called synchronously and has \texttt{Protected} as a non-functional property attached to it}
+\label{Listing: Provided interface port1 Impl}
+\end{Listing}
 
-The concrete implementation for the methods, in case the corresponding operation is requested to be released asynchronously, with non-functional property as \texttt{cyclic} is a simple call to start the task using the reference to the task as shown in \cref{fig: Provided interface port Impl}.
+The concrete implementation for the methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in code excerpt in \cref{Listing: Provided interface port2 Impl} . A diagrammatic representation of the push that is required, is already shown in Step 2 of each of these figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty} in the section which deals with the required code archetypes in the programming model for asynchronous release patterns.
+
+\begin{Listing}
+\begin{lstlisting}[language=C++]
+void ProvidedInterfacePort2::OperationAdd_Receiver (General::OperationAddStruct_InterfaceB myStruct) {
+	m_myOperationAddChannel->push(myStruct);
+}
+\end{lstlisting}
+\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port2} which is called asynchronously}
+\label{Listing: Provided interface port2 Impl}
+\end{Listing}
+
+The concrete implementation for the methods, in case the corresponding operation is requested to be released asynchronously, with non-functional property as \texttt{cyclic} is a simple call to start the task using the reference to the task as shown in the code excerpt in \cref{Listing: Provided interface port Impl}.
+
+\begin{Listing}
+\begin{lstlisting}[language=C++]
+void ProvidedInterfacePort::CallOperationAdd(void) {
+	m_mycallOperationAddTask->startPeriodicTask();
+}
+\end{lstlisting}
+\caption{Code excerpt from the generated code for operation \texttt{CallOperationAdd} in \texttt{Provided\allowbreak Interface\allowbreak Port} which has non-functional property set as \texttt{Cyclic}}
+\label{Listing: Provided interface port Impl}
+\end{Listing}
 
 \textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Provided interface port1 UML}, \cref{fig: Provided interface port2 UML}, \cref{fig: Provided interface port UML} are defined:
 \begin{itemize}
@@ -581,34 +639,39 @@ The concrete implementation for the methods, in case the corresponding operation
 
 All the abstract base classes have pure virtual methods as per the general description given above and they have to be implemented in the corresponding concrete implementation classes. The concrete implementations are in line with the description as in the general case above.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.0\textwidth]{ProvidedInterfacePort1Impl.pdf}
-	\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port1} which is called synchronously and has \texttt{Protected} as a non-functional property attached to it}
-	\label{fig: Provided interface port1 Impl}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.0\textwidth]{ProvidedInterfacePort2Impl.pdf}
-	\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port1} which is called asynchronously}
-	\label{fig: Provided interface port2 Impl}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\textwidth]{ProvidedInterfacePortImpl.pdf}
-	\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port1} which is called asynchronously}
-	\label{fig: Provided interface port Impl}
-\end{figure}
-
 \subsubsection{\textbf{Tasks from the Tasking framework}}
-In the discussions about designing a programming model for OSRA, it was clear that the threads of control might contain tasks from the Tasking framework. Each task is mapped to an abstract base class and a concrete implementation class in C++. A task would have instances of the required task inputs, task event as per the required thread of control. Each task has a reference to the component type in order to invoke the actual operations which are represented as pure virtual methods in the component type.
+In the discussions about designing a programming model for OSRA in the \cref{chap: Progamming model}, it was clear that the threads of control might contain tasks from the Tasking framework. Each task is mapped to an abstract base class and a concrete implementation class in C++. A task would have instances of the required task inputs, task event as per the required threads of control explained in detail in the chapter on arriving at a programming model for OSRA.
 
-\textbf{For our example OBSW model}: The following classes are defined:
+Each task stores a reference to the base class of the component implementation in order to access the services implemented in the respective component implementations.  
+
+\textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Periodic task UML}, \cref{fig: Sporadic task UML}, \cref{fig: Status value getter setter task UML} are defined:
 \begin{itemize}
-\item \texttt{Periodic\allowbreak TaskBase} abstract base class and \texttt{PeriodicTask} concrete implementation class for 
+\item \texttt{CallOperationAdd\allowbreak Periodic\allowbreak TaskBase\allowbreak \_InterfaceA} abstract base class and \texttt{Call\allowbreak OperationAdd\allowbreak Periodic\allowbreak Task} concrete implementation class, in order to call operation \texttt{Call\allowbreak OperationAdd} in the \texttt{Provided\allowbreak Interface\allowbreak Port} perioidically every 2s
+\item \texttt{OperationAdd\allowbreak Sporadic\allowbreak TaskBase\allowbreak \_InterfaceB} abstract base class and a corresponding \texttt{Operation\allowbreak Add\allowbreak Sporadic\allowbreak Task} concrete implementation class, in order to call operation \texttt{Operation\allowbreak Add} in the \texttt{Provided\allowbreak Interface\allowbreak Port2} sporadically with an MIAT of 2s
+\item \texttt{StatusValue\allowbreak SetterTaskBase\allowbreak \_InterfaceB} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Setter\allowbreak Task} concrete implementation class, in order to provide asynchronous access to the setter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Port2}
+\item \texttt{StatusValue\allowbreak SetterTaskBase\allowbreak \_InterfaceB} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Getter\allowbreak Task} concrete implementation class, in order to provide asynchronous access to the getter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Port2}
 \end{itemize} 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{PeriodicTaskUML.pdf}
+	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port1} for \texttt{Component\allowbreak\_Callee} in the example OBSW model}
+	\label{fig: Periodic task UML}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{SporadicTaskUML.pdf}
+	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port1} for \texttt{Component\allowbreak\_Callee} in the example OBSW model}
+	\label{fig: Sporadic task UML}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{SetterGetterTaskUML.pdf}
+	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port1} for \texttt{Component\allowbreak\_Callee} in the example OBSW model}
+	\label{fig: Status value getter setter task UML}
+\end{figure}
 
 \subsubsection{\textbf{Component containers}}
 A container of a component can be mapped to a class in C++. The component instance, event emitter and receiver slots, required interface slots, instances of tasks from the Tasking framework reside inside a component container. The number of task instances inside a component container depend on the number of operations in the provided interface which would be released asynchronously. 
