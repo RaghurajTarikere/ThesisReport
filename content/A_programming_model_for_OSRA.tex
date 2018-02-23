@@ -36,7 +36,7 @@ The archetypes for a synchronous release pattern are quite straight forward. Whe
 	\centering
 	\includegraphics[width=0.8\textwidth]{Synchronous.pdf}
 	\caption{Synchronous release pattern}
-	\label{fig: Synchronous}
+	\label{fig: Synchronous call}
 \end{figure}
 
 \subsubsection{\textbf{Protected}}
@@ -46,6 +46,7 @@ When the non-functional property set on the service in the provided interface si
 When the non-functional property set on the service in the provided interface side of the component offering the service is \texttt{Unprotected}, the semantics of handling the service request is essentially the same as the way the protected operations are handled, except for the fact that obtaining and releasing of the semaphore for the operation is not anymore needed.
 
 \subsection{Asynchronous release patterns}
+\label{subsection: asynchronous patterns}
 The archetypes for asynchronous release patterns are quite complicated when compared to archetypes for synchronous release patterns. As the requests cannot be anymore handled in the flow of control of the service requester in case of asynchronous release pattern, tasks from Tasking framework along with other tasking primitives, which are independent threads of execution can be activated to cater to these requests on the provided interface side. 
 
 The asynchronous service request is initially intercepted at the required interface port subsumed by the container of the component which makes the request. Here the data (if any), associated with the request is packaged and the packaged data is forwarded to the provided interface port, which is promoted by the container of the component handling the request. Along with the data associated with the service request, it is also important that the required interface port packages information about how to send back the results and exceptions (if any) to the service requester.
