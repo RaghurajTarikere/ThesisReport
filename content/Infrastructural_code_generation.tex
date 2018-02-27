@@ -734,6 +734,26 @@ A component container is also responsible for initializing the following:
 
 Both the containers have instances of different component as explained in the general case and as shown in \cref{fig: Component container caller UML} and \cref{fig: Component container callee UML}. They are responsible for the initialization of different components as explained in the above general description.  
 
+\section{Code generation using Xtend}
+\label{section: code generation}
+The reference implementation of the OSRA component model consists in a set of .ecore metamodels \cite{SpecMetamodel}. Ecore is an implementation of the EMOF (Essential MOF), the meta-meta language by the OMG for the specification of meta-models \cite{SpecMetamodel}. The main advantage of using Ecore is the ready availability of graphical editors for the specification of metamodels and powerful support provided by the Eclipse Modeling Framework (EMF), which is a framework of the Eclipse development platform that permits to generate a code implementation of the metamodel entities, basic editors for the creation of models conforming to the metamodel under development \cite{SpecMetamodel}. 
+
+It is an implementation decision in this Master thesis to use Xtend for the code generation. Xtend is a general purpose Java-like language that is completely operable with Java \cite{Xtend,XtendDoc}. Xtend has a more concise syntax than Java and provides powerful features such as type inference, extension methods, dispatch methods, an lambda expressions and the all important multiline template expressions, which are useful when writing code generators \cite{Xtend,XtendDoc}. Xtend also provides powerful features that make model visiting and traversing really easy, straightforward, and natural to read and maintain. 
+
+Xtext is an eclipse framework for implementing programming languages and Domain Specific Languages (DSLs) \cite{Xtend}. Xtext helps to implement languages quickly, and most of all, it covers all the aspects of a complete language infrastructure like parser, code generator etc. Xtext uses Google Guice, which is a dependency injection framework to create and call a code generator \cite{Xtend}. The dependency injection pattern basically allows to inject implementation objects into a class hierarchy in a consistent way \cite{InvOfCntrlurl}. The Xtext's generator support can be used in Xtend directly to build code generators for non-Xtext based models, such as the OBSW models constructed using the OSRA component model \cite{CodeGenEclXtend}. 
+
+The tutorial in \cite{CodeGenNonXtext} is used as a base in this Master thesis to construct a code generator for non-Xtext based models using Xtend and also provide a UI integration for the code generator.
+
+
+
+
+ 
+
+   
+
+ 
+
+
  
    
 
