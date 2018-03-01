@@ -138,6 +138,36 @@ crk={I.7.2}
 %
 %%%
 
+%%For creating folder structure
+\usepackage{dirtree}
+
+\usepackage{forest}
+\usetikzlibrary{arrows.meta}
+\forestset{
+	dir tree/.style={
+		for tree={
+			parent anchor=south west,
+			child anchor=west,
+			anchor=mid west,
+			inner ysep=1pt,
+			grow'=0,
+			align=left,
+			edge path={
+				\noexpand\path [draw, \forestoption{edge}] (!u.parent anchor) ++(1em,0) |- (.child anchor)\forestoption{edge label};
+			},
+			font=\sffamily,
+			if n children=0{}{
+				delay={
+					prepend={[,phantom, calign with current]}
+				}
+			},
+			fit=band,
+			before computing xy={
+				l=2em
+			}
+		},
+	}
+}
 
 %%%
 % Intelligentes Leerzeichen um hinter Abkürzungen die richtigen Abstände zu erhalten, auch leere.

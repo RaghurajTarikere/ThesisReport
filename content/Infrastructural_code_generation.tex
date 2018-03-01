@@ -91,18 +91,17 @@ In this simple example, two simple components are designed. The first component 
 
 The desired interaction kind for the operations in the required interface ports of \texttt{Component\allowbreak\_Caller} are as shown in the \cref{table: NFP RI Ports}
 
-\begin{center}
-\captionof{table}{Desired interaction kind for operations in the required interface ports} \label{table: NFP RI Ports} 
-\begin{tabular}{|c|c|c|}
-\hline
-\thead{Required interface ports} & \thead{Operations} & \thead{Interaction kind} \\
-\hline\hline
-\texttt{Required\allowbreak Interface\allowbreak PortType1} & \makecell{\texttt{OperationAdd} \\ Interface attribute setter \\ Interface attribute getter} & \makecell{\texttt{synchronous} \\ \texttt{synchronous} \\ \texttt{synchronous}} \\
-\hline
-\texttt{Required\allowbreak Interface\allowbreak PortType2} & \makecell{\texttt{OperationAdd} \\ Interface attribute setter \\ Interface attribute getter} & \makecell{\texttt{asynchronous} \\ \texttt{asynchronous} \\ \texttt{asynchronous}} \\
-\hline
-\end{tabular}
-\end{center}
+\begin{table}[]
+	\centering
+	\caption{Desired interaction kind for operations in the required interface ports}
+	\label{table: NFP RI Ports}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{Required interface ports} & \textbf{Operations} & \textbf{Interaction kind} \\ \hline
+		\texttt{RequiredInterfacePortType1} & \begin{tabular}[c]{@{}c@{}}\texttt{OperationAdd}\\ Interface attribute setter\\ Interface attribute getter\end{tabular} & \begin{tabular}[c]{@{}c@{}}\texttt{synchronous}\\ \texttt{synchronous}\\ \texttt{synchronous}\end{tabular} \\ \hline
+		\texttt{RequiredInterfacePortType2} & \begin{tabular}[c]{@{}c@{}}\texttt{OperationAdd}\\ Interface attribute setter\\ Interface attribute getter\end{tabular} & \begin{tabular}[c]{@{}c@{}}\texttt{asynchronous}\\ \texttt{asynchronous}\\ \texttt{asynchronous}\end{tabular} \\ \hline
+	\end{tabular}
+\end{table}
 
 \texttt{Component\allowbreak\_Callee} has:
 \begin{itemize}
@@ -145,46 +144,47 @@ Two component instances as shown in \cref{fig: Ex. Component instances} are defi
 
 For the provided interface slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_impl\_inst}, the following non-functional property is specified as shown in \cref{table: NFP PI Ports1}
 
-\begin{center}
-\captionof{table}{Non-functional property for the operation in the provided interface slot} \label{table: NFP PI Ports1}
-\begin{tabular}{|c|c|c|}
-\hline	
-\thead{Provided interface slot} & \thead{Operation} & \thead{Non-functional property} \\
-\hline \hline
-\texttt{ProvidedInterface\allowbreak Slot} & \texttt{Call\allowbreak OperationAdd} & \makecell{\texttt{Cyclic}, Period = 2s} \\
-\hline
-\end{tabular}
-\end{center}
+\begin{table}[]
+	\centering
+	\caption{Non-functional property for the operation in the provided interface slot}
+	\label{table: NFP PI Ports1}
+	\begin{tabular}{lll}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{Provided interface slot}} & \multicolumn{1}{c|}{\textbf{Operation}} & \multicolumn{1}{c|}{\textbf{Non-functional property}} \\ \hline
+		\multicolumn{1}{|c|}{\texttt{ProvidedInterfaceSlot}} & \multicolumn{1}{c|}{\texttt{CallOperationAdd}} & \multicolumn{1}{c|}{\texttt{cyclic}, Period = 2s} \\ \hline
+	\end{tabular}
+\end{table}
 
 For the provided interface slots in the component instance \texttt{Component\allowbreak\_callee\_impl\_inst}, the following non-functional properties are specified as shown in \cref{table: NFP PI Ports2}
 
-\begin{center}
-\captionof{table}{Non-functional properties for the operations in the provided interface slots} \label{table: NFP PI Ports2}
-\begin{tabular}{|c|c|c|}
-\hline	
-\thead{Provided interface slots} & \thead{Operations} & \thead{Non-functional properties} \\
-\hline \hline
-\texttt{ProvidedInterface\allowbreak Slot1} & \makecell{\texttt{OperationAdd} \\ Interface attribute setter \\ Interface attribute getter} & \makecell{\texttt{Protected} \\ \texttt{Protected} \\ \texttt{Unprotected}} \\
-\hline
-\texttt{ProvidedInterface\allowbreak Slot2} & \makecell{\texttt{OperationAdd} \\ Interface attribute setter \\ Interface attribute getter} & \makecell{\texttt{Sporadic}, MIAT = 2s \\ \texttt{Protected} \\ \texttt{Protected}} \\
-\hline
-\end{tabular}
-\end{center}
+\begin{table}[]
+	\centering
+	\caption{Non-functional properties for the operations in the provided interface slots}
+	\label{table: NFP PI Ports2}
+	\begin{tabular}{ccc}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{Provided interface slots}} & \multicolumn{1}{c|}{\textbf{Operations}} & \multicolumn{1}{c|}{\textbf{Non-functional properties}} \\ \hline
+		\multicolumn{1}{|c|}{\texttt{ProvidedInterfaceSlot1}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}\texttt{OperationAdd}\\ Interface attribute setter\\ Interface attribute getter\end{tabular}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}\texttt{Protected}\\ \texttt{Protected}\\ \texttt{Unprotected}\end{tabular}} \\ \hline
+		\multicolumn{1}{|c|}{\texttt{ProvidedInterfaceSlot2}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}\texttt{OperationAdd}\\ Interface attribute setter\\ Interface attribute getter\end{tabular}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}\texttt{sporadic}, MIAT = 2s\\ \texttt{Protected}\\ \texttt{Protected}\end{tabular}} \\ \hline
+		\multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}
+	\end{tabular}
+\end{table}
 
 It is important to note that the WCET and deadline values for the operations in the provided interface slots are not handled, as the safeguarding of these properties are not of concern in this Master thesis.
 
 For the event receiver slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_impl\allowbreak\_inst}, the following non-functional property is specified as shown in \cref{table: NFP ER Port}
 
-\begin{center}
-\captionof{table}{Non-functional property for event reception} \label{table: NFP ER Port}
-\begin{tabular}{|c|c|c|}
-\hline	
-\thead{Event receiver slot} & \thead{Event} & \thead{Non-functional property} \\
-\hline \hline
-\texttt{FailureEvent\allowbreak ReceiverSlot} & \texttt{FailureEvent} & \texttt{Protected} \\
-\hline
-\end{tabular}
-\end{center}
+\begin{table}[]
+	\centering
+	\caption{Non-functional property for event reception}
+	\label{table: NFP ER Port}
+	\begin{tabular}{ccc}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{Event receiver slot}} & \multicolumn{1}{c|}{\textbf{\texttt{Event}}} & \multicolumn{1}{c|}{\textbf{Non-functional property}} \\ \hline
+		\multicolumn{1}{|c|}{\texttt{FailureEventReceiverSlot}} & \multicolumn{1}{c|}{\texttt{FailureEvent}} & \multicolumn{1}{c|}{\texttt{Protected}} \\ \hline
+		\multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}
+	\end{tabular}
+\end{table}
 
 \item [Step 8: Definition of the physical architecture] The hardware topology provides a description of the system hardware. As hardware modeling is not of concern in this Master thesis, a simple hardware topology as shown in \cref{fig: Ex. Hardware topology} is considered. 
 
@@ -202,6 +202,7 @@ A processor board with a processor and a processor core is instantiated. Two con
 This OBSW model is subjected to model validation against the OSRA Specification Compliance and the SCM meta-model compliance, in the OSRA SCM editor \cite{OSRAEditor}. Only after the OBSW model is successfully validated, can the OBSW model be considered as a suitable candidate for automatic generation of infrastructure code \cite{OSRAEditor}.  
    
 \subsection{Software design approach for the generated code}
+\label{subsection: Software design approach}
 This section deals with the software design approach for the generated infrastructure code. UML class diagrams, wherever appropriate are judiciously used in this section to show a high level representation of the generated C++ classes and datastructures. 
 
 Each of the following sub-sections, is divided into two parts:
@@ -744,6 +745,98 @@ Xtext is an eclipse framework for implementing programming languages and Domain 
 
 The tutorial in \cite{CodeGenNonXtext} is used as a base in this Master thesis to construct a code generator for non-Xtext based models using Xtend and also provide a UI integration for the code generator.
 
+\section{Organizing the generated code}
+\label{section: Code organization}
+As explained in the previous sections, adopting separation of concerns even at the implementation level is one of the primary goals of this chapter and we have successfully achieved it in the discussions on software design for the infrastructural code in \cref{subsection: Software design approach}. 
+
+To further emphasize on separation of concerns at the implementation level, it is necessary to properly sort the generated infrastructure code into a meaningful file structure helping the third party software supplier to separate the automatically generated code from the code that needs to be supplied. This is of prime importance for the third party software supplier to not accidentally lose the implementations in successive code generation cycles. 
+
+The overall idea would be to:
+\begin{itemize}
+\item Generate two folders per component to clearly separate the infrastructural code entities, at the component type level from the infrastructural code entities at the component instance level 
+\begin{itemize}
+\item The first folder would hold C++ classes related to its component type, required interface ports, event emitter ports, event receiver ports in the sub-folder named as \texttt{AutogeneratedCode}. It also contains C++ classes related to component implementations and because it is the unit of sub-contract, it is placed in a separate sub-folder named as \texttt{UserCode}. The third-party software supplier can alter the code in this folder safely without the fear of the code being overwritten by successive code generation cycles. Care is taken in the code generator to generate the classes in these files only once  
+\item The second folder would hold the C++ classes related to provided interface ports, component containers in the sub-folder named as \texttt{AutogeneratedCode}. As already explained the component container class for a component would contain provided and required interface slots, component instance   
+\end{itemize} 
+\item The folder named as \texttt{Datatypes\allowbreak Interfaces\allowbreak EventsAnd\allowbreak Exceptions} would hold C++ classes related to the data types, exceptions, events, parameter channel and their corresponding parameter queues 
+\end{itemize}
+
+Considering our running example, the folder structure is as explained below:
+
+All the data types, event types, interfaces, exception types that are used in the example are stored along with the parameter channel and parameter queue as shown below:
+
+\newpage 
+
+\dirtree{%
+.1 src-gen.
+.2 DatatypesInterfacesEventsAndExceptions.
+.3 include.
+.4 Datatypes.h.
+.4 Exceptions.h.
+.4 FailureEvent.h.
+.4 InterfaceA.h.
+.4 InterfaceB.h.
+.4 ParameterChannel.h.
+.4 ParameterQueue.h.
+}
+
+All the constituents of the \texttt{Component\_Callee} are arranged as shown below:
+
+\dirtree{%
+.1 src-gen.
+.2 Component\_Callee.
+.3 AutogeneratedCode.
+.4 include.
+.5 ComponentType\_Callee.h.
+.5 EventEmitterPorts\_Callee.h.h.
+.4 src.
+.5 ComponentType\_Callee.cpp.
+.5 EventEmitterPorts\_Callee.cpp.
+.3 UserCode.
+.4 include.
+.5 ComponentImplementation\_Callee.h.
+.4 src.
+.5 ComponentImplementation\_Callee.cpp.
+.2 Component\_Callee\_Instance.
+.3 AutogeneratedCode.
+.4 include.
+.5 ProvidedInterfacePorts\_Callee.h.
+.5 ComponentContainer\_Callee.h.
+.4 src.
+.5 ProvidedInterfacePorts\_Callee.cpp.
+.5 ComponentContainer\_Callee.cpp.
+}
+
+\newpage
+
+All the constituents of the \texttt{Component\_Caller} are arranged as shown below:
+\dirtree{%
+	.1 src-gen.
+	.2 Component\_Caller.
+	.3 AutogeneratedCode.
+	.4 include.
+	.5 ComponentType\_Caller.h.
+	.5 EventReceiverPorts\_Caller.h.
+	.5 RequiredInterfacePorts\_Caller.h.
+	.4 src.
+	.5 ComponentType\_Caller.cpp.
+	.5 EventReceiverPorts\_Caller.cpp.
+	.5 RequiredInterfacePorts\_Caller.cpp.
+	.3 UserCode.
+	.4 include.
+	.5 ComponentImplementation\_Caller.h.
+	.4 src.
+	.5 ComponentImplementation\_Caller.cpp.
+	.2 Component\_Caller\_Instance.
+	.3 AutogeneratedCode.
+	.4 include.
+	.5 ProvidedInterfacePorts\_Caller.h.
+	.5 ComponentContainer\_Caller.h.
+	.4 src.
+	.5 ProvidedInterfacePorts\_Caller.cpp.
+	.5 ComponentContainer\_Caller.cpp.
+}
+  
 
 
 
