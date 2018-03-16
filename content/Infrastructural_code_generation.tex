@@ -536,8 +536,8 @@ A component implementation can be mapped in C++ as a concrete implementation of 
 In case of components that promote multiple provided interface ports which refer to the same interface type, it is necessary to provide multiple implementations for the operations in the provided interfaces. In order to solve this problem a class hierarchy as shown in \cref{fig: Component implementation Callee UML} is decided upon in this Master thesis:
 
 \begin{itemize}
-\item A component implementation abstract base class is designed which contains implementations for inherited pure virtual methods related to acquiring and releasing of semaphores. Also the the inherited pure virtual methods which are provided only once are implemented here
-\item The Component implementation abstract base class is further extended by dummy abstract base classes. A dummy base class is added for each of the provided interface ports which refer to the same interface type. These dummy abstract base classes help in testing of the implementations of the services which are provided by multiple provided interfaces. With the help of these dummy abstract base classes, mock implementation classes can be easily created and used in testing \cite{InvOfCntrlurl}  
+\item A component implementation abstract base class is designed which contains implementations for inherited pure virtual methods related to acquiring and releasing of semaphores. Also the inherited pure virtual methods which are provided only once are implemented here
+\item The Component implementation abstract base class is further extended by dummy abstract base classes. A dummy base class is added for each of the provided interface ports which refer to the same interface type. These dummy abstract base classes help in testing of the implementations of the services which are provided more than once by multiple provided interfaces. With the help of these dummy abstract base classes, mock implementation classes can be easily created and used for testing \cite{InvOfCntrlurl}  
 \item These dummy abstract base classes are extended by concrete implementation classes which provide different concrete implementations for all the inherited operations except the ones, which are already implemented in the component implementation abstract base class
 \item As it is a necessity to have only one instantiable concrete implementation per component \cite{EvoRAVCodeAr,SpecMetamodel,CompBasedProcess}, all the concrete implementations are inherited one last time in a component implementation class. This instance is now deployable on the hardware platform
 \end{itemize}
@@ -548,8 +548,8 @@ In case of components that promote multiple provided interface ports which refer
 \item Because the \texttt{ComponentType} in the namespace \texttt{Component\_Callee} has two provided interface ports namely, \texttt{Provided\allowbreak Interface\allowbreak Port1} and \texttt{Provided\allowbreak Interface\allowbreak Port2}, which refer to \texttt{InterfaceB}, the following classes as shown in \cref{fig: Component implementation Callee UML} are created in the namespace \texttt{Component\_Callee}:
 \begin{itemize}
 \item \texttt{ComponentImplementation\allowbreak Base} which is an abstract base class, but provides implementation for inherited pure virtual methods related to acquiring and releasing of semaphores
-\item \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface1\allowbreak Base} and \texttt{Component\allowbreak Implemen\allowbreak tation\allowbreak Provided\allowbreak Interface2\allowbreak Base} which are two dummy abstract base classes
-\item \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Impl\allowbreak emen\allowbreak tation\allowbreak Provided\allowbreak Interface2} which provide different implementations for all the inherited operations except the ones implemented in \texttt{Component\allowbreak Implementation\allowbreak Base}
+\item \texttt{Component\allowbreak Implementation\allowbreak Base\_\allowbreak Provided\allowbreak Interface\allowbreak Port1\allowbreak} and \texttt{Component\allowbreak Implementation\allowbreak Base\_\allowbreak Provided\allowbreak Interface\allowbreak Port2\allowbreak} which are two dummy abstract base classes
+\item \texttt{Component\allowbreak Implementation\_\allowbreak Provided\allowbreak Interface\allowbreak Port1} and \texttt{Component\allowbreak Impl\allowbreak emen\allowbreak tation\_\allowbreak Provided\allowbreak Interface\allowbreak Port2} which provide different implementations for all the inherited operations except the ones implemented in \texttt{Component\allowbreak Implementation\allowbreak Base}
 \item \texttt{Component\allowbreak Implementation} which inherits from both \texttt{Component\allowbreak Implemen\allowbreak tation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Inter\allowbreak face2}
 \end{itemize}   
 \end{itemize}
@@ -586,8 +586,8 @@ In case of interface attributes:
 The following additional pure virtual methods are added to the abstract class for a provided interface port:
 \begin{itemize}
 \item For each interface operation and interface attribute setter/getter operation which is called asynchronously, an additional pure virtual method is added to store the address of the task channel, to which the data structure corresponding to the operation needs to be pushed
-\item For storing the reference to their corresponding component implementation base class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}
-\item As shown in \cref{fig: Provided interface port UML}, for storing the reference of the task from tasking framework which is responsible for periodically requesting the service in the provided interface port which has the interaction kind set to \texttt{cyclic}. 
+\item An additional pure virtual method for storing the reference to their corresponding component implementation base class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}
+\item An additional pure virtual method as shown in \cref{fig: Provided interface port UML}, for storing the reference of the task from tasking framework which is responsible for periodically requesting the service in the provided interface port which has the interaction kind set to \texttt{cyclic}. 
 \end{itemize}
 
 \begin{figure}[h]
@@ -611,11 +611,11 @@ The following additional pure virtual methods are added to the abstract class fo
 	\label{fig: Provided interface port UML}
 \end{figure}   
 
-The concrete implementation for the methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. If the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. 
+The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. If the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. 
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
-General::OperationAddReport ProvidedInterfacePort1::OperationAdd (const IntegerType& a,const IntegerType& b,IntegerType& c) {
+General::OperationAddReport ProvidedInterfacePort1_Component_Callee_inst::OperationAdd (const IntegerType& a,const IntegerType& b,IntegerType& c) {
 	General::OperationAddReport_InterfaceB myReport;
 	m_myComponent->lockOperationAdd_InterfaceB();
 	myReport = m_myComponent->OperationAdd(a,b,c); //Simple method call
@@ -627,11 +627,11 @@ General::OperationAddReport ProvidedInterfacePort1::OperationAdd (const IntegerT
 \label{Listing: Provided interface port1 Impl}
 \end{Listing}
 
-The concrete implementation for the methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in code excerpt in \cref{Listing: Provided interface port2 Impl} . A diagrammatic representation of the push that is required, is already shown in Step 2 of each of these figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty} in the section which deals with the required code archetypes in the programming model for asynchronous release patterns.
+The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in code excerpt in \cref{Listing: Provided interface port2 Impl} . A diagrammatic representation of the push that is required, is already shown in figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty}, in the section which deals with the required code archetypes in the programming model for asynchronous release patterns.
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
-void ProvidedInterfacePort2::OperationAdd_Receiver (General::OperationAddStruct_InterfaceB myStruct) {
+void ProvidedInterfacePort2_Component_Callee_inst::OperationAdd_Receiver (General::OperationAddStruct_InterfaceB myStruct) {
 	m_myOperationAddChannel->push(myStruct); //A push onto the task channel
 }
 \end{lstlisting}
@@ -639,11 +639,11 @@ void ProvidedInterfacePort2::OperationAdd_Receiver (General::OperationAddStruct_
 \label{Listing: Provided interface port2 Impl}
 \end{Listing}
 
-The concrete implementation for the methods, in case the corresponding operation is requested to be released asynchronously, with non-functional property as \texttt{cyclic} is a simple call to start the task using the reference to the task as shown in the code excerpt in \cref{Listing: Provided interface port Impl}.
+The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released with non-functional property as \texttt{cyclic}, then is a simple call to start the task using the reference to the task as shown in the code excerpt in \cref{Listing: Provided interface port Impl}.
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
-void ProvidedInterfacePort::CallOperationAdd(void) {
+void ProvidedInterfacePort_Component_Caller_inst::CallOperationAdd(void) {
 	m_mycallOperationAddTask->startPeriodicTask(); //Method call to start the task
 }
 \end{lstlisting}
@@ -653,9 +653,9 @@ void ProvidedInterfacePort::CallOperationAdd(void) {
 
 \textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Provided interface port1 UML}, \cref{fig: Provided interface port2 UML}, \cref{fig: Provided interface port UML} are defined:
 \begin{itemize}
-\item \texttt{Provided\allowbreak Interface1\allowbreak Base} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port1} concrete implementation class
-\item \texttt{Provided\allowbreak Interface2\allowbreak Base} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port2} concrete implementation class
-\item \texttt{Provided\allowbreak Interface\allowbreak Port} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port} concrete implementation class 
+\item \texttt{Provided\allowbreak Interface\allowbreak Port1\_\allowbreak Base\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port1\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} concrete implementation class
+\item \texttt{Provided\allowbreak Interface\allowbreak Port2\_\allowbreak Base\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port2\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} concrete implementation class
+\item \texttt{Provided\allowbreak Interface\allowbreak Port\_\allowbreak Base\allowbreak Component\_\allowbreak Caller\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port\_\allowbreak Component\_\allowbreak Caller\_\allowbreak inst} concrete implementation class 
 \end{itemize} 
 
 All the abstract base classes have pure virtual methods as per the general description given above and they have to be implemented in the corresponding concrete implementation classes. The concrete implementations are in line with the description as in the general case above.
@@ -667,10 +667,10 @@ Each task stores a reference to the base class of the component implementation i
 
 \textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Periodic task UML}, \cref{fig: Sporadic task UML}, \cref{fig: Status value getter setter task UML}, \cref{fig: Event receiver task UML} are defined:
 \begin{itemize}
-\item \texttt{CallOperationAdd\allowbreak Periodic\allowbreak TaskBase\allowbreak \_InterfaceA} abstract base class and \texttt{Call\allowbreak OperationAdd\allowbreak Periodic\allowbreak Task} concrete implementation class, in order to call operation \texttt{Call\allowbreak OperationAdd} in the \texttt{Provided\allowbreak Interface\allowbreak Port} perioidically every 2s
-\item \texttt{OperationAdd\allowbreak Sporadic\allowbreak TaskBase\allowbreak \_InterfaceB} abstract base class and a corresponding \texttt{Operation\allowbreak Add\allowbreak Sporadic\allowbreak Task} concrete implementation class, in order to call operation \texttt{Operation\allowbreak Add} in the \texttt{Provided\allowbreak Interface\allowbreak Port2} sporadically with an MIAT of 2s
-\item \texttt{StatusValue\allowbreak SetterTaskBase\allowbreak \_InterfaceB} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Setter\allowbreak Task} concrete implementation class, in order to provide asynchronous access to the setter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Port2}
-\item \texttt{StatusValue\allowbreak SetterTaskBase\allowbreak \_InterfaceB} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Getter\allowbreak Task} concrete implementation class, in order to provide asynchronous access to the getter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Port2}
+\item \texttt{CallOperationAdd\allowbreak Periodic\allowbreak TaskBase\_\allowbreak Provided\allowbreak Interface\allowbreak Slot} abstract base class and \texttt{Call\allowbreak OperationAdd\allowbreak Periodic\allowbreak Task\_\allowbreak Provided\allowbreak Interface\allowbreak Slot} concrete implementation class, in order to call operation \texttt{Call\allowbreak OperationAdd} in the \texttt{Provided\allowbreak Interface\allowbreak Slot} perioidically every 2s
+\item \texttt{OperationAdd\allowbreak Sporadic\allowbreak TaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Operation\allowbreak Add\allowbreak Sporadic\allowbreak Task\_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to call operation \texttt{Operation\allowbreak Add} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2} sporadically with an MIAT of 2s
+\item \texttt{StatusValue\allowbreak SetterTaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Setter\allowbreak Task\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to provide asynchronous access to the setter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2}
+\item \texttt{StatusValue\allowbreak GetterTaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Getter\allowbreak Task\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to provide asynchronous access to the getter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2}
 \item \texttt{Failure\allowbreak Event\allowbreak Receiver\allowbreak Task\allowbreak Base} abstract base class and a corresponding \texttt{Failure\allowbreak Event\allowbreak Receiver\allowbreak Task} concrete implementation class, for the reception of \texttt{Failure\allowbreak Event} which are emitted by the \texttt{Component\allowbreak\_Callee} asynchronously and to forward it to \texttt{Component\allowbreak\_Caller} 
 \end{itemize} 
 
@@ -727,7 +727,7 @@ A component container is also responsible for initializing the following:
 \item The instances of tasks with reference of component instance in order to schedule the execution of the services
 \item The required interface ports by providing references of:
 \begin{itemize}
-\item The component instance, in order to initialize the data structures of the operations with correct function wrappers for call-back functions
+\item The instantiated component instance, in order to initialize the data structures of the operations with correct function wrappers for call-back functions
 \item The respective provided interface port each one of them is bound to 
 \end{itemize}
 \item The event receiver tasks with references of the component instance and the channels which needs to be associated with their respective task inputs      
@@ -754,7 +754,7 @@ A component container is also responsible for initializing the following:
 	\label{fig: Component container callee UML}
 \end{figure}
 
-Both the containers have instances of different component as explained in the general case and as shown in \cref{fig: Component container caller UML} and \cref{fig: Component container callee UML}. They are responsible for the initialization of different components as explained in the above general description.  
+Both the containers have instances of their respective different components as explained in the general case and as shown in \cref{fig: Component container caller UML} and \cref{fig: Component container callee UML}. They are responsible for the initialization of different components as explained in the above general description.  
 
 \section{Code generation using Xtend}
 \label{section: code generation}
@@ -764,99 +764,25 @@ It is an implementation decision in this Master thesis to use Xtend for the code
 
 Xtext is an eclipse framework for implementing programming languages and Domain Specific Languages (DSLs) \cite{Xtend}. Xtext helps to implement languages quickly, and most of all, it covers all the aspects of a complete language infrastructure like parser, code generator etc. Xtext uses Google Guice, which is a dependency injection framework to create and call a code generator \cite{Xtend}. The dependency injection pattern basically allows to inject implementation objects into a class hierarchy in a consistent way \cite{InvOfCntrlurl}. The Xtext's generator support can be used in Xtend directly to build code generators for non-Xtext based models, such as the OBSW models constructed using the OSRA component model \cite{CodeGenEclXtend}. 
 
-The tutorial in \cite{CodeGenNonXtext} is used as a base in this Master thesis to construct a code generator for non-Xtext based models using Xtend and also provide a UI integration for the code generator.
+The tutorial in \cite{CodeGenNonXtext} is used as a base in this Master thesis to construct a code generator using Xtend for non-Xtext based models and also provide a UI integration for the code generator.
 
 \section{Organizing the generated code}
 \label{section: Code organization}
 As explained in the previous sections, adopting separation of concerns even at the implementation level is one of the primary goals of this chapter and we have successfully achieved it in the discussions on software design for the infrastructural code in \cref{subsection: Software design approach}. 
 
-To further emphasize on separation of concerns at the implementation level, it is necessary to properly sort the generated infrastructure code into a meaningful file structure helping the third party software supplier to separate the automatically generated code from the code that needs to be supplied. This is of prime importance for the third party software supplier to not accidentally lose the implementations in successive code generation cycles. 
+To further emphasize on separation of concerns at the implementation level, it is necessary to properly separate the generated infrastructure code into a meaningful files and a suitable file structure helping the third party software supplier to separate the automatically generated code from the code that needs to be supplied. This is of prime importance for the third party software supplier to not accidentally lose the implementations in successive code generation cycles. 
 
 The overall idea would be to:
 \begin{itemize}
-\item Generate two folders per component to clearly separate the infrastructural code entities, at the component type level from the infrastructural code entities at the component instance level 
+\item Generate two types of folders to clearly separate the infrastructural code entities, at the component type level from the infrastructural code entities at the component instance level. The number of folders at the component instance level, depends on the actual number of component instances.   
 \begin{itemize}
-\item The first folder would hold C++ classes related to its component type, required interface ports, event emitter ports, event receiver ports in the sub-folder named as \texttt{AutogeneratedCode}. It also contains C++ classes related to component implementations and because it is the unit of sub-contract, it is placed in a separate sub-folder named as \texttt{UserCode}. The third-party software supplier can alter the code in this folder safely without the fear of the code being overwritten by successive code generation cycles. Care is taken in the code generator to generate the classes in these files only once  
-\item The second folder would hold the C++ classes related to provided interface ports, component containers in the sub-folder named as \texttt{AutogeneratedCode}. As already explained the component container class for a component would contain provided and required interface slots, component instance   
+\item The first folder type would hold C++ classes related to its component type, required interface ports, event emitter ports, event receiver ports in the sub-folder named as \texttt{AutogeneratedCode}. It also contains C++ classes related to component implementations and because it is the unit of sub-contract, it is placed in a separate sub-folder named as \texttt{UserCode}. The third-party software supplier can alter the code in this folder safely without the fear of the code being overwritten by successive code generation cycles. Care is taken in the code generator to generate the classes in these files only once  
+\item The second folder type would hold the C++ classes related to its component instances, namely, provided interface ports, component containers in the sub-folder named as \texttt{AutogeneratedCode}. As already explained the component container class for a component instance would contain provided and required interface slots, component instance itself   
 \end{itemize} 
 \item The folder named as \texttt{Datatypes\allowbreak Interfaces\allowbreak EventsAnd\allowbreak Exceptions} would hold C++ classes related to the data types, exceptions, events, parameter channel and their corresponding parameter queues 
 \end{itemize}
 
-Considering our running example, the folder structure is as explained below:
-
-All the data types, event types, interfaces, exception types that are used in the example are stored along with the parameter channel and parameter queue as shown below:
-
-\newpage 
-
-\dirtree{%
-.1 src-gen.
-.2 DatatypesInterfacesEventsAndExceptions.
-.3 include.
-.4 Datatypes.h.
-.4 Exceptions.h.
-.4 FailureEvent.h.
-.4 InterfaceA.h.
-.4 InterfaceB.h.
-.4 ParameterChannel.h.
-.4 ParameterQueue.h.
-}
-
-All the constituents of the \texttt{Component\_Callee} are arranged as shown below:
-
-\dirtree{%
-.1 src-gen.
-.2 Component\_Callee.
-.3 AutogeneratedCode.
-.4 include.
-.5 ComponentType\_Callee.h.
-.5 EventEmitterPorts\_Callee.h.h.
-.4 src.
-.5 ComponentType\_Callee.cpp.
-.5 EventEmitterPorts\_Callee.cpp.
-.3 UserCode.
-.4 include.
-.5 ComponentImplementation\_Callee.h.
-.4 src.
-.5 ComponentImplementation\_Callee.cpp.
-.2 Component\_Callee\_Instance.
-.3 AutogeneratedCode.
-.4 include.
-.5 ProvidedInterfacePorts\_Callee.h.
-.5 ComponentContainer\_Callee.h.
-.4 src.
-.5 ProvidedInterfacePorts\_Callee.cpp.
-.5 ComponentContainer\_Callee.cpp.
-}
-
-\newpage
-
-All the constituents of the \texttt{Component\_Caller} are arranged as shown below:
-\dirtree{%
-	.1 src-gen.
-	.2 Component\_Caller.
-	.3 AutogeneratedCode.
-	.4 include.
-	.5 ComponentType\_Caller.h.
-	.5 EventReceiverPorts\_Caller.h.
-	.5 RequiredInterfacePorts\_Caller.h.
-	.4 src.
-	.5 ComponentType\_Caller.cpp.
-	.5 EventReceiverPorts\_Caller.cpp.
-	.5 RequiredInterfacePorts\_Caller.cpp.
-	.3 UserCode.
-	.4 include.
-	.5 ComponentImplementation\_Caller.h.
-	.4 src.
-	.5 ComponentImplementation\_Caller.cpp.
-	.2 Component\_Caller\_Instance.
-	.3 AutogeneratedCode.
-	.4 include.
-	.5 ProvidedInterfacePorts\_Caller.h.
-	.5 ComponentContainer\_Caller.h.
-	.4 src.
-	.5 ProvidedInterfacePorts\_Caller.cpp.
-	.5 ComponentContainer\_Caller.cpp.
-}
+The folder structure for our running example is listed in Appendix A\cref{chap: File structure}.
   
 
 
