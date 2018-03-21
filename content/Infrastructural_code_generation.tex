@@ -206,7 +206,7 @@ This OBSW model is subjected to model validation against the OSRA Specification 
 \label{subsection: Software design approach}
 This section deals with the software design approach for the generated infrastructure code. Some of the necessary good characteristics of a software such as reusability, separation of concerns and minimal complexity are targeted already at the reference architecture level and it needs to be safeguarded at the generated software level as well. The other main characteristics of the generated software which are of utmost value are \cite{CodeComplete}:
 \begin{description}
-\item [Testability] The software must be testable and there must be suitable constructs in the generated software which assist in writing automated unit tests or user driven tests to test it. In this Master thesis, it is taken care that the generated C++ classes have corresponding abstract base classes, using which mock classes can be constructed easily for the purpose of testing. More about this is explained in the next chapter which focuses on further scope of this Master thesis
+\item [Testability] The software must be testable and there must be suitable constructs in the generated software which assist in writing automated unit tests or user driven tests to test it. In this Master thesis, it is taken care that the generated C++ classes have corresponding abstract base classes, using which mock classes can be constructed easily for the purpose of testing. More about this is explained in the next chapter which focuses on the results and further scope of this Master thesis
 \item [Extensability and Refactorability] The software generated must be loosely coupled so that the entire code base is more resilient to changes and extensions. Dependency injection software design pattern \cite{InvOfCntrlurl} is used wherever appropriate to make the generated software loosely coupled
 \item [Portability] The generated software must be portable across systems and environments. The data  types used in the generated software should be portable across multiple platforms and the data type standardizations from C++11 are made use of in the generated software
 \item [High fan-in] The generated software is designed in a way that a particular C++ class is used by large number of other C++ classes.
@@ -455,7 +455,7 @@ It has pure virtual methods meant for:
 \end{figure} 
 
 \subsubsection{\textbf{Required interface ports}}
-A required interface port is mapped as an abstract base class and a corresponding concrete implementation class in C++. The required interface subsumed by a particular component type has various operations that it might request and each operation has information specified whether the required interaction kind is \texttt{synchronous} or \texttt{asynchronous} \cite{SpecMetamodel,CompBasedProcess}. 
+A required interface port is mapped as an abstract base class and a corresponding concrete implementation class in C++. The required interface subsumed by a particular component type has various operations that it might request and each operation has information specified whether the required interaction kind is \texttt{synchronous} or \texttt{asynchronous} \cite{SpecMetamodel}\cite{CompBasedProcess}. 
 
 Each required interface port refers to one interface type and for each operation in the required interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether the operations would be requested with an asynchronous release pattern or synchronous release pattern.
 
@@ -540,7 +540,7 @@ In case of components that promote multiple provided interface ports which refer
 \item A component implementation abstract base class is designed which contains implementations for inherited pure virtual methods related to acquiring and releasing of semaphores. Also the inherited pure virtual methods which are provided only once are implemented here
 \item The Component implementation abstract base class is further extended by dummy abstract base classes. A dummy base class is added for each of the provided interface ports which refer to the same interface type. These dummy abstract base classes help in testing of the implementations of the services which are provided more than once by multiple provided interfaces. With the help of these dummy abstract base classes, mock implementation classes can be easily created and used for testing \cite{InvOfCntrlurl}  
 \item These dummy abstract base classes are extended by concrete implementation classes which provide different concrete implementations for all the inherited operations except the ones, which are already implemented in the component implementation abstract base class
-\item As it is a necessity to have only one instantiable concrete implementation per component \cite{EvoRAVCodeAr,SpecMetamodel,CompBasedProcess}, all the concrete implementations are inherited one last time in a component implementation class. This instance is now deployable on the hardware platform
+\item As it is a necessity to have only one instantiable concrete implementation per component \cite{EvoRAVCodeAr}\cite{SpecMetamodel}\cite{CompBasedProcess}, all the concrete implementations are inherited one last time in a component implementation class. This instance is now deployable on the hardware platform
 \end{itemize}
  
 \textbf{For our example OBSW model}:
@@ -558,19 +558,19 @@ In case of components that promote multiple provided interface ports which refer
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{ComponentImplementationCallerUML.pdf}
-	\caption{Code excerpt from the generated code for interface attribute \texttt{StatusValue} access in \texttt{Required\allowbreak InterfacePort\allowbreak Type2}}
+	\caption{UML class diagram representation of component implementation for \texttt{Component\_\allowbreak Caller} in the example OBSW model}
 	\label{fig: Component implementation Caller UML}
 \end{figure} 
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1.0\textwidth]{ComponentImplementationCalleeUML.pdf}
-	\caption{Code excerpt from the generated code for interface attribute \texttt{StatusValue} access in \texttt{Required\allowbreak InterfacePort\allowbreak Type2}}
+	\caption{UML class diagram representation of component implementations for \texttt{Component\_\allowbreak Callee} in the example OBSW model}
 	\label{fig: Component implementation Callee UML}
 \end{figure}
 
 \subsubsection{\textbf{Provided interface ports}}
-A provided interface port is mapped to an abstract base class and a corresponding concrete implementation class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}. The provided interface promoted by a particular component type has various operations that are provided and each operation has a desired release pattern attached as a non-functional/extra-functional property \cite{SpecMetamodel,CompBasedProcess}. Each provided interface port refers to one interface type and for each operation in the provided interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether these operations are requested with a synchronous release pattern or an asynchronous release pattern.
+A provided interface port is mapped to an abstract base class and a corresponding concrete implementation class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}. The provided interface promoted by a particular component type has various operations that are provided and each operation has a desired release pattern attached as a non-functional/extra-functional property \cite{SpecMetamodel}\cite{CompBasedProcess}. Each provided interface port refers to one interface type and for each operation in the provided interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether these operations are requested with a synchronous release pattern or an asynchronous release pattern.
 
 In case of interface operations:
 \begin{itemize}
@@ -594,21 +594,21 @@ The following additional pure virtual methods are added to the abstract class fo
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1.0\textwidth]{ProvidedInterfacePort1UML.pdf}
-	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port1} for \texttt{Component\allowbreak\_Callee} in the example OBSW model}
+	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port1\allowbreak\_Component\allowbreak\_Callee\allowbreak\_inst} for \texttt{Component\allowbreak\_Callee} in the example OBSW model}
 	\label{fig: Provided interface port1 UML}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1.0\textwidth]{ProvidedInterfacePort2UML.pdf}
-	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port2} for \texttt{Component\allowbreak\_Callee} in the example OBSW model}
+	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port2\allowbreak\_Component\allowbreak\_Callee\allowbreak\_inst} for \texttt{Component\allowbreak\_Callee} in the example OBSW model}
 	\label{fig: Provided interface port2 UML}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1.0\textwidth]{ProvidedInterfacePortUML.pdf}
-	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port} for \texttt{Component\allowbreak\_Caller} in the example OBSW model}
+	\caption{UML class diagram representation of \texttt{Provided\allowbreak Interface\allowbreak Port\allowbreak\_Component\allowbreak\_Caller\allowbreak\_inst} for \texttt{Component\allowbreak\_Caller} in the example OBSW model}
 	\label{fig: Provided interface port UML}
 \end{figure}   
 
@@ -624,7 +624,7 @@ General::OperationAddReport ProvidedInterfacePort1_Component_Callee_inst::Operat
 	return myReport;
 }
 \end{lstlisting}
-\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port1} which is called synchronously and has \texttt{Protected} as a non-functional property attached to it}
+\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port1\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} which is called synchronously and has \texttt{Protected} as a non-functional property attached to it}
 \label{Listing: Provided interface port1 Impl}
 \end{Listing}
 
@@ -636,7 +636,7 @@ void ProvidedInterfacePort2_Component_Callee_inst::OperationAdd_Receiver (Genera
 	m_myOperationAddChannel->push(myStruct); //A push onto the task channel
 }
 \end{lstlisting}
-\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port2} which is called asynchronously}
+\caption{Code excerpt from the generated code for operation \texttt{OperationAdd} access in \texttt{Provided\allowbreak Interface\allowbreak Port2\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} which is called asynchronously}
 \label{Listing: Provided interface port2 Impl}
 \end{Listing}
 
@@ -648,7 +648,7 @@ void ProvidedInterfacePort_Component_Caller_inst::CallOperationAdd(void) {
 	m_mycallOperationAddTask->startPeriodicTask(); //Method call to start the task
 }
 \end{lstlisting}
-\caption{Code excerpt from the generated code for operation \texttt{CallOperationAdd} in \texttt{Provided\allowbreak Interface\allowbreak Port} which has non-functional property set as \texttt{Cyclic}}
+\caption{Code excerpt from the generated code for operation \texttt{CallOperationAdd} in \texttt{Provided\allowbreak Interface\allowbreak Port\_\allowbreak Component\_\allowbreak Caller\_\allowbreak inst} which has non-functional property set as \texttt{Cyclic}}
 \label{Listing: Provided interface port Impl}
 \end{Listing}
 
@@ -678,14 +678,14 @@ Each task stores a reference to the base class of the component implementation i
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{PeriodicTaskUML.pdf}
-	\caption{UML class diagram representation of the task required to call \texttt{CallOperationAdd} in \texttt{Provided\allowbreak Interface\allowbreak Port} perioidcally with a period of 2s in the example OBSW model}
+	\caption{UML class diagram representation of the task required to call \texttt{CallOperationAdd} in \texttt{Provided\allowbreak Interface\allowbreak Port\allowbreak\_Component\allowbreak\_Caller\allowbreak\_inst} perioidcally with a period of 2s in the example OBSW model}
 	\label{fig: Periodic task UML}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1.0\textwidth]{SporadicTaskUML.pdf}
-	\caption{UML class diagram representation of the task required to call \texttt{OperationAdd} in \texttt{Provided\allowbreak Interface\allowbreak Port2} sporadically with a MIAT of 2s in the example OBSW model}
+	\caption{UML class diagram representation of the task required to call \texttt{OperationAdd} in \texttt{Provided\allowbreak Interface\allowbreak Port2\allowbreak\_Component\allowbreak\_Callee\allowbreak\_inst} sporadically with a MIAT of 2s in the example OBSW model}
 	\label{fig: Sporadic task UML}
 \end{figure}
 
@@ -761,7 +761,7 @@ Both the containers have instances of their respective different components as e
 \label{section: code generation}
 The reference implementation of the OSRA component model consists in a set of .ecore metamodels \cite{SpecMetamodel}. Ecore is an implementation of the EMOF (Essential MOF), the meta-meta language by the OMG for the specification of meta-models \cite{SpecMetamodel}. The main advantage of using Ecore is the ready availability of graphical editors for the specification of metamodels and powerful support provided by the Eclipse Modeling Framework (EMF), which is a framework of the Eclipse development platform that permits to generate a code implementation of the metamodel entities, basic editors for the creation of models conforming to the metamodel under development \cite{SpecMetamodel}. 
 
-It is an implementation decision in this Master thesis to use Xtend for the code generation. Xtend is a general purpose Java-like language that is completely operable with Java \cite{Xtend,XtendDoc}. Xtend has a more concise syntax than Java and provides powerful features such as type inference, extension methods, dispatch methods, an lambda expressions and the all important multiline template expressions, which are useful when writing code generators \cite{Xtend,XtendDoc}. Xtend also provides powerful features that make model visiting and traversing really easy, straightforward, and natural to read and maintain. 
+It is an implementation decision in this Master thesis to use Xtend for the code generation. Xtend is a general purpose Java-like language that is completely operable with Java \cite{Xtend}\cite{XtendDoc}. Xtend has a more concise syntax than Java and provides powerful features such as type inference, extension methods, dispatch methods, an lambda expressions and the all important multiline template expressions, which are useful when writing code generators \cite{Xtend}\cite{XtendDoc}. Xtend also provides powerful features that make model visiting and traversing really easy, straightforward, and natural to read and maintain. 
 
 Xtext is an eclipse framework for implementing programming languages and Domain Specific Languages (DSLs) \cite{Xtend}. Xtext helps to implement languages quickly, and most of all, it covers all the aspects of a complete language infrastructure like parser, code generator etc. Xtext uses Google Guice, which is a dependency injection framework to create and call a code generator \cite{Xtend}. The dependency injection pattern basically allows to inject implementation objects into a class hierarchy in a consistent way \cite{InvOfCntrlurl}. The Xtext's generator support can be used in Xtend directly to build code generators for non-Xtext based models, such as the OBSW models constructed using the OSRA component model \cite{CodeGenEclXtend}. 
 

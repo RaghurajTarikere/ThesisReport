@@ -3,7 +3,7 @@
 \chapter{Evaluation of the code generator}
 \label{chap: code generator evaluation}
 \section{Introduction}
-By using model-driven engineering tools (MDE) tools for code generation, it is possible to generate software code automatically and achieve extremely high developer productivity rates of thousands of function points and millions of lines of code per person-month \cite{EvalCodeGen}. But, as we have seen in the previous chapters, the MDE approach consists of more than code generation tools; It defines the entire software-engineering approach that can impact the entire lifecycle from requirements gathering through sustainment \cite{CompBasedProcess, SAVOIR}.     
+By using model-driven engineering tools (MDE) tools for code generation, it is possible to generate software code automatically and achieve extremely high developer productivity rates of thousands of function points and millions of lines of code per person-month \cite{EvalCodeGen}. But, as we have seen in the previous chapters, the MDE approach consists of more than code generation tools; It defines the entire software-engineering approach that can impact the entire lifecycle from requirements gathering through sustainment \cite{CompBasedProcess}\cite{SAVOIR}.     
 
 It is important to consider these tools and methods in the context of a particular system acquisition i.e., the MDE methods and tools need to be aligned with the system acquisition strategies, which would in turn improve system quality, reduce time to field, and reduce sustainment cost \cite{EvalCodeGen}. System acquisition strategies include: 
 
@@ -43,13 +43,13 @@ As a part of the \texttt{Establish criteria} step in the PECA process, the acqui
 \item [Program constraints] This cover risks that arise from factors external to the project 
 \end{description}
 
-To establish a criteria for a particular program/project, it is necessary for the program to first scan the risk taxonomy and identify those areas that apply for the project. Each risk creates one or more acquisition concerns , which may refine the program risk or indicate how certain tool features or capabilities might help mitigate the risk \cite{EvalCodeGen}.      
+To establish a criteria for a particular program or project, it is necessary for the program to first scan the risk taxonomy and identify those areas that apply for the project. Each risk creates one or more acquisition concerns , which may refine the program risk or indicate how certain tool features or capabilities might help mitigate the risk \cite{EvalCodeGen}.      
 
 As part of the \texttt{Collect data} step in the PECA process, a vendor self-assessment questionnaire is prepared as in \cite{EvalCodeGen} which is given to the MDE tool vendors, to provide data needed to make the tool selection decision.
 
 As a part of the \texttt{Analyze data} in the PECA rocess, it is then necessary to position these acquisition concerns in the specific program context and finally decide whether acquiring a particular tool is beneficial for the project.
 
-In this Master thesis, a subset of evaluation criteria is chosen from Appendix A in \cite{EvalCodeGen}. The risk areas and the acquisition concerns which are meaningful in the scope of this Master thesis are chosen. Eg., the \cite{EvalCodeGen} discusses about potential risks in the Process Management area of the project and these are of no interest in this Master thesis and are not considered. Each of the acquisition concerns in Appendix A of \cite{EvalCodeGen} are then linked to the questions in the vendor self-assessment questionnaire listed in Appendix B of the \cite{EvalCodeGen}. For our chosen subset of potential areas and the acquisition concerns within this Master thesis, an attempt is made to answer the corresponding linked questions in the questionnaire.
+In this Master thesis, a subset of evaluation criteria is chosen from Appendix A in \cite{EvalCodeGen}. The risk areas and the acquisition concerns which are meaningful in the scope of this Master thesis are chosen. For example, the \cite{EvalCodeGen} discusses about potential risks in the Process Management area of the project and these are of no interest in this Master thesis and are not considered. Each of the acquisition concerns in Appendix A of \cite{EvalCodeGen} are then linked to the questions in the vendor self-assessment questionnaire listed in Appendix B of the \cite{EvalCodeGen}. For our chosen subset of potential areas and the acquisition concerns within this Master thesis, an attempt is made to answer the corresponding linked questions in the questionnaire. The tables \cref{table: PEReqArea}, \cref{table: PEDesArea}, \cref{table: PEITArea}, \cref{table: PCResArea}, \cref{table: DEDevProArea}, \cref{table: DEDevDevSysArea} showcase these efforts.   
 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
@@ -57,14 +57,14 @@ In this Master thesis, a subset of evaluation criteria is chosen from Appendix A
 \begin{table}[]
 	\centering
 	\caption{Evaluation Criteria - Product Engineering Risk Area (Requirements)}
-	\label{my-label}
+	\label{table: PEReqArea}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{lll}
 			\hline
 			\multicolumn{1}{|c|}{\textbf{Risk area}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Potential Acquisition \\ Concerns \\ Related to MDE Tools for \\ Automatic Code Generation\end{tabular}}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Answers to the linked questions \\ in the questionnaire\end{tabular}}} \\ \hline
 			\multicolumn{3}{|l|}{\textbf{Requirements}} \\ \hline
 			\multicolumn{1}{|l|}{\multirow{3}{*}{Stability}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Responding to requirements \\ changes may necessitate \\ operating on partially complete \\ models and performing \\ refactoring or rework on \\ models.\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The OBSW models designed using the OSRA Component \\ Model should be subjected to model validation against the \\ OSRA Specification Compliance and the SCM Metamodel \\ Compliance before it is subjected to automatic code \\ generation. In that case, the OBSW model, even if partially \\ complete can be subjected to code generation if it clears the \\ model validation step\end{tabular}} \\ \cline{2-3} 
-			\multicolumn{1}{|l|}{} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Communication with stake-\\ holders is partially important \\ to resolve requirements issues, \\ so tool features that support \\ this become more important\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}It is possible to annotate each of the model entities while \\ constructing the OBSW model with information which \\ can be used for communicating with the stakeholders. \\ There is no additional documentation too which comes with \\ the OSRA SCM tool suite\end{tabular}} \\ \cline{2-3} 
+			\multicolumn{1}{|l|}{} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Communication with stake-\\ holders is partially important \\ to resolve requirements issues, \\ so tool features that support \\ this become more important\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}It is possible to annotate each of the model entities while \\ constructing the OBSW model with information which \\ can be used for communicating with the stakeholders. \\ There is no additional documentation tool which comes with \\ the OSRA SCM tool suite\end{tabular}} \\ \cline{2-3} 
 			\multicolumn{1}{|l|}{} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Interfaces between the soft-\\ ware modeling tools and \\ the requirements management \\ tools promote co-evolution \\ of requirements and software\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}There is no support for tracing requirements into model \\ elements at the current state of development of OSRA\\ SCM\end{tabular}} \\ \hline
 			\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Completeness\\ Clarity\\ Validity\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}In addition to the concerns \\ noted above about require-\\ ments stability, the ability to \\ execute or simulate the exe-\\ cution of the model can help\\ validate requirements \\ completeness\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}At the current stage of the development of the OSRA \\ SCM, it is not possible visualize the execution of the model. \\ It is only possible to create static models of the OBSW \\ and it is not possible to trace the flow of execution \\ through the model, or inject data or events into the model\end{tabular}} \\ \hline
 			\multicolumn{1}{|l|}{Feasibility} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The ability to perform analysis \\ of the model for qualities \\ such as latency, throughput \\ and consistency can help \\ demonstrate the feasibility \\ of requirements\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The model-based static analysis of the OBSW model is not \\ possible at the current stage of development of the OSRA. \\ Step 10 of the overall software development process \\ in \cref{section: Design steps} in chapter \cref{chap: Software development process} gives an idea about the \\ analysis of latency, throughput etc. which can be perform-\\ ed on the OBSW model in the future\end{tabular}} \\ \hline
@@ -72,7 +72,6 @@ In this Master thesis, a subset of evaluation criteria is chosen from Appendix A
 		\end{tabular}%
 	}
 \end{table}
-
 
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
@@ -85,7 +84,7 @@ In this Master thesis, a subset of evaluation criteria is chosen from Appendix A
 			\hline
 			\multicolumn{1}{|c|}{\textbf{Risk area}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Potential Acquisition \\ Concerns \\ Related to MDE Tools for \\ Automatic Code Generation\end{tabular}}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Answers to the linked questions \\ in the questionnaire\end{tabular}}} \\ \hline
 			\multicolumn{3}{|l|}{\textbf{Design}} \\ \hline
-			\multicolumn{1}{|l|}{Interfaces} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}If only parts of the system \\ will be automatically gene-\\ rated, while other parts will \\ be developed using traditional \\ approaches, the interfaces bet-\\ ween these two types of \\ software must be designed \\ and developed\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}In the software design for the generated infrastructure code, \\ the model entities are mapped to infrastructural code\\ entities. As the model entities clearly separates the two \\ types of code, the generated infrastructural code entities\\ as well clearly separates the generated code from the user \\ code, which may be developed using traditional approaches. \\ The generated source code needs to be compiled. The \\ generated source code is in C++ and works with the \\ Tasking framework written in C++. The  code is generated\\ for the Linux platform and GCC C++-11 compiler can be \\ used to compile to the source code. The code generator\\ also generates SCons build scripts for building the generated\\ software code automatically\end{tabular}} \\ \hline
+			\multicolumn{1}{|l|}{Interfaces} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}If only parts of the system \\ will be automatically gene-\\ rated, while other parts will \\ be developed using traditional \\ approaches, the interfaces bet-\\ ween these two types of \\ software must be designed \\ and developed\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}In the software design for the generated infrastructure code, \\ the model entities are mapped to infrastructural code\\ entities. As the model entities clearly separates the two \\ types of code, the generated infrastructural code entities\\ as well clearly separates the generated code from the user \\ code, which may be developed using traditional approaches. \\ The generated source code needs to be compiled. The \\ generated C++ source code works with the Tasking frame-\\ work written in C++. The  code is generated for the Linux \\ platform and GCC C++ compiler conforming to the C++11 \\ standard can be used to compile to the source code. \\ The code generator also generates SCons build scripts for \\ building the generated software code automatically\end{tabular}} \\ \hline
 			\multicolumn{1}{|l|}{Testability} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The tool should generate code\\ that exposes internal states and \\ interfaces needed to test the\\ generated software\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The generated infrastructural code is testable as testability\\ of the generated code is one of the main concerns in the\\ software design for the infrastructural code. (Effective test-\\ ability of the generated code is proven with an example in\\ the subsequent chapter)\\ Mock C++ classes for different infrastructural code entities\\ and automatic test cases can also be generated in future\\ using the code generator\end{tabular}} \\ \hline
 			\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Hardware\\ constraints\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The generated code must be \\ sufficiently efficient (in terms of\\ processors, memory, network,\\ disk, and other resource utiliz-\\ ation) to operate in the target\\ environment\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The generated code depends on Tasking framework written\\ in C++. Hence effective resource utilization eg., processor,\\ memory, network disk utilization is not of concern in this\\ Master thesis\end{tabular}} \\ \hline
 			\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Non-deve-\\ lopmental\\ software\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Any runtime packages, librar-\\ ies, or other software required\\ to execute the generated code\\ must be known, compatible\\ with the current and future\\ target environments, and able\\ to be certified for use in other\\ environments\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The generated code depends on Tasking framework which\\ is written in C++. The generated code uses Linux as the \\ target environment and hence uses Tasking framework\\ which sits on top of Linux POSIX library. As Tasking \\ framework is internal to DLR, no certification efforts have \\ been done. The compatibility of Tasking framework for \\ future environments is not of concern in this Master thesis.\\ The build system which is automatically generated by the\\ code generator makes use of SCons for building the\\ generated code\end{tabular}} \\ \hline
@@ -94,12 +93,38 @@ In this Master thesis, a subset of evaluation criteria is chosen from Appendix A
 \end{table}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
 \begin{table}[]
 	\centering
 	\caption{Evaluation Criteria - Product Engineering Risk Area (Integration and Test)}
-	\label{my-label}
+	\label{table: PEITArea}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{lll}
 			\hline
@@ -116,7 +141,7 @@ In this Master thesis, a subset of evaluation criteria is chosen from Appendix A
 \begin{table}[]
 	\centering
 	\caption{Evaluation Criteria - Program Constraints Risk Area (Resources)}
-	\label{my-label}
+	\label{table: PCResArea}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{lll}
 			\hline
@@ -134,7 +159,7 @@ In this Master thesis, a subset of evaluation criteria is chosen from Appendix A
 \begin{table}[]
 	\centering
 	\caption{Evaluation Criteria - Development Environment Risk Area (Development Process)}
-	\label{my-label}
+	\label{table: DEDevProArea}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{lll}
 			\hline
@@ -152,7 +177,7 @@ In this Master thesis, a subset of evaluation criteria is chosen from Appendix A
 \begin{table}[]
 	\centering
 	\caption{Evaluation Criteria - Development Environment Risk Area (Development System)}
-	\label{my-label}
+	\label{table: DEDevDevSysArea}
 	\resizebox{\textwidth}{!}{%
 		\begin{tabular}{lll}
 			\hline

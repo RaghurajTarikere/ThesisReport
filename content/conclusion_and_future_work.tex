@@ -1,8 +1,37 @@
 % !TeX spellcheck = en_US
 
-\chapter{Results and Conclusion}
+\chapter{Results and Conclusions}
 \label{chap:conclusion}
 
+\section{Discussion}
+As a part of this Master thesis, 
+\begin{itemize}
+\item A choice is made to use the Tasking framework as a computational model so that the OSRA component model statically binds to Tasking framework which formally defines the computational entities and the rules which govern their usage 
+\item A reference programming model is decided upon that enforces the analysis assumptions and which permits to express exclusively the semantics imposed by the analysis theory and which conveys the implementations of the desired non-functional properties using the primitives from the Tasking framework
+\item Different corner cases which might arise during the construction of an OBSW model using the OSRA component model are identified 
+\item An overall software design approach for the generated infrastructure code of the OBSW models is presented and a mapping of the OBSW model design entities to the infrastructural code entities is presented. The generated code would then have all the good characteristics of a software as listed in \cref{subsection: Software design approach} 
+\item A code generator is implemented, using which the generation of the entire non-functional code i.e., the code for handling the concurrency and interaction requirements for communication between components and generation of component containers and component connectors can be automated. The code generator uses the already tried and tested Tasking framework as the platform and bases the generated code on it. The advantage of this is that it eases the model-to-code transformation step 
+\item The implemented code generator is tested for multiple OBSW models as shown in \cref{chap: Extra examples} which capture the different corner cases identified
+\item For the simple OBSW model example which was introduced in \cref{chap: Code generation}, a set of unit test cases are written using Gtest and Gmock frameworks and the test coverage reports are generated
+\end{itemize}
+
+The following results were obtained 
+\begin{itemize}
+\item  The implemented code generator successfully generates the infrastructural code entities for all the example OBSW models listed in \cref{chap: Code generation} and in \cref{chap: Extra examples}. The generated code in all cases is successfully compiled along with Tasking framework using GCC C++ compiler conforming to the C++11 standard for the Linux platform
+\item The test coverage reports generated for the unit tests written for the simple OBSW example are analyzed. The results show that the testability factor of the generated code is high and the infrastructural code entities can be efficiently tested      
+\end{itemize}
+
+\section{Identified shortcomings of Tasking framework}
+During the course of the Master thesis, the following shortcomings of the current version of Tasking framework, which is chosen as a computational model for this Master thesis are identified:
+\begin{itemize}
+\item Tasks from Tasking framework are used in various threads of control as explained in \cref{chap: Progamming model}. At the heart of the Tasking framework is a scheduler which schedules tasks based on priorities and these tasks are non-preemptible at the moment \cite{TaskFr}. This is one of the critical shortcomings in the current version of the Tasking framework as it makes the generated software code which is based on Tasking framework not suitable for hard real-time systems \cite{TempIsolation}. Time-monitoring architectures such as Server-based architecture or Priority-Band architectures listed in \cite{TempIsolation} are the ways to go ahead in case making the code making use of the Tasking framework truly real-time capable. These architectures help in providing isolation of applications i.e., tasks (at least) along three orthogonal dimensional axes: time, space and communication
+\item In the current version of the Tasking framework there is no possibility to measure the run-time of the tasks and monitor deadline violations which are mostly caused by WCET overruns of either the task at hand or a higher priority task. This limits the extent of property preservation in the model-to-code transformation step \cite{TempIsolation}. It is of very high importance that the system properties asserted during the analysis and the assumptions made for the analysis to hold are preserved across implementation and execution \cite{EvoRAVCodeAr}\cite{TempIsolation}
+\item It is also not possible to measure the execution time of a group tasks which are associated to the single time budget so that the Group Budget is accounted for their collective execution time. This incapability makes the adoption of Server-based architecture in the Tasking framework more difficult
+\item In line with the inability to measure the run-time of the tasks from the Tasking framework, Tasking Framework also does not provide any constructs for at least coarse-grained fault detection and fault handling in case of deadline misses
+\item 
+\end{itemize}
+
 \section{Future Work}
+As an enhancement to the current work, it is possible to extend this Master thesis  
 \label{section: Future work}
 

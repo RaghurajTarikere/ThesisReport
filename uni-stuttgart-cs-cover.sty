@@ -56,11 +56,9 @@
 \DeclareStringOption[fac]{institute}
 \DeclareStringOption[not set]{number} % running number
 \DeclareStringOption[cs]{course}
-\DeclareStringOption[examiner not set]{examiner}
-\DeclareStringOption[supervisor not set]{supervisor} 
+\DeclareStringOption[examiner not set]{examinerAndSupervisor}
 \DeclareStringOption[startdate not set]{startdate} 
 \DeclareStringOption[enddate not set]{enddate}
-\DeclareStringOption[crk not set]{crk}
 
 \DeclareStringOption[german]{language}
 \DeclareBoolOption[false]{setPageNumberToOne}
@@ -78,14 +76,12 @@
 % - if language is not set, german is used
 % ------------------------------
 \def\labelsenglish{
-	\gdef\@labelExaminer{Examiner}%
+	\gdef\@labelExaminer{Examiner \& Supervisor}%
 	%\gdef\@labelprueferin{Examiner}%
-	\gdef\@labelSupvervisor{Supervisor}%
 	%\gdef\@labelbetreuerin{Supervisor}%
 	\gdef\@labelCourse{Course of Study}%
 	\gdef\@labelStartdate{Commenced}%
 	\gdef\@labelEnddate{Completed}%
-	\gdef\@labelcrk{CR-Classification}%
 	\gdef\@labelUniversity{~\newline University of Stuttgart}%
 	\gdef\@labelDept{Faculty of Computer Science}%
 
@@ -106,6 +102,7 @@
 	\gdef\@labelCourseMSV{Maschinelle Sprachverarbeitung}%
 	\gdef\@labelCourseBIS{Wirtschaftsinformatik}%
 	\gdef\@labelCourseSimTech{Simulation Technology}%
+	\gdef\@labelCourseINFOTECH{Information Technology (INFOTECH)}%
 	
 	% institute names
 	\gdef\@labeliaas{Institute of Architecture of Application Systems}%
@@ -234,6 +231,7 @@
 	\def\0{msv}\ifthenelse{\equal{\0}{\1}}{\gdef\@labelCourseValue{\@labelCourseMSV}}{}
 	\def\0{bis}\ifthenelse{\equal{\0}{\1}}{\gdef\@labelCourseValue{\@labelCourseBIS}}{}
 	\def\0{simtech}\ifthenelse{\equal{\0}{\1}}{\gdef\@labelCourseValue{\@labelCourseSimTech}}{}
+	\def\0{infotech}\ifthenelse{\equal{\0}{\1}}{\gdef\@labelCourseValue{\@labelCourseINFOTECH}}{}
 }
 
 % ------------------------------
@@ -305,7 +303,7 @@
   %
 
   \vskip 20mm\relax %%%
-
+  
   \vbox to 70mm{
   \begin{center}%
     \@labelInstitute
@@ -334,26 +332,21 @@
       \end{center}%
       \vskip 17.5mm plus 35mm minus 12.5mm}\hfil}}}%
   \vskip 20mm %%%%%
-
+  
   \vbox to 15mm{%
     \begin{USCCover@TBlist}%
-      \item[\@labelCourse: ]\@labelCourseValue
+      \item[\@labelCourse:]\@labelCourseValue
     \end{USCCover@TBlist}%
     \vfill}%
-  \vbox to 45mm{%
+  \vbox to 50mm{%
     \begin{USCCover@TBlist}%
-      \item[\@labelExaminer:]\MCS@examiner
-      \item[\@labelSupvervisor:]\MCS@supervisor
+      \item[\@labelExaminer:]\MCS@examinerAndSupervisor
     \end{USCCover@TBlist}%
     \vfill}%
   \vbox to 70mm{%%%%% ==> 85 mm von oben
     \begin{USCCover@TBlist}%
       \item[\@labelStartdate:]\MCS@startdate
       \item[\@labelEnddate:]\MCS@enddate
-      \ifx\@crk\relax \else
-          \vskip 1.5\baselineskip
-          \item[\@labelcrk:]\MCS@crk
-      \fi
     \end{USCCover@TBlist}%
     \vfill}%
 
