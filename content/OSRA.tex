@@ -13,15 +13,15 @@ The implementation of such a vision is expected to provide benefits for all the 
 \item [Supplier Industry] Benefits from diversified customer bases and the supplied building blocks would be compatible with software architectures from the software primes such as Thales Alenia Space and astrium Satellites (EADS Astrium)
 \end{description}
 
-Similar initiatives have already been taken across various industries and eg. AUTOSAR (AUTomotive Open System ARchitecture) for the automotive industry is worthy mentioning \cite{BasConAUTOSAR}. Space can benefit from these examples by studies related to how these or similar initiatives were successfully conducted and how they faired. Although the business model is different in the automotive and the space sectors, AUTOSAR demonstrates that the need for standardization is the key irrespective of the sector and is driven by the need of the industry to become more competitive \cite{EfAnAUTOSAR}
+Similar initiatives have already been taken across various industries and eg. \ac{autosar} for the automotive industry is worthy mentioning \cite{BasConAUTOSAR}. Space can benefit from these examples by studies related to how these or similar initiatives were successfully conducted and how they faired. Although the business model is different in the automotive and the space sectors, AUTOSAR demonstrates that the need for standardization is the key irrespective of the sector and is driven by the need of the industry to become more competitive \cite{EfAnAUTOSAR}
 
 Space primes and on-board software companies have made significant progress and have implemented and/or are implementing reuse on the basis of their internal software reference architectures and building blocks. However, for this standardization to provide maximum benefits, it has to be tackled at the European level rather than at company level \cite{SAVOIR}
 
-ESA through its two parallel activities, namely COrDeT and DOMENG \cite{CORDET} aimed at increasing the software reuse in on-board software have confirmed that interface standardization allows to efficiently compose the software on the basis of existing and mature building blocks.
+\ac{esa} through its two parallel activities, namely \ac{cordet} and \ac{domeng} \cite{CORDET} aimed at increasing the software reuse in on-board software have confirmed that interface standardization allows to efficiently compose the software on the basis of existing and mature building blocks.
 
-To refer to all ongoing initiatives and to provide a platform for technical discussions, related to the vision of avionics development through maximizing reuse and standardization, a "Space Avionics Open Interface Architecture" Advisory Group (SAVOIR Advisory Group) was created. SAVIOR Advisory Group decided to spawn a specific subgroup for on-board software reference architectures called "SAVOIR Fair Architecture and Interface Reference Elaboration"(SAVOIR FAIRE) working group. OSRA is the result of the R\&D activities of this group \cite{SAVOIR}.   
+To refer to all ongoing initiatives and to provide a platform for technical discussions, related to the vision of avionics development through maximizing reuse and standardization, a \ac{savoir} Advisory Group (SAVOIR Advisory Group) was created. SAVOIR Advisory Group decided to spawn a specific subgroup for on-board software reference architectures called "SAVOIR Fair Architecture and Interface Reference Elaboration"(SAVOIR FAIRE) working group. \ac{osra} is the result of the R\&D activities of this group \cite{SAVOIR}.   
 
-The On-board software reference architecture (OSRA) is designed to be a single, common and agreed framework for the definition of the on-board software (OBSW) of the future European Space Agency (ESA) missions \cite{SAVOIR}. It is based on solid scientific foundations and accompanied by development methodology and architectural practices that fit the domain. A single software system would thus be an "instantiation" of the reference architecture to specific mission needs.
+The OSRA is designed to be a single, common and agreed framework for the definition of the \ac{obsw} of the future European Space Agency (ESA) missions \cite{SAVOIR}. It is based on solid scientific foundations and accompanied by development methodology and architectural practices that fit the domain. A single software system would thus be an "instantiation" of the reference architecture to specific mission needs.
 
 \section{Need for software reference architecture}
 \subsection{Motivation}
@@ -32,7 +32,7 @@ to each other, and to the environment, and the principles guiding its design and
  
 A software architecture is the key to create "good quality" software because it promotes architectural best practices and contributes to the quality of the software. A bad architecture hinders the fulfillment of functional, behavioral, non-functional and life-cycle requirements.
 
-According to the "Rational Unified Process"(RUP)\cite{RUP}, the software reference architecture can be defined as:
+According to the "\ac{rup}" \cite{RUP}, the software reference architecture can be defined as:
 
 \textit{"a predefined architectural pattern, or set of patterns, possibly partially or
 completely instantiated, designed, and proven for use in particular business and technical contexts, together with supporting artifacts to enable their use. Often, these artifacts are harvested
@@ -106,13 +106,13 @@ The COrDeT study, with the slogan "Faster, Later, Software", represented a summa
 
 \item [Increase cost-efficiency] Increase in the "value" of the software product that is developed for a given amount of budget.
 
-\item [Reduce Verification and Validation effort] The new development approaches shall foster the reduction of effort for Verification and Validation efforts, which is one of the main contributor to the cost of software development.
+\item [Reduce Verification and Validation effort] The new development approaches shall foster the reduction of effort for \ac{vandv} efforts, which is one of the main contributor to the cost of software development.
 
 \item [Mitigate the impact of late requirement definition or change] 
 
 \item [Support for various system integration strategies] It should be possible to do preliminary software releases which allow early system integration efforts.
 
-\item [Simplification and harmonization of FDIR] A simplification and hopefully, harmonization of the Fault Detection, Isolation and Recovery (FDIR) approach is advocated.
+\item [Simplification and harmonization of FDIR] A simplification and hopefully, harmonization of the \ac{fdir} approach is advocated.
 
 \item [Optimize flight maintenance] There should be provision for changing the OBSW during flight maintenance and coordination of strategies to perform it. 
 
@@ -160,11 +160,11 @@ These properties have to be preserved or enforced so that these properties are n
 
 \section{The Software Architectural Concept}
 \subsection{Fitting Model-Driven Engineering}
-MDE is a novel trend for software development in the space domain, but has been successfully applied to enterprise computing \cite{CompBasedDev}. The validation-intensive real-time high-integrity systems such as on-board software systems make the adoption of the MDE considerable more arduous. Positive experiences on the application of MDE to the design of these kind of systems do exist and it can be found in the 'CHESS: space case study' \cite{CompBasedProcess} and the 'ESA: reference Earth Observation case study' \cite{CompBasedProcess}.
+\ac{mde} is a novel trend for software development in the space domain, but has been successfully applied to enterprise computing \cite{CompBasedDev}. The validation-intensive real-time high-integrity systems such as on-board software systems make the adoption of the MDE considerable more arduous. Positive experiences on the application of MDE to the design of these kind of systems do exist and it can be found in the '\ac{chess}: space case study' \cite{CompBasedProcess} and the 'ESA: reference Earth Observation case study' \cite{CompBasedProcess}.
 
 In MDE, the principal design artifact is a model, which is an abstract representation of the system under development which encompasses systems and software architecture. Each model conforms with a metamodel, which describes the syntax of entities that populate the models, as well as their relationships and the constraints in place between them. The metamodel constrains the design space of the MDE infrastructure \cite{Metamodelling}.  
 
-COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation \cite{CORDET}. Based on this study, the concept of overall software reference architecture, in the development of OSRA, is considered to be made up of {SoftRefArch,SAVOIR}:
+COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation \cite{CORDET}. Based on this study, the concept of overall software reference architecture, in the development of OSRA, is considered to be made up of \cite{SoftRefArch}\cite{SAVOIR}:
 
 \begin{description}
 \item [Component Model] A component model is the basis for designing the software as a composition of individually verifiable and reusable software units \cite{ComponentModel}.
@@ -187,7 +187,7 @@ These become the key ingredients for the very foundation of the MDE design metho
 \end{figure}
 
 \subsection{Component Model}
-Component Based Software Engineering (CBSE) is a software methodology centered on the systematic re-use of software by realizing the software as assembly of units of composition called components \cite{CBSE}.
+\ac{cbse} is a software methodology centered on the systematic re-use of software by realizing the software as assembly of units of composition called components \cite{CBSE}.
 The adoption of Component Based Software Engineering (CBSE) in the context of high-integrity real-time systems in general and in space domain in particular is not so popular as in the other main-stream domains like enterprise computing \cite{SAVOIR} because of strong verification and validation requirements imposed in the space domain and the presence of non-functional dimensions \cite{SAVOIR}.
 
 The principles of Component Based Software Engineering (CBSE) when combined with the principles below can be used to build OBSW as an assembly of components \cite{SAVOIR}: 
@@ -316,7 +316,7 @@ Using a computational model is necessary as per the Space Software engineering s
 
 \subsection{Programming model and the execution platform}
 \label{section: Execution platform}
-The execution platform is a part of the software architecture providing all the necessary means for the implementation of a component and the computational model. It comprises of the middleware, the real-time operating system/kernel (RTOS/RTK), communication drivers and the board support package (BSP) for a given hardware platform. The services provided by the execution platform can be categorized into four different types \cite{SAVOIR}:
+The execution platform is a part of the software architecture providing all the necessary means for the implementation of a component and the computational model. It comprises of the middleware, the \ac{rtos}/\ac{rtk}, communication drivers and the board support package (BSP) for a given hardware platform. The services provided by the execution platform can be categorized into four different types \cite{SAVOIR}:
 
 \begin{description}
 \item [Services for containers] These services are meant to be used by the containers e.g. Tasking primitives, synchronization primitives, primitives related to time and timers.
