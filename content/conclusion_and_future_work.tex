@@ -4,7 +4,7 @@
 \label{chap:conclusion}
 
 \section{Discussion}
-As a part of this Master thesis, 
+As a part of this Master thesis, the following 
 \begin{itemize}
 \item A choice is made to use the Tasking framework as a computational model so that the OSRA component model statically binds to the Tasking framework which formally defines the computational entities and the rules which govern their usage 
 \item A reference programming model is decided upon that enforces the analysis assumptions and which permits to express exclusively the semantics imposed by the analysis theory and which conveys the implementations of the desired non-functional properties using the primitives from the Tasking framework
@@ -33,7 +33,7 @@ During the course of the Master thesis, the following shortcomings of the curren
 \section{Future Work}
 As an enhancement to the current work, it is possible to extend this Master thesis in the following directions:
 \begin{itemize}
-\item A rather straight forward improvement would be to generate the unit test cases for different infrastructural code entities automatically as part of the model-to-code transformation step. This helps in automating the testing of the generated code 
+\item A rather straight forward improvement would be to generate the unit test cases and mock classes for different infrastructural code entities automatically as part of the model-to-code transformation step. This helps in automating the testing of the generated code and testing the code entities independent of each other
 \item The generated infrastructure code is found to have all the good characteristics of a software as listed in \cref{subsection: Software design approach} although the generated code needs to be rigorously evaluated for each of these characteristics 
 \item Enable model-based round-trip analysis by conducting static analysis of the system model in the non-functional dimensions of interest. For example, schedulability analysis which verifies whether the timing non-functional requirements can be met \cite{ScheduAnaly},\cite{CompBasedProcess}.  For this, a platform specific model (PSM) i.e., a Schedulability Analysis Model (SAM) can be created from the declarative specification of the concurrent semantics that decorate the user model and inputs for the schedulability analysis tools can be automated and the results of the analysis can be seamlessly propogated back to the user space \cite{ScheduAnaly}
 \item Model-to-code transformation of more complex data types such as opaque types, arrays, structures, unions etc which are possible to be instantiated in the OBSW model
