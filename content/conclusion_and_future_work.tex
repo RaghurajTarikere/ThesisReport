@@ -22,6 +22,7 @@ The following results were obtained
 \end{itemize}
 
 \section{Identified shortcomings of Tasking framework}
+\label{section: Identififed shortcomings}
 During the course of the Master thesis, the following shortcomings of the current version of Tasking framework, which is chosen as a computational model for this Master thesis are identified:
 \begin{itemize}
 \item Tasks from Tasking framework are used in various threads of control as explained in \cref{chap: Progamming model}. At the heart of the Tasking framework is a scheduler which schedules tasks based on priorities and these tasks are non-preemptible at the moment \cite{TaskFr}. This is one of the critical shortcomings in the current version of the Tasking framework as it makes the generated software code which is based on Tasking framework not suitable for hard real-time systems \cite{TempIsolation}. Time-monitoring architectures such as Server-based architecture or Priority-Band architectures listed in \cite{TempIsolation} need to be adopted in the Tasking framework in order to make the generated code truly real-time capable. These architectures help in providing isolation of applications i.e., tasks (at least) along three orthogonal dimensional axes: time, space and communication \cite{TempIsolation}

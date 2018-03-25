@@ -5,23 +5,23 @@
 \section{Introduction}
 \subsection{Background}
 Space industry has recognized for the past decade the need to raise the level of standardization in the avionics system in order to increase the efficiency and reduce cost and schedule in the development \cite{SAVOIR}.
-The implementation of such a vision is expected to provide benefits for all the stake-holders in the space community \cite{SAVOIR}.
+The implementation of such a vision is expected to provide benefits for all the stake-holders in the space community \cite{SAVOIR}:
 
 \begin{description}
-\item  [Customer Agencies] Significant reduction in the project development cost and schedule and the risk involved in the software development
-\item [System Integrators] Increased competition among stake-holders to deliver at lower price and maintain shorter time-to-market as a result of multi-supplier option
-\item [Supplier Industry] Benefits from diversified customer bases and the supplied building blocks would be compatible with software architectures from the software primes such as Thales Alenia Space and astrium Satellites (EADS Astrium)
+\item  [Customer Agencies] Significant reduction in the project development cost and schedule and the risk involved in software development.
+\item [System Integrators] Increased competition among stake-holders to deliver at lower price and maintain shorter time-to-market as a result of multi-supplier option.
+\item [Supplier Industry] Benefits from diversified customer bases and the supplied building blocks would be compatible with software architectures from the software primes such as Thales Alenia Space and Astrium Satellites (EADS Astrium).
 \end{description}
 
-Similar initiatives have already been taken across various industries and eg. \ac{autosar} for the automotive industry is worthy mentioning \cite{BasConAUTOSAR}. Space can benefit from these examples by studies related to how these or similar initiatives were successfully conducted and how they faired. Although the business model is different in the automotive and the space sectors, AUTOSAR demonstrates that the need for standardization is the key irrespective of the sector and is driven by the need of the industry to become more competitive \cite{EfAnAUTOSAR}
+Similar initiatives have already been taken across various industries and eg., \ac{autosar} for the automotive industry is worthy mentioning \cite{BasConAUTOSAR}. Space can benefit from these examples, by studies related to how these or similar initiatives were successfully conducted and how they faired. Although the business model is different in the automotive and the space sectors, AUTOSAR demonstrates that the need for standardization is the key irrespective of sectors and is actually driven by the need of the industry to become more competitive \cite{EfAnAUTOSAR}.
 
-Space primes and on-board software companies have made significant progress and have implemented and/or are implementing reuse on the basis of their internal software reference architectures and building blocks. However, for this standardization to provide maximum benefits, it has to be tackled at the European level rather than at company level \cite{SAVOIR}
+Space primes and on-board software companies have made significant progress and have implemented and/or are implementing principle of reuse on the basis of their internal software reference architectures and building blocks. However, for this standardization to provide maximum benefits, it has to be tackled at the European level rather than at a company level \cite{SAVOIR}.
 
-\ac{esa} through its two parallel activities, namely \ac{cordet} and \ac{domeng} \cite{CORDET} aimed at increasing the software reuse in on-board software have confirmed that interface standardization allows to efficiently compose the software on the basis of existing and mature building blocks.
+\ac{esa} through its two parallel activities, namely \ac{cordet} and \ac{domeng} \cite{CORDET}, which aimed at increasing the software reuse in on-board software have confirmed that interface standardization allows to efficiently compose the software on the basis of existing and mature building blocks.
 
-To refer to all ongoing initiatives and to provide a platform for technical discussions, related to the vision of avionics development through maximizing reuse and standardization, a \ac{savoir} Advisory Group (SAVOIR Advisory Group) was created. SAVOIR Advisory Group decided to spawn a specific subgroup for on-board software reference architectures called "SAVOIR Fair Architecture and Interface Reference Elaboration"(SAVOIR FAIRE) working group. \ac{osra} is the result of the R\&D activities of this group \cite{SAVOIR}.   
+To refer to all the ongoing initiatives and to provide a platform for technical discussions related to the vision of avionics development through maximizing reuse and standardization, a \ac{savoir} Advisory Group (SAVOIR Advisory Group) was created. SAVOIR Advisory Group decided to spawn a specific subgroup for on-board software reference architectures called SAVOIR Fair Architecture and Interface Reference Elaboration (SAVOIR FAIRE) working group. \ac{osra} is the result of the R\&D activities of this group \cite{SAVOIR}.   
 
-The OSRA is designed to be a single, common and agreed framework for the definition of the \ac{obsw} of the future European Space Agency (ESA) missions \cite{SAVOIR}. It is based on solid scientific foundations and accompanied by development methodology and architectural practices that fit the domain. A single software system would thus be an "instantiation" of the reference architecture to specific mission needs.
+The OSRA is designed to be a single, common and agreed framework for the definition of the \ac{obsw} of the future European Space Agency (ESA) missions \cite{SAVOIR}. It is based on solid scientific foundations and accompanied by development methodology and architectural practices that fit the domain. A single software system would thus be an "instantiation" of the reference architecture to specific mission needs \cite{PhdThesis}\cite{SAVOIR}.
 
 \section{Need for software reference architecture}
 \subsection{Motivation}
@@ -30,24 +30,24 @@ According to the ISO/IEC standard ISO 42010 \cite{ISO42010}, the software archit
 \textit{"The fundamental organization of a system embodied in its components, their relationships
 to each other, and to the environment, and the principles guiding its design and evolution"}
  
-A software architecture is the key to create "good quality" software because it promotes architectural best practices and contributes to the quality of the software. A bad architecture hinders the fulfillment of functional, behavioral, non-functional and life-cycle requirements.
+A software architecture is the key to create "good quality" software because it promotes architectural best practices and contributes to the quality of the software. A bad architecture hinders the fulfillment of functional, behavioral, non-functional and life-cycle requirements \cite{PhdThesis}.
 
 According to the "\ac{rup}" \cite{RUP}, the software reference architecture can be defined as:
 
-\textit{"a predefined architectural pattern, or set of patterns, possibly partially or
+\textit{"A predefined architectural pattern, or set of patterns, possibly partially or
 completely instantiated, designed, and proven for use in particular business and technical contexts, together with supporting artifacts to enable their use. Often, these artifacts are harvested
 from previous projects"} 
 
-A software reference architecture prescribes the form of concrete software architectures for a set of systems for which it was developed. So, a reference architecture is a form of "generic" software architecture which prescribes the founding principles, the underlying methodology and the architectural practices that were recognized by the domain stakeholders as the best solution to the construction of a certain class of software systems  \cite{PhdThesis}\cite{SoftRefArch}.
+A software reference architecture prescribes the form of concrete software architectures for a set of systems for which it is developed. So, a reference architecture is a form of "generic" software architecture which prescribes the founding principles, the underlying methodology and the architectural practices that are recognized by the domain stakeholders as the best solution to the construction of a certain class of software systems  \cite{PhdThesis}\cite{SoftRefArch}.
 
 Elevating a software architecture to a software reference architecture permits to gather and re-use lessons learned and architectural best practices, give new projects a consolidated running start and promote a product line approach \cite{SAVOIR}.
 
-A generic software reference architecture is made up of two main parts: \cite{SAVOIR}
+A generic software reference architecture is made up of two main parts \cite{SAVOIR}:
 
-\begin{itemize}
-\item A software architectural concept addressing the pure software architectural related issues
-\item Architectural building blocks related to functional aspects and the corresponding interface definitions which express functions derived from the analysis of the functional chains of the core on-board software domain 
-\end{itemize}
+\begin{description}
+\item [Software architectural concepts] These address the pure software architectural related issues.
+\item [Architectural building blocks and interfaces] These are related to functional aspects and the corresponding interface definitions which express functions derived from the analysis of the functional chains of the core on-board software domain. 
+\end{description}
 
 \begin{figure}[h]
 	\centering
@@ -57,32 +57,32 @@ A generic software reference architecture is made up of two main parts: \cite{SA
 	\label{}
 \end{figure} 
 
-As mentioned in the previous section, in order to increase the efficiency and cost-effectiveness in the development process of on-board avionics and to incorporate more number of functionality in the on-board software, the overall objective of space industry would be to standardize the avionics systems and therefore the on-board software.
+As mentioned in the previous section, in order to increase the efficiency and cost-effectiveness in the development process of on-board avionics and to incorporate more number of functionalities in the on-board software, the overall objective of space industry would be to standardize the avionics systems and therefore the on-board software.
 
 A building block approach is one of the ways to tackle this problem. In this approach, the on-board software is implemented from a set of pre-developed and compatible building blocks, plus specific adaptations and "missionisation" according to specific mission requirements \cite{SAVOIR}. The target missions are the core ESA missions, i.e. high reliability and availability spacecraft driven systems (eg. operational missions, science missions).
 
 The "right" building blocks need to be produced and supplied by the suppliers to any system integrator and to achieve this, reference architectures need to be defined.
 
-A software building block, generally:
+A software building block, generally \cite{SAVOIR}:
 \begin{itemize}
-\item Has a clear, well defined, specified, documented function and open external interfaces for the purpose of interaction
-\item Meets defined performance, operation and other requirements
-\item Is self-contained so that they can be used at higher-integration levels eg. board, equipment, subsystem 
-\item Has a quality level that can be assessed
-\item Is applicable in well defined physical and hardware environment
-\item Is worth developing as they are going to be used in bulk of ESA missions
-\item Is designed for reuse in different projects, by different users under different environments
-\item Can be made available off-the-shelf, read for deployment under different conditions.  
+\item Has a clear, well defined, specified, documented function and open external interfaces for the purpose of interaction.
+\item Meets defined performance, operation and other requirements.
+\item Is self-contained so that they can be used at higher-integration levels eg. board, equipment, subsystem. 
+\item Has a quality level that can be assessed.
+\item Is applicable in well defined physical and hardware environment.
+\item Is worth developing as they are going to be used in bulk of ESA missions.
+\item Is designed for reuse in different projects, by different users under different environments.
+\item Can be made available off-the-shelf, ready for deployment under different conditions.  
 \end{itemize}
 
-Separation of the application aspects from the general-purpose data processing aspects is the key to generic/reusable software architectures \cite{PhdThesis}. The lower layers of the architectures usually handle the implementation of communication, real time capabilities etc. and the higher level layers usually deal with the application aspects. However there have to be ways to annotate the application building blocks (ABB) with sufficient information regarding requirements related to communication, real-time, dependability etc., so that the platform building blocks (PBB) can provide the suitable complete implementation. Development of interface specifications with reference architectures as the basis allows the implementation of the famous AUTOSAR concept: \textit{"Cooperate on standards, compete on implementation"}\cite{AUTOSARurl}
+Separation of the application aspects from the general-purpose data processing aspects is the key to generic/reusable software architectures \cite{PhdThesis}. The lower layers of the architectures usually handle the implementation of communication, real time capabilities etc. and the higher level layers usually deal with the application aspects. However there have to be ways to annotate the application building blocks (ABB) with sufficient information regarding requirements related to communication, real-time, dependability etc., so that the platform building blocks (PBB) can provide a suitable complete implementation. Development of interface specifications with reference architectures as a basis, allows the implementation of the famous AUTOSAR concept: \textit{"Cooperate on standards, compete on implementation"}\cite{AUTOSARurl}.
 
 The OBSW life-cycle needs to be consistent with the system life-cycle, which features the definition of functional increments in system development \cite{SAVOIR}. Hence, OBSW must in particular:
 
 \begin{itemize}
-\item Allow for faster software development
-\item Be compatible to a late definition or changes of some of its requirements
-\item Cope with various system integration strategies
+\item Allow for faster software development.
+\item Be compatible to a late definition or changes of some of its requirements.
+\item Cope with various system integration strategies.
 \end{itemize}
 
 \subsection{User needs}
@@ -100,13 +100,13 @@ The COrDeT study, with the slogan "Faster, Later, Software", represented a summa
 	\label{fig:RedSWSched}
 \end{figure}
 
-\item [Reduce recurring costs] Identification and reduction of recurring costs by providing the same set of functions eg. device drivers, real-time operating systems, communication services etc.   
+\item [Reduce recurring costs] Identification and reduction of recurring costs by providing the same set of functions eg., device drivers, real-time operating systems, communication services, etc.   
 
 \item [Quality of the product] Need for high quality software (timing predictability, dependability, etc.) and the quality must be at least the same as one of OBSW developed with current approaches.
 
 \item [Increase cost-efficiency] Increase in the "value" of the software product that is developed for a given amount of budget.
 
-\item [Reduce Verification and Validation effort] The new development approaches shall foster the reduction of effort for \ac{vandv} efforts, which is one of the main contributor to the cost of software development.
+\item [Reduce Verification and Validation effort] The new development approaches shall foster the reduction of effort for \ac{vandv}, which is one of the main contributor to the cost of software development.
 
 \item [Mitigate the impact of late requirement definition or change] 
 
@@ -122,7 +122,7 @@ The COrDeT study, with the slogan "Faster, Later, Software", represented a summa
 
 \item [Dissemination activities] System engineers should be exposed to the core principles of the process.
 
-\item [Future needs] Future needs such as integration of functions of different criticality and security levels, use of Time and Space Partitioning (TSP), support to multi-core processors, need to subjected to evaluation and their impact on software reference architecture need to be monitored.
+\item [Future needs] Future needs such as integration of functions of different criticality and security levels, use of Time and Space Partitioning (TSP), support to multi-core processors, need to be subjected to evaluation and their impact on software reference architecture need to be monitored.
 \end{description} 
 
 \subsection{High level requirements}
@@ -138,7 +138,7 @@ The user needs are translated into a set of high-level requirements for OSRA \ci
 
 \item [HW/SW Independence] Software should be developed independent from the hardware features. It is necessary to separate parts of the software that interact directly with the hardware, into separate modules and make them accessible through defined interfaces. In this way, as long as the interface does not change, the software is isolated from the changes in the hardware-dependent layers.
 	  	
-\item [Component based approach] The whole software should be designed as a composition of components that are reusable in nature. The architecture shall respect preservation of properties of individual building blocks, once they are integrated into the architecture and it should be possible to calculate the system's property as a function of components' individual properties. The former is called composability and the latter is called compositionality \cite{CompBasedDev}. Chapter \cref{chap: Software development process} explains this approach in more detail.
+\item [Component based approach] The whole software should be designed as a composition of components that are reusable in nature. The architecture shall respect preservation of properties of individual building blocks, once they are integrated into the architecture and it should be possible to calculate the system's property as a function of components' individual properties. The former is called composability and the latter is called compositionality \cite{CompBasedDev}. \cref{section: Founding principle-Composition} in \cref{chap: Software development process} explains this approach in more detail.
   
 \item [Software observability] The software architecture should provide means to observe the software specific parts and extract current and past status of the software using the services specified by its operational scenarios.
 
@@ -160,23 +160,23 @@ These properties have to be preserved or enforced so that these properties are n
 
 \section{The Software Architectural Concept}
 \subsection{Fitting Model-Driven Engineering}
-\ac{mde} is a novel trend for software development in the space domain, but has been successfully applied to enterprise computing \cite{CompBasedDev}. The validation-intensive real-time high-integrity systems such as on-board software systems make the adoption of the MDE considerable more arduous. Positive experiences on the application of MDE to the design of these kind of systems do exist and it can be found in the '\ac{chess}: space case study' \cite{CompBasedProcess} and the 'ESA: reference Earth Observation case study' \cite{CompBasedProcess}.
+\ac{mde} is a novel trend for software development in the space domain, but has been successfully applied to enterprise computing \cite{CompBasedDev}. The validation-intensive real-time high-integrity systems such as on-board software systems make the adoption of the MDE considerably more arduous. Positive experiences on the application of MDE to the design of these kind of systems do exist and it can be found in the '\ac{chess}: space case study' \cite{CompBasedProcess} and the 'ESA: reference Earth Observation case study' \cite{CompBasedProcess}.
 
-In MDE, the principal design artifact is a model, which is an abstract representation of the system under development which encompasses systems and software architecture. Each model conforms with a metamodel, which describes the syntax of entities that populate the models, as well as their relationships and the constraints in place between them. The metamodel constrains the design space of the MDE infrastructure \cite{Metamodelling}.  
+In MDE, the principal design artifact is a model, which is an abstract representation of the system under development, which encompasses systems and software architecture. Each model conforms with a metamodel, which describes the syntax of entities that populate the models, as well as their relationships and the constraints in place between them. The metamodel constrains the design space of the MDE infrastructure \cite{Metamodelling}.  
 
-COrDeT (Component Oriented Development Techniques) aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation \cite{CORDET}. Based on this study, the concept of overall software reference architecture, in the development of OSRA, is considered to be made up of \cite{SoftRefArch}\cite{SAVOIR}:
+COrDeT (Component Oriented Development Techniques) study aimed at investigating various techniques in fields such as software product line engineering, model driven engineering and component orientation \cite{CORDET}. Based on this study, the concept of overall software reference architecture, in the development of OSRA, is considered to be made up of \cite{SoftRefArch}\cite{SAVOIR}:
 
 \begin{description}
 \item [Component Model] A component model is the basis for designing the software as a composition of individually verifiable and reusable software units \cite{ComponentModel}.
 
-\item [Computational Model] A computational model is used to relate to the design entities of the component model, their non-functional needs for concurrency, time and space, to a framework consisting of analysis techniques, in general, to a set of schedulability analysis equations, which help to judge formally, whether the description of the architecture is statically analyzable \cite{ScheduAnaly}
+\item [Computational Model] A computational model is used to relate to the design entities of the component model, their non-functional needs for concurrency, time and space, to a framework consisting of analysis techniques, in general, to a set of schedulability analysis equations, which help to judge formally, whether the description of the architecture is statically analyzable \cite{ScheduAnaly}.
 
-\item [A Programming Model] A programming model is used to ensure that the implementation of the design entities obey the semantics and the assumptions of the analysis and the attributes used as input to it.\cite{CharEvoRAVCodeAr}
+\item [A Programming Model] A programming model is used to ensure that the implementation of the design entities obey the semantics and the assumptions of the analysis and the attributes used as input to it \cite{CharEvoRAVCodeAr}.
 
 \item [A conforming Execution Platform] An execution platform helps to preserve at run-time, the properties asserted by the static analysis, and is able to react to possible violations of them.  
 \end{description}
 
-These become the key ingredients for the very foundation of the MDE design methodology focused on the principle of correctness by construction and property preservation, which are high level requirements respectively and \cref{fig: Constituents of OSRA} gives a pictorial representation of it.
+These become the key ingredients for the very foundation of the MDE design methodology focused on the principle of correctness by construction and property preservation, which are high level requirements respectively. \cref{fig: Constituents of OSRA} gives a pictorial representation of it.
 
 \begin{figure}[h]
 	\centering
@@ -187,13 +187,13 @@ These become the key ingredients for the very foundation of the MDE design metho
 \end{figure}
 
 \subsection{Component Model}
-\ac{cbse} is a software methodology centered on the systematic re-use of software by realizing the software as assembly of units of composition called components \cite{CBSE}.
-The adoption of Component Based Software Engineering (CBSE) in the context of high-integrity real-time systems in general and in space domain in particular is not so popular as in the other main-stream domains like enterprise computing \cite{SAVOIR} because of strong verification and validation requirements imposed in the space domain and the presence of non-functional dimensions \cite{SAVOIR}.
+\ac{cbse} is a software methodology centered on the systematic re-use of software by realizing the software as an assembly of units of composition called components \cite{CBSE}.
+The adoption of Component Based Software Engineering (CBSE) in the context of high-integrity real-time systems in general and in space domain in particular is not so popular as in the other main-stream domains like enterprise computing because of strong verification and validation requirements imposed in the space domain and the presence of non-functional dimensions \cite{SAVOIR}.
 
 The principles of Component Based Software Engineering (CBSE) when combined with the principles below can be used to build OBSW as an assembly of components \cite{SAVOIR}: 
 \begin{itemize}
-\item Principle of separation of concerns, by allocation of concerns to three distinct software entities: the component (which is a design entity), the container and the connector (which are entities used in implementation only and do not appear in the design space)
-\item Possibility of verification of properties related to composability and compositionality \cite{CompBasedDev} 
+\item Principle of separation of concerns, by allocation of concerns to three distinct software entities: the component (which is a design entity), the container and the connector (which are entities used in implementation only and which do not appear in the design space).
+\item Possibility of verification of properties related to composability and compositionality \cite{CompBasedDev}. 
 \end{itemize}
 
 The execution platform defined in the software architecture then provides the services to the components, container and the connectors. Finally, the entire software is deployed on the physical architecture (Computational units, equipment, and the network interconnections between them).
@@ -202,19 +202,19 @@ The execution platform defined in the software architecture then provides the se
 This section describes the founding principles of choice of the component model:
 
 \begin{description}
-\item[Correctness by construction] E.W. Dijkstra in his ACM Turing lecture in 1972 suggested that the program construction should be done after a valid proof of correctness of construction has been developed \cite{CompBasedProcess}. Two decades later, a software development approach called Correctness by Construction (C-by-C) was proposed which advocated the detection and removal of errors at early stages, which leads to safer, cheaper and more reliable software \cite{CompBasedProcess}\cite{PhdThesis}. The Correctness by Construction practice follows:
+\item[Correctness by construction] E.W. Dijkstra in his ACM Turing lecture in 1972 suggested that the program construction should be done after a valid proof of correctness of construction has been developed \cite{CompBasedProcess}. Two decades later, a software development approach called Correctness by Construction (C-by-C) was proposed which advocated the detection and removal of errors at early stages, which led to safer, cheaper and more reliable software \cite{CompBasedProcess}\cite{PhdThesis}. The Correctness by Construction practice follows:
 \begin{itemize}
-\item To give a solid reasoning on the correctness of the document or code, it is necessary to use formal and precise tools and notations for their development and verification 
-\item Defining things only once so as to avoid contradictions and repetitions
+\item To give a solid reasoning on the correctness of the document or code, it is necessary to use formal and precise tools and notations for their development and verification. 
+\item Defining things only once so as to avoid contradictions and repetitions.
 \item Designing the software that is easy to verify e.g. by using safer language subsets or using appropriate coding styles and software design patterns. 
 \end{itemize}
 
 In OSRA and the component model developed along with it, the Correctness by Construction principle is changed to be applicable to a CBSE approach based on Model-driven Engineering (MDE) \cite{CompBasedProcess} wherein:
 
 \begin{itemize}
-\item The components are designed
+\item The components can be designed.
 \item The products designed by the design environment can be verified and analyzed by the design environment.
-\item The lower level artifacts are automatically generated and the software production is automated to the maximum extent.  
+\item The lower level artifacts can be automatically generated and the software production can be automated to the maximum extent.  
 \end{itemize}
 
 \item [Separation of concerns] 
@@ -222,7 +222,7 @@ In OSRA and the component model developed along with it, the Correctness by Cons
 Separation of concerns was first advocated by Dijkstra \cite{CompBasedProcess} and it helps to separate the aspects of software design and implementation. The OSRA and its associated component model promotes separation of concerns\cite{CompBasedProcess}\cite{PhdThesis}:
 
 \begin{itemize}
-\item The components are restricted to hold the functional code only. The non-functional requirements which has effects on the run-time behavior e.g. tasking, synchronization and timing are dealt by the component infrastructure, which is external to the component which realizes the functional code. The component infrastructure mainly consists of containers, connectors and their run-time support.
+\item The components are restricted to hold the functional code only. The non-functional requirements which has effects on the run-time behavior e.g. tasking, synchronization and timing are dealt by the component infrastructure which is external to the component and which realizes the functional code. The component infrastructure mainly consists of containers, connectors and their run-time support.
 
 \item A specific annotation language is specified which is used to define the non-functional requirements and these are annotated on the components realizing the functional code.
 
@@ -236,14 +236,14 @@ Inculcating the principle of separation of concerns in the development process h
 \begin{itemize}
 \item It increases the reuse potential of the components, which is an important high level requirement described in the previous section \cite{SAVOIR}. The reuse potential of the component is increased because the same component can now be used under different non-functional requirements (as per the instantiations of the component infrastructure).
 
-\item It helps in the generation of vast amount of complex and delicate infrastructural code which takes care of realizing the non-functional requirements on the run-time behavior of the software. This increases the readability, traceability and maintainability of the infrastructural code. 
+\item It helps in the generation of vast amount of complex and delicate infrastructural code which takes care of realizing the non-functional requirements at run-time. This increases the readability, traceability and maintainability of the infrastructural code. 
 \end{itemize}
 
 \item [Composition] 
 \label{section: Founding principle-Composition}
 When composability and compositionality can be assured by static analysis, guaranteed through implementation, actively preserved at run-time, the goal of composition with guarantees as discussed by Vardanega can be achieved \cite{CompBasedProcess}. This is also one of the high level requirements defined in the section before.
  
-Composability is guaranteed when the properties of individual components are preserved on component composition, deployment on target and execution. The components, as mentioned before, implement functional code, most part of which is sequential only and they do not have to worry about the non-functional semantics. The components behave like black-boxes and showcase to the external world only provided and required interfaces. Other components or infrastructural components are expected to communicate through these defined interfaces only. Hence, when components are composed with each other with matching required and provided interfaces, the functional composability is guaranteed which is necessary but not sufficient.
+Composability is guaranteed when the properties of individual components are preserved on component composition, on deployment on target and on execution. The components, as mentioned before, implement only the functional code, most part of which is sequential only and they do not have to worry about the non-functional semantics. The components behave like black-boxes and showcase to the external world only the provided and required interfaces. Other components or infrastructural components are expected to communicate through these defined interfaces only. Hence, when components are composed with each other with matching required and provided interfaces, the functional composability is guaranteed which is necessary but not sufficient.
 
 The non-functional requirements/constraints are annotated on the components (specifically the component interfaces) and they are realized by the container which encapsulates the respective component \cite{SAVOIR}\cite{ComponentModel}. The provided interface determines the semantics of the invocation and adds to the functional capabilities provided by the component. These semantics must match with the execution semantics described by the computational model, to which the component model is attached. An example for composable property is shown in \cref{fig: Composability}. In this case, the number of threads and protected objects generated per component, which entirely depends on the extra functional notations to the component interface should be invariant across component composition for the composable property to hold true.  
 
@@ -279,11 +279,11 @@ A component provides a set of services and exposes them to the external world as
 
 Non functional attributes are added to the component interfaces as discussed before in the previous section on separation of concerns.
 
-The adoption of hierarchical decomposition of components can be an effective way of defining components instead of defining a containment relationships. A child component can be developed to any component which would delegate and subsume the relationships between the interfaces of the child component and its parent. But the drawback is that various non-functional dimensions applicable to the space domain complicate the picture and hence is hierarchical decomposition of components not allowed at the current stage pf development \cite{PhdThesis}.
+The adoption of hierarchical decomposition of components can be an effective way of defining components instead of defining a containment relationships. A child component can be developed to any component which would delegate and subsume the relationships between the interfaces of the child component and its parent. But the drawback is that various non-functional dimensions applicable to the space domain complicate the picture and hence is hierarchical decomposition of components not allowed at the current stage of development \cite{PhdThesis}.
     
 \item [Container] The container is a software entity that wraps around the component, which is directly responsible for realizing the non-functional properties. The relation between the component and the container is a famous software design pattern called the "inversion of control" \cite{CompBasedProcess}\cite{InvOfCntrlurl}. All in all, the reusable code (the container), controls the execution of the problem-specific code (the component).
 
-The container exposes the same provided and required interfaces as that of the component and is able to support the component's execution with the desired, relevant non functional concerns attached to the component interface \cite{CompBasedDev}. The container also intercepts the calls made by the component to the other components/services requested from the target platform and transparently forward them to the container of the target component/target platform pseudo component (A pseudo component is a kind of component which is used for interaction purposes only). The former principle is called interface "promotion" and the latter is called the interface "subsumption" \cite{CompBasedDev}. The container and the component interact with each other according to the inversion of control design pattern, but the binding between components are still defined at software initialization time.
+The container exposes the same provided and required interfaces as that of the component and is able to support the component's execution with the desired, relevant non functional concerns attached to the component interfaces \cite{CompBasedDev}. The container also intercepts the calls made by the component to the other components/services requested from the target platform and transparently forward them to the container of the target component/target platform pseudo component (A pseudo component is a kind of component which is used for interaction purposes only). The former principle is called interface "promotion" and the latter is called the interface "subsumption" \cite{CompBasedDev}. The container and the component interact with each other according to the inversion of control design pattern, but the binding between components are still defined at software initialization time.
 
 \item [Connector] The connector is a software entity responsible for the interaction between the components (actually between the containers that wrap around them). Connectors assist in implementing separation of concerns as the concerns of interaction is separated from the functional concerns. Components are thus void of code related to interactions with other components, however the the component model requires that the user specifies the interaction style in the component interfaces.
 
@@ -316,16 +316,16 @@ Using a computational model is necessary as per the Space Software engineering s
 
 \subsection{Programming model and the execution platform}
 \label{section: Execution platform}
-The execution platform is a part of the software architecture providing all the necessary means for the implementation of a component and the computational model. It comprises of the middleware, the \ac{rtos}/\ac{rtk}, communication drivers and the board support package (BSP) for a given hardware platform. The services provided by the execution platform can be categorized into four different types \cite{SAVOIR}:
+The execution platform is a part of the software architecture providing all the necessary means for the implementation of a component and the computational model. It comprises of the middleware, the \ac{rtos}/\ac{rtk}, communication drivers and the \ac{bsp} for a given hardware platform. The services provided by the execution platform can be categorized into four different types \cite{SAVOIR}:
 
 \begin{description}
 \item [Services for containers] These services are meant to be used by the containers e.g. Tasking primitives, synchronization primitives, primitives related to time and timers.
 
 \item [Services for connectors] These services are intended to be used by the connectors and it consists of actual communication means between components, ways to handle physical distribution across processing units, libraries used for translating data codes.
 
-\item [Services to components] These services are supposed to be used by the components which implement the functional constraints. Typical services include: provision of on-board time for time-stamps, context management and data recovery. Access to these services are intercepted by the container wrapped around the component (refer section \cref{section: Software entities})
+\item [Services to components] These services are supposed to be used by the components which implement the functional constraints. Typical services include: provision of on-board time for time-stamps, context management and data recovery. Access to these services are intercepted by the container wrapped around the component (refer \cref{section: Software entities}).
 
-\item [Services to implement "abstract components"] These services include PUS monitoring, OBCPs, hardware representation etc.
+\item [Services to implement "abstract components"] These services include \ac{pus} monitoring, OBCPs, hardware representation etc.
 \end{description}
 
 It is important to note that different implementation of containers and connectors are necessary for each execution platform of interest.
@@ -333,7 +333,7 @@ It is important to note that different implementation of containers and connecto
 The programming model realizes a given computational model and together with a conforming execution platform, it is possible to achieve the following goals \cite{PhdThesis}:
 
 \begin{itemize}
-\item Ensure that the implementation fully conforms with the semantics prescribed by the computational model and those assumed by the analysis
+\item Ensure that the implementation fully conforms with the semantics prescribed by the computational model and those assumed by the analysis.
 \item Ensure that the contracts stipulated between the components are respected at run-time. This is in-line with the principle of property preservation which is one of the high level requirements.
 \end{itemize} 
 

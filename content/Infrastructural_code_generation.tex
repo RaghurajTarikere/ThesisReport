@@ -3,27 +3,27 @@
 \chapter{Infrastructural code generation}
 \label{chap: Code generation}
 \section{Introduction}
-After designing an OBSW model using the OSRA SCM model editor and following the component-based software development approach that comes with it, the OBSW model entities need to be mapped to infrastructure code. The reference programming model for OSRA, discussed in the previous chapter helps us in progressing towards this goal. But, it is necessary to understand the overall design approach for the generated code and briefly present the abstractions that will be offered to the software supplier. This chapter, deals with these things in detail. Similar efforts from the Artemis JU CHESS project \cite{EvoRAVCodeAr}, provide the perfect base for discussions in this chapter of the Master thesis.   
+After designing an OBSW model using the OSRA SCM model editor and following the component-based software development approach that comes with it, the OBSW model entities need to be mapped to infrastructure code. The reference programming model for OSRA, discussed in the previous chapter helps us in progressing towards this goal. But, it is necessary to understand the overall design approach for the generated code and present the abstractions that will be offered to the software supplier. This chapter, deals with these things in detail. Similar efforts from the Artemis JU CHESS project \cite{EvoRAVCodeAr}, provide the perfect base for discussions in this chapter of the Master thesis.   
 
 \section{User model entities in the Platform Independent Model (PIM) phase}
 A detailed description of all the modeling entities that the software architect can use, can be found in the specification of the metamodel for the OSRA component model \cite{SpecMetamodel}. However a brief description of them is noteworthy here:
  
 \begin{description}
-\item [Datatypes] The software architect can create a set of project-specific data types and constants using the \texttt{Data Types} language unit of the \texttt{CommonTypes} metamodel and the language unit is designed to provide the software architect an expressive power comparable to the languages with strong types (e.g. Ada).\cite{SpecMetamodel}. The supported type definitions are boolean types, integer types, float types, enumeration types, fixed point types, array types, structured types, string types, union types, alias types, opaque types, external types and unconstrained types. Some of these data type definitions are obvious for readers with programming skills in typed languages such as Ada, C or C++. 
+\item [Datatypes] The software architect can create a set of project-specific data types and constants using the \texttt{Data Types} language unit of the \texttt{CommonTypes} metamodel and the language unit is designed to provide the software architect an expressive power comparable to the languages with strong types (e.g. Ada) \cite{SpecMetamodel}. The supported type definitions are boolean types, integer types, float types, enumeration types, fixed point types, array types, structured types, string types, union types, alias types, opaque types, external types and unconstrained types. Some of these data type definitions are obvious for readers with programming skills in typed languages such as Ada, C or C++. 
 
 \item [Interface] An interface is a specification of a coherent set of services and it represents the definition of a contract. An interface is defined independently of the entities implementing it (e.g. Component type). An interface may enlist declaration of operations, which are the functional services that shall be offered by the entities implementing it. The services include a name, a set of ordered parameters and one or more exceptions that they might throw when things go wrong during the handling of the service. Parameters are typed with one of the types mentioned above and have a mode (\texttt{in, out} or \texttt{inout}). A component type may expose one or more interfaces and the same interface can be exposed by different component types. An interface may also contain the declaration of one or more interface attributes, which are the parameters that are accessible via the interface implementations.
 
 \item [Component type] A component type is an entity which specifies the external interfaces of a software component which are defined in isolation and are used to declare relationships with the other components and system in general. It conforms to the principle of encapsulation and as a consequence, all the interactions with other components are performed exclusively via its explicitly declared interface. A component type usually encompasses:
 \begin{itemize}
-\item Certain number of provided interface ports
-\item Certain number of required interface ports
-\item Certain number of dataset emitter ports 
-\item Certain number of dataset receiver ports
-\item Certain number of event emitter ports
-\item Certain number of event receiver ports 
+\item A definite number of provided interface ports
+\item A definite number of required interface ports
+\item A definite number of dataset emitter ports 
+\item A definite number of dataset receiver ports
+\item A definite number of event emitter ports
+\item A definite number of event receiver ports 
 \end{itemize}
 
-\item [Component implementation] It is an entity that represents a concrete realization of a component type. It is functionally identical to the component type except that the source code is added to the component implementation and may also define number of component implementation attributes
+\item [Component implementation] It is an entity that represents a concrete realization of a component type. It is functionally identical to the component type, except that the source code is added to the component implementation and may also define number of component implementation attributes.
 
 \item [Component instance] It is an instantiation of a component implementation and hence contains all the instantiations of the structural features, such as provided and required interface ports. It also contains instantiation of all attributes (interface attributes, component type attributes and component implementation attributes). It is also the elementary deployment unit for the OBSW model \cite{SpecMetamodel}.        
 \end{description}
@@ -43,12 +43,12 @@ The different corner cases which can arise are:
 \item Multiple interfaces provide exact same operations
 \end{itemize}
 
-The first and second corner cases are handled in the following example. But, the other cases will be treated directly in the later section, which deals with the software design for the generated infrastructure code. 
+The first and second corner cases are handled in the following example. But, the other case will be treated directly in the later section, which deals with the software design for the generated infrastructure code. 
 
 \subsection{An example OBSW model}
-Our simple OBSW model, yet effective to serve the intended purpose, is built as per the proposed component-based development approach explained in the section \cref{section: Design steps} in chapter \cref{chap: Software development process}. As already mentioned in that section, the component-based approach puts a lot of emphasis on the definition of component interfaces \cite{CompBasedProcess} and it is followed here as well. Components are built from scratch using newly defined interfaces. All model entities defined here are instantiations of the modeling entities specified in the metamodel \cite{SpecMetamodel}. The OBSW model is designed using the OSRA SCM model editor mentioned in \cref{section: OSRA editor} in chapter \cref{chap: Software development process}. The model entities from the OSRA SCM model editor can be exported as images and they are used in this sub-section for illustration purposes.
+Our simple OBSW model, yet effective to serve the intended purpose, is built as per the proposed component-based development approach explained in the section \cref{section: Design steps} in \cref{chap: Software development process}. As already mentioned in that section, the component-based approach puts a lot of emphasis on the definition of component interfaces \cite{CompBasedProcess} and it is followed here as well. Components are built from scratch using newly defined interfaces. All model entities defined here are instantiations of the modeling entities specified in the metamodel \cite{SpecMetamodel}. The OBSW model is designed using the OSRA SCM model editor mentioned in \cref{section: OSRA editor} in chapter \cref{chap: Software development process}. The model entities from the OSRA SCM model editor can be exported as images and they are used in this sub-section for illustration purposes.
 
-In this simple example, two simple components are designed. The first component requests for a service \texttt{OperationAdd} which can add two numbers, as the name suggests and this service is implemented in the second component. Another service namely \texttt{Call\allowbreak Operation\allowbreak Add} is implemented in the first component, which can be requested to trigger the OBSW model. Different non-functional properties, as explained later in this section, are strewn on the required and provided interfaces of these components to make the example a bit more interesting and also to capture the above mentioned first and second corner cases in the example.
+In this simple example, two simple components namely \texttt{Caller} and \texttt{Callee} are designed. The first component requests for a service \texttt{OperationAdd} which can add two numbers, as the name suggests and this service is implemented in the second component. Another service named \texttt{Call\allowbreak Operation\allowbreak Add} is implemented in the first component, which can be requested to trigger the OBSW model execution on a periodic basis. Different non-functional properties, as explained later in this section, are strewn on the required and provided interfaces of these components to make the example a bit more interesting and also capture the above mentioned first and second corner cases in the example.
 
 \begin{description}
 \item [Step 1: Definition of data types and events] As the Master thesis requires to emphasize more on effectively capturing interactions and concurrency semantics required for communication between the designed components, the data types chosen in this example are fairly simple. But it is important to note that the scheme of mapping of these simple data types to the infrastructural code (explained in the later sections), can be scaled to fairly complex data types as well. The data types, exception types and the event type used in this example are as shown in \cref{fig: Ex. Datatypes etc.}.  
@@ -65,7 +65,7 @@ In this simple example, two simple components are designed. The first component 
 \item [Step 2: Definition of interfaces] Two interface namely \texttt{InterfaceA} and \texttt{InterfaceB} are designed as shown in \cref{fig: Ex. Datatypes etc.}. \texttt{InterfaceA} has only one single operation called \texttt{CallOperationAdd} and \texttt{InterfaceB} has an operation called \texttt{OperationAdd} and an interface attribute of data type \texttt{IntegerType} called \texttt{m\_StatusValue}.  
 
 \begin{itemize}
-\item The operation \texttt{Call\allowbreak OperationAdd} is a parameterless operation and it is intended to be the service which can in turn request the service which can add two numbers.
+\item The operation \texttt{Call\allowbreak OperationAdd} is a parameterless operation and it is intended to be the service which can in turn request the service \texttt{OperationAd} which can add two numbers.
 
 \item The operation \texttt{OperationAdd} in \texttt{InterfaceB}, as the name suggests, is intended to be the service which can add two numbers, send back the results and raise a pre-defined exception if necessary. It has three operation parameters and can throw different exceptions as mentioned in \cref{fig: Ex. Datatypes etc.}. 
 
@@ -79,7 +79,7 @@ In this simple example, two simple components are designed. The first component 
 	\label{fig: Ex. Datatypes etc.}
 \end{figure}
 
-\item [Step 3: Definition of component types] Component types namely \texttt{Component\allowbreak\_Caller} and \texttt{Component\allowbreak\_Callee} which form the basis for a reusable software asset are defined as shown in \cref{fig: Ex. Component types}. 
+\item [Step 3: Definition of component types] Component types namely \texttt{Component\allowbreak\_Caller} and \texttt{Component\allowbreak\_Callee} which form the basis for a reusable software asset are defined as shown in \cref{fig: Ex. Component types}. In \cref{fig: Ex. Component types}, a circle without a fill on a component type denotes a provided interface port and a black filled-in circle on a component type denotes a required interface port. Similarly, an arrow without a fill on the component type denotes an event receiver port and a filled-in arrow on the component type denotes an event emitter port.
 
 \texttt{Component\allowbreak\_Caller} has:
 \begin{itemize}
@@ -103,6 +103,7 @@ The desired interaction kind for the operations in the required interface ports 
 	\end{tabular}
 \end{table}
 
+\newpage
 \texttt{Component\allowbreak\_Callee} has:
 \begin{itemize}
 \item Provided interface port \texttt{Provided\allowbreak Interface\allowbreak Port1} which refers to \texttt{InterfaceB}.
@@ -127,8 +128,8 @@ No maximum memory footprint for component implementations are defined or no deta
 
 Two component instances as shown in \cref{fig: Ex. Component instances} are defined, namely:
 \begin{itemize}
-\item \texttt{Component\allowbreak\_Caller\_impl\_inst} which is an instantiation of \texttt{Component\allowbreak\_Caller\_impl}
-\item \texttt{Component\allowbreak\_Callee\_impl\_inst} which is an instantiation of \texttt{Component\allowbreak\_Callee\_impl}
+\item \texttt{Component\allowbreak\_Caller\_inst} which is an instantiation of \texttt{Component\allowbreak\_Caller\_impl}.
+\item \texttt{Component\allowbreak\_Callee\_inst} which is an instantiation of \texttt{Component\allowbreak\_Callee\_impl}.
 \end{itemize}
 
 \item [Step 6: Definition of component bindings] Component bindings as shown in \cref{fig: Ex. Component instances} are defined:
@@ -142,7 +143,7 @@ Two component instances as shown in \cref{fig: Ex. Component instances} are defi
 
 \item [Step 7: Specification of non-functional attributes] The non-functional properties are defined on the component instances and the component bindings defined in the previous step. The non-functional properties language unit of the specification of a metamodel provides a Value Specification Language (VSL) unit, which permits the specification of the the non-functional properties qualified with a measurement unit \cite{SpecMetamodel}. The VSL is used here to define values of non-functional properties with a measurement unit.
 
-For the provided interface slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_impl\_inst}, a non-functional property is specified as shown in \cref{table: NFP PI Ports1}
+For the provided interface slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_inst}, a non-functional property is specified as shown in \cref{table: NFP PI Ports1}
 
 \begin{table}[]
 	\centering
@@ -155,7 +156,7 @@ For the provided interface slot in the component instance \texttt{Component\allo
 	\end{tabular}
 \end{table}
 
-For the provided interface slots in the component instance \texttt{Component\allowbreak\_callee\_impl\_inst}, non-functional properties are specified as shown in \cref{table: NFP PI Ports2}
+For the provided interface slots in the component instance \texttt{Component\allowbreak\_callee\_inst}, non-functional properties are specified as shown in \cref{table: NFP PI Ports2}
 
 \begin{table}[]
 	\centering
@@ -172,7 +173,7 @@ For the provided interface slots in the component instance \texttt{Component\all
 
 It is important to note that the WCET and deadline values for the operations in the provided interface slots are not handled, as the safeguarding of these properties are not of concern in this Master thesis.
 
-For the event receiver slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_impl\allowbreak\_inst}, a non-functional property is specified as shown in \cref{table: NFP ER Port}.
+For the event receiver slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_inst}, a non-functional property is specified as shown in \cref{table: NFP ER Port}.
 
 \begin{table}[]
 	\centering
@@ -205,11 +206,11 @@ This OBSW model is subjected to model validation against the OSRA Specification 
 \label{subsection: Software design approach}
 This section deals with the software design approach for the generated infrastructure code. Some of the necessary good characteristics of a software such as reusability, separation of concerns and minimal complexity are targeted already at the reference architecture level and it needs to be preserved at the generated software level as well. The other main characteristics of the generated software which are of utmost value are \cite{CodeComplete}:
 \begin{description}
-\item [Testability] The software must be testable and there must be suitable constructs in the generated software which assist in writing automated unit tests or user driven tests to test it. In this Master thesis, it is taken care of that the generated C++ classes have corresponding abstract base classes. These abstract base classes are used in constructing mock classes which can be used for the purpose of testing each class independently. More about this is explained in the next chapter which focuses on the results and further scope of this Master thesis.
+\item [Testability] The software must be testable and there must be suitable constructs in the generated software which assist in writing automated unit tests or user driven tests to test it. In this Master thesis, it is taken care of that the generated C++ classes have corresponding abstract base classes. These abstract base classes are used in constructing mock classes which can be used for the purpose of testing each class independently \cite{GoogleMock}. More about this is explained in the next chapter which focuses on the results and further scope of this Master thesis.
 \item [Extensability and Refactorability] The software generated must be loosely coupled so that the entire code base is more resilient to changes and extensions. Dependency injection software design pattern \cite{InvOfCntrlurl} is used wherever appropriate to make the generated software loosely coupled.
 \item [Portability] The generated software must be portable across systems and environments. The data  types used in the generated software should be portable across multiple platforms and the data type standardizations from C++11 are made use of in the generated software.
 \item [High fan-in] The generated software is designed in a way that a particular C++ class is used by large number of other C++ classes.
-\item [Low-to-medium fan-out] The generated software is designed in a way that a particular C++ class uses not many classes, so that the complexity of the generated software is not too high. Unfortunately, this characteristic is not completely respected in this software design, because the complexity of a particular class depends on the complexity of the user model.      
+\item [Low-to-medium fan-out] The generated software is designed in a way that a particular C++ class uses not many classes, so that the complexity of the generated software is not too high. Unfortunately, this characteristic is not completely respected in this software design, because the complexity of a particular class depends on the complexity of the corresponding model entity in the user model.      
 \end{description}
 \ac{uml} class diagrams, wherever appropriate, are judiciously used in this section to show a high level representation of the generated C++ classes and datastructures. 
 
@@ -219,14 +220,14 @@ Each of the following sub-sections, is divided into two parts:
 \item The second part makes the approach clear by taking the reference of our OBSW example model discussed in the previous section. 
 \end{itemize}
 
-The following sub-sections also include UML class diagrams wherever appropriate. The standard notations from UML class diagrams are used. The following additional legends are introduced:
+The standard notations from UML class diagrams are used. The following additional legends are introduced:
 \begin{itemize}
-\item A UML class in dotted notation means that the explanation for that particular has been given in the previous sections or would be given in the following sections 
+\item A UML class in dotted notation means that the explanation for that particular has already been given in the previous sections or would be given later in the following sections 
 \item A package notation from UML is used to indicate the namespaces that the respective classes in the UML diagram can be found
 \end{itemize}  
 
 \subsubsection{\textbf{Namespaces}}
-Namespaces from C++ are used to differentiate component types, component implementations etc. of different components. The names for the namespaces are obtained from the names of the component types in the OBSW model. The name of each component type is a namespace and this namespace holds all the code entities which are related to its corresponding component type. An additional namespace called \texttt{General} is used to define all the code entities which would be shared across all components.   
+Namespaces from C++ (similar to packages in Ada as shown in \cite{EvoRAVCodeAr} for the Artemis JU CHESS project) are used to differentiate component types, component implementations, etc. of different components. The names for the namespaces are obtained from the names of the component types in the OBSW model. The name of each component type is a namespace and this namespace holds all the code entities which are related to its corresponding component type. An additional namespace called \texttt{General} is used to define all the code entities which would be shared across all components.   
 
 \textbf{For our example OBSW model}: Three namespaces, namely \texttt{General}, \texttt{Component\_Caller} and \texttt{Component\_Callee} are created as shown in \cref{fig: PackagesUML}
 
@@ -238,7 +239,7 @@ Namespaces from C++ are used to differentiate component types, component impleme
 \end{figure}
 
 \subsubsection{\textbf{Data types and events}}
-A data type from the OBSW model is translated into a simple \texttt{typedef} statement from C++ as shown in \cite{typedefRationale}.
+A data type from the OBSW model is translated into a simple \texttt{typedef} statement from C++ as shown in \cite{MDSDBook}\cite{typedefRationale}.
 
 \textbf{For our example OBSW model}:
 \begin{itemize}
@@ -248,7 +249,7 @@ A data type from the OBSW model is translated into a simple \texttt{typedef} sta
 
 A subset of all possible data types from the OSRA Component Model can be translated to simple \texttt{typedef} statements as shown above. More information about the subset of data types for which this successfully works is given in the next chapter. 
 
-The exception types from the OBSW models are translated into simple enumeration literals from C++. These exceptions, which can be thrown by a particular operation are grouped under an enumeration. This enumeration is further instantiated in a C++ struct.
+The exception types from the OBSW models are translated into simple enumeration literals from C++ as shown in \cite{ExceptionClasses}. These exceptions, which can be thrown by a particular operation are grouped under an enumeration. This enumeration is further instantiated in a C++ struct as shown in \cite{ExceptionClasses}.
 
 \textbf{For our example OBSW model}: The three exceptions \texttt{Operand\allowbreak Exception}, \texttt{Memory\allowbreak Exception} and \texttt{Overflow\allowbreak Exception} are translated to enumeration literals. These exceptions can be thrown by \texttt{OperationAdd}, which is defined in \texttt{InterfaceB}. Hence the enumeration literals, corresponding to the exceptions, are stored together as an enumeration named \texttt{OperationAdd\allowbreak Exception\allowbreak\_InterfaceB} as shown in the \cref{fig: ExceptionsUML}. This exception is further instantiated in a C++ struct \texttt{OperationAdd\allowbreak Report\allowbreak\_InterfaceB} as shown in the \cref{fig: ExceptionsUML} 
 
@@ -259,7 +260,7 @@ The exception types from the OBSW models are translated into simple enumeration 
 	\label{fig: ExceptionsUML}
 \end{figure}
 
-An event from the OBSW model is mapped to an abstract base class and a corresponding concrete implementation class. As already explained, the abstract base classes help in improving the testability of the generated software. Appropriate setters and getters for the event parameters are declared as pure virtual methods in the abstract base class for the event and they are implemented in their corresponding concrete implementation.
+An event is similar to a message which is passed asynchronously from emitter to receiver \cite{SpecMetamodel} in an OBSW model. Because it resembles a message, it can be mapped to an abstract base class and a corresponding concrete implementation class as in \cite{EvoRAVCodeAr}. As already explained, the abstract base classes help in improving the testability of the generated software. Appropriate setters and getters for the event parameters are declared as pure virtual methods in the abstract base class for the event and they are implemented in their corresponding concrete implementation.
 
 \textbf{For our example OBSW model}: The \texttt{FailureEvent} is mapped as an abstract base class named \texttt{FailureEvent\allowbreak Interface} and a concrete implementation class named \texttt{FailureEvent}. Appropriate setters and getters for the event parameters \texttt{Param} and \texttt{Failure\allowbreak Event\allowbreak	Description} are declared as pure virtual methods in the \texttt{FailureEvent\allowbreak Interface} abstract base class and implemented in the \texttt{FailureEvent} concrete implementation class. An UML class diagram representation of the generated classes is shown in \cref{fig: EventUML}.
 
@@ -279,12 +280,12 @@ An interface can be mapped to a C++ abstract base class, as in \cite{EvoRAVCodeA
 \item For each interface operation, a pure virtual method is declared in the interface class. The names and data types of the input parameters for this pure virtual method correspond to the names and data types of the interface operation parameters. The operation parameters, with \texttt{ParameterDirectionKind} as \texttt{in} are translated to constant references and the operation parameters with \texttt{ParameterDirectionKind} as \texttt{out} or \texttt{inout} are translated to plain references. 
 \item For each interface attribute parameter of type \texttt{CFG}:
 \begin{itemize}
-\item A class variable of name and data type corresponding to the name and data type of interface attribute is added.
+\item A public non-static class variable of name and data type corresponding to the name and data type of interface attribute is added.
 \item Pure virtual setter and getter methods for the interface attributes are declared. The data types and names of the input parameters in the setter and getter methods mimic the name and data type of the interface attribute.
 \end{itemize} 
 \item For each interface attribute parameter of type \texttt{MIS}, which is fixed and is not variable \cite{SpecMetamodel}: 
 \begin{itemize}
-\item A \texttt{const} non-static protected class variable of name and data type corresponding to the name and data type of interface attribute is added.
+\item A \texttt{const} protected non-static class variable of name and data type corresponding to the name and data type of interface attribute is added.
 \item No getter and setter methods are added.
 \end{itemize}
 \item For each interface attribute of type \texttt{DAT}, which are modifiable by the component only and not by external entities \cite{SpecMetamodel}:
@@ -312,7 +313,7 @@ An interface can be mapped to a C++ abstract base class, as in \cite{EvoRAVCodeA
 	\label{fig: InterfacesUML}
 \end{figure}
 
-Because of the corner case that multiple interfaces can have exactly same operations, it is necessary to refine these interfaces using the interface helper abstract base classes as shown in \cref{fig: Interface helpers UML}. In each interface helper class:
+Because of the corner case that multiple interfaces can have exactly same operations, it is necessary to refine these interfaces using the interface helper abstract base classes as shown in \cite{MultipleInheritance} and in \cite{C++Book}. UML class diagram as shown in \cref{fig: Interface helpers UML} explains such an approach in this context. In each interface helper class:
 \begin{itemize}
 \item Implementations for all the inherited pure virtual methods from the parent interface are provided.
 \item The implementations consist of simple method calls to new pure virtual methods.
@@ -352,11 +353,11 @@ public:
 \item \texttt{InterfaceA\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceA} and which implements the pure virtual method in the parent interface \texttt{InterfaceA}. The implementation contains a simple call to a new pure virtual method added to the original method name from the parent interface as shown in the \cref{Listing: Interface helper Impl}.
 
 \item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. Each implementation contain a simple call to the new pure virtual methods added. The \texttt{InterfaceB\allowbreak\_Helper} class is designed and implemented the same way as \texttt{InterfaceA\allowbreak\_Helper} is designed in the code excerpt in \cref{Listing: Interface helper Impl}   
-\end{itemize}
+\end{itemize}.
 
-The combined effect is that now, more than one original parent interfaces (resembling model entities) can have same operations and interface attributes. The refined interfaces redefine the methods from the original parent interfaces, so that there are no confusions between operations from different interfaces. Of course, a straight forward solution would have been to incorporate the concept of namespaces from C++, but it is not suitable for this design and the reason is explained later in this section. 
+The combined effect is that now, more than one original parent interfaces (resembling model entities) can have same operations and interface attributes. The refined interfaces redefine the methods from the original parent interfaces, so that there are no confusions between operations from different interfaces. Of course, a straight forward solution would have been to incorporate the concept of namespaces from C++, but it is not suitable for this design and the reason is explained later in this section while discussing about mapping for component types. 
 
-For each interface operation and interface attribute in an interface, a C++ struct is defined to carry around the values of the operation parameters or the values of the interface attributes. These data structures come in handy, when the interface operations or interface attribute access operations need to be accessed asynchronously. The data structures also hold general purpose polymorphic function wrappers from C++11 standard to store the call-back functions wherever appropriate. 
+For each interface operation and interface attribute in an interface, a C++ struct is defined to carry around the values of the operation parameters or the values of the interface attributes. These data structures come in handy, when the interface operations or interface attribute access operations need to be accessed asynchronously. The data structures also hold general purpose polymorphic function wrappers from C++11 standard as shown in \cite{C++11CallBack} to store the call-back functions wherever appropriate. 
 
 \textbf{For our example OBSW model}:
 \begin{itemize}
@@ -371,12 +372,12 @@ For each interface operation and interface attribute in an interface, a C++ stru
 	\label{fig: Operation structs UML}
 \end{figure} 
 
-All the infrastructure code entities mentioned above are present in the namespace \texttt{General}.
+All the infrastructure code entities mentioned above are present in the namespace \texttt{General}. They are placed in the namespace \texttt{General} because these structs are used by both \texttt{Caller} and \texttt{Callee} components.
 
 \subsubsection{\textbf{Parameter channels and parameter queues}}
-The data structures which are defined to carry around the values of the operation parameters or values of the interface attributes, need to be pushed onto parameter channels, each one of which is supported in the back end by corresponding parameter queue.
+The data structures which are defined to carry around the values of the operation parameters or values of the interface attributes, need to be pushed onto parameter channels, each one of which is supported in the back end by a corresponding parameter queue.
 
-\textbf{For our example OBSW model}: \texttt{Parameter\allowbreak Channel} and \texttt{Parameter\allowbreak Queue} C++ classes as shown in \cref{fig: Parameter channel UML} are defined. These classes can be reused for any OBSW model. 
+\textbf{For our example OBSW model}: \texttt{Parameter\allowbreak Channel} and \texttt{Parameter\allowbreak Queue} C++ classes as shown in \cref{fig: Parameter channel UML} are defined. These classes can be reused for any OBSW model i.e., they are generic code for all OBSW models. 
 
 \begin{figure}[h]
 	\centering
@@ -385,7 +386,7 @@ The data structures which are defined to carry around the values of the operatio
 	\label{fig: Parameter channel UML}
 \end{figure}
 
-All the infrastructure code entities mentioned above are present in the namespace \texttt{General}.   
+All the infrastructure code entities mentioned above are present in the namespace \texttt{General} as these classes are used by both \texttt{Caller} and \texttt{Callee} components.   
 
 \subsubsection{\textbf{Event emitter ports and event receiver ports}}
 The event emitter port for a particular event is mapped as an abstract base class and a corresponding concrete implementation class in C++. The event receiver port for a particular event is mapped only as an abstract base class. The abstract base class for event receiver port also contains pure virtual methods in order to safely interleave the reception of events.  
@@ -408,12 +409,12 @@ The event emitter port for a particular event is mapped as an abstract base clas
 	\label{fig: Event receiver port UML}
 \end{figure} 
 
-The \texttt{FailureEvent\allowbreak Emitter\allowbreak Port\allowbreak Interface} and \texttt{FailureEvent\allowbreak Emitter\allowbreak Port} classes are defined in the namespace \texttt{Component\allowbreak \_Callee}. 
+The \texttt{FailureEvent\allowbreak Emitter\allowbreak Port\allowbreak Interface} and \texttt{FailureEvent\allowbreak Emitter\allowbreak Port} classes are defined in the namespace \texttt{Component\allowbreak \_Callee} as component \texttt{Callee} is the component which can emit a \texttt{FailureEvent}. 
 
-The \texttt{FailureEvent\allowbreak Receiver\allowbreak Port\allowbreak Interface} is defined in the namespace \texttt{Component\allowbreak\_Caller}.
+The \texttt{FailureEvent\allowbreak Receiver\allowbreak Port\allowbreak Interface} is defined in the namespace \texttt{Component\allowbreak\_Caller} as component \texttt{Caller} is the component which can receive a \texttt{FailureEvent}.
 
 \subsubsection{\textbf{Component types}}
-A component type can be mapped to an abstract base class in C++. A component type must provide all the operations that are listed in the provided interfaces of the component \cite{CompBasedProcess}. Hence it inherits from all the interface helper classes which are referenced by its provided interfaces as in \cite{EvoRAVCodeAr} 
+A component type can be mapped to an abstract base class in C++ as shown in \cite{EvoRAVCodeAr}. A component type must provide all the operations that are listed in the provided interfaces of the component \cite{CompBasedProcess}. Hence it inherits from all the interface helper classes which are referenced by its provided interfaces as in \cite{EvoRAVCodeAr}. 
 
 This is where interface helper classes, with redefined operations come in handy, because C++ does not distinguish between operations with same signatures, although they are inherited from different namespaces. A component type must also inherit from the mapped abstract base classes for event receiver ports.
 
@@ -425,17 +426,17 @@ A component type must also have pure virtual methods which obtain and release th
 It has pure virtual methods meant for:
 
 \begin{itemize}
-\item Obtaining and releasing of semaphores for concurrent accesses of the operation \texttt{CallOperationAdd\allowbreak\_InterfaceA}
-\item Call-back function for the operation \texttt{OperationAdd}
-\item Call-back function for the getter operation of the interface attribute \texttt{StatusValue} 
+\item Obtaining and releasing of semaphores for concurrent accesses of the operation \texttt{CallOperationAdd\allowbreak\_InterfaceA}.
+\item Call-back function for the operation \texttt{OperationAdd}.
+\item Call-back function for the getter operation of the interface attribute \texttt{StatusValue}.
 \end{itemize}
 
 \item A shown in \cref{fig: Component type Callee UML} \texttt{ComponentType} in the namespace \texttt{Component\_Callee} inherits from the \texttt{InterfaceB\allowbreak\_Helper}. 
 It has pure virtual methods meant for:
 
 \begin{itemize}
-\item Obtaining and releasing of semaphores for concurrent access of the operation {OperationAdd\allowbreak\_InterfaceB}
-\item Obtaining and releasing of semaphores for concurrent access of the setter and getter operations for the interface attribute \texttt{StatusValue}
+\item Obtaining and releasing of semaphores for concurrent access of the operation {OperationAdd\allowbreak\_InterfaceB}.
+\item Obtaining and releasing of semaphores for concurrent access of the setter and getter operations for the interface attribute \texttt{StatusValue}.
 \end{itemize}   
 \end{itemize}
 
@@ -454,21 +455,21 @@ It has pure virtual methods meant for:
 \end{figure} 
 
 \subsubsection{\textbf{Required interface ports}}
-A required interface port is mapped as an abstract base class and a corresponding concrete implementation class in C++. The required interface subsumed by a particular component type has various operations that it might request and each operation has information specified whether the required interaction kind is \texttt{synchronous} or \texttt{asynchronous} \cite{SpecMetamodel}\cite{CompBasedProcess}. 
+A required interface port is mapped as an abstract base class and a corresponding concrete implementation class in C++ as shown in \cite{EvoRAVCodeAr}. The required interface subsumed by a particular component type has various operations that it might request and each operation has information specified whether the required interaction kind is \texttt{synchronous} or \texttt{asynchronous} \cite{SpecMetamodel}\cite{CompBasedProcess}. 
 
-Each required interface port refers to one interface type and for each operation in the required interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether the operations would be requested with an asynchronous release pattern or synchronous release pattern.
+Each required interface port refers to one interface type and for each operation in the required interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether the operations would be requested with an asynchronous release pattern or a synchronous release pattern.
 
 In case of interface operations:
 \begin{itemize}
 \item If the desired interaction kind for the operation is \texttt{synchronous}, then the signature of the method in the abstract base class is same as the corresponding method in the abstract base class for the interface, as shown in \cref{fig: Required interface port1 UML}.
-\item If the desired interaction kind for the operation is \texttt{asynchronous}, then the signature of the method in the abstract base class bears no resemblance to the corresponding method in the abstract base class for the interface. It is changed as shown in \cref{fig: Required interface port2 UML} to replace the \texttt{out} and \texttt{inout} parameters with a single pointer to the desired call-back function 
+\item If the desired interaction kind for the operation is \texttt{asynchronous}, then the signature of the method in the abstract base class bears no resemblance to the corresponding method in the abstract base class for the interface. It is changed as shown in \cref{fig: Required interface port2 UML} to replace the \texttt{out} and \texttt{inout} parameters with a pointer to the desired call-back function. 
 \end{itemize}
 
 In case of interface attributes:
 \begin{itemize}
-\item For the setter operation, signature of the method in the abstract class is same as the corresponding method in the abstract base class for the interface, as shown in \cref{fig: Required interface port1 UML} and \cref{fig: Required interface port2 UML}
+\item For the setter operation, signature of the method in the abstract class is same as the corresponding method in the abstract base class for the interface, as shown in \cref{fig: Required interface port1 UML} and \cref{fig: Required interface port2 UML}.
 \item If the desired interaction kind for the getter operation is \texttt{synchronous}, then the signature of the method in the abstract class is same as the corresponding method in the abstract base class for the interface, as shown in \cref{fig: Required interface port1 UML}. 
-\item If the desired interaction kind for the getter operation is \texttt{asynchronous}, then the signature of the method in the abstract base class bears no resemblance to the corresponding method in the abstract base class for the interface. It is changed as shown in \cref{fig: Required interface port2 UML} to replace the method parameter with a single pointer to the desired call-back function  
+\item If the desired interaction kind for the getter operation is \texttt{asynchronous}, then the signature of the method in the abstract base class bears no resemblance to the corresponding method in the abstract base class for the interface. It is changed as shown in \cref{fig: Required interface port2 UML} to replace the method parameter with a single pointer to the desired call-back function.  
 \end{itemize} 
 
 The concrete implementation of any method, for example, as the one shown in the code excerpt in \cref{Listing: Required interface port1 Impl} is fairly simple, if the desired interaction kind for the corresponding operation is \texttt{synchronous}. The implementation consists of a simple method call to the corresponding operation in the abstract base class of the bound provided interface port.
@@ -485,11 +486,11 @@ General::OperationAddReport_InterfaceB RequiredInterfacePortType1::OperationAdd 
 \label{Listing: Required interface port1 Impl}
 \end{Listing}
 
-The concrete implementation for any method, for example, the one as shown in code excerpt in \cref{Listing: Required interface port2 Impl} is fairly complex, if the desired interaction kind for the corresponding operation is \texttt{asynchronous}. It would do the following things: 
+The concrete implementation for any method, for example, the one as shown in code excerpt in \cref{Listing: Required interface port2 Impl} is fairly complex, if the desired interaction kind for the corresponding operation is \texttt{asynchronous}. It would do the following things as explained in \cite{CharEvoRAVCodeAr}: 
 \begin{itemize}
-\item Make local copies of all the method parameters (if any)
-\item Pack them in the instances of data structures designed to carry the corresponding parameters
-\item Simple method call to the corresponding operation in the abstract base class of the bound provided interface port
+\item Make local copies of all the method parameters (if any) as it is necessary to ask for an asynchronous release of the associated service.
+\item Pack them in the instances of data structures designed previously to carry the corresponding parameters.
+\item Simple method call to the corresponding operation in the abstract base class of the bound provided. interface port.
 \end{itemize}
 
 \begin{Listing}
@@ -533,24 +534,26 @@ All the C++ classes mentioned above are present in the namespace \texttt{Compone
 \subsubsection{\textbf{Component implementations}}
 A component implementation can be mapped in C++ as a concrete implementation of its abstract component type base class. as in \cite{EvoRAVCodeAr}. It implements all the pure virtual methods that are inherited from its component type. It also has actual instances of semaphores for allowing safe concurrent accesses to the implemented methods and for safe interleaving between concurrent receptions of events of the same type.
 
-In case of components that promote multiple provided interface ports which refer to the same interface type, it is necessary to provide multiple implementations for the operations in the provided interfaces. In order to solve this problem a class hierarchy as shown in \cref{fig: Component implementation Callee UML} is decided upon in this Master thesis:
+A variation of the very famous Template method design pattern as discussed in \cite{TemplatePattern} is adopted in this Master thesis. It is used for the concrete implementation of the inherited operations. According to \cite{TemplatePattern}, it is better to hide the concrete implementation of the inherited virtual functions, and it is followed in this Master thesis.  
+
+In case of components that promote multiple provided interface ports which refer to the same interface type, it is necessary to provide multiple implementations for the operations in the provided interfaces. In order to solve this problem a class hierarchy as shown in \cref{fig: Component implementation Callee UML} is decided upon in this Master thesis. As this kind of class hierarchy involves multiple inheritance and is an eligible candidate for the Diamond Problem in C++ \cite{DiamondProblem}, suitable measures are taken in the code generation step to avoid the usage of ambiguous base classes for polymorphic method calls:
 
 \begin{itemize}
-\item A component implementation abstract base class is designed which contains implementations for inherited pure virtual methods related to acquiring and releasing of semaphores. Also the inherited pure virtual methods which are provided only once are implemented here
-\item The Component implementation abstract base class is further extended by dummy abstract base classes. A dummy base class is added for each of the provided interface ports which refer to the same interface type. These dummy abstract base classes help in testing of the implementations of the services which are provided more than once by multiple provided interfaces. With the help of these dummy abstract base classes, mock implementation classes can be easily created and used for testing \cite{InvOfCntrlurl}  
-\item These dummy abstract base classes are extended by concrete implementation classes which provide different concrete implementations for all the inherited operations except the ones, which are already implemented in the component implementation abstract base class
-\item As it is a necessity to have only one instantiable concrete implementation per component \cite{EvoRAVCodeAr}\cite{SpecMetamodel}\cite{CompBasedProcess}, all the concrete implementations are inherited one last time in a component implementation class. This instance is now deployable on the hardware platform
+\item A component implementation abstract base class is designed which contains implementations for inherited pure virtual methods related to acquiring and releasing of semaphores. Also the inherited pure virtual methods which are provided only once are implemented here.
+\item A component implementation abstract base class is further extended by dummy abstract base classes. A dummy base class is added for each of the provided interface ports which refer to the same interface type. These dummy abstract base classes help in testing of the implementations of the services which are provided more than once by multiple provided interfaces. With the help of these dummy abstract base classes, mock implementation classes can be easily created and used for testing \cite{InvOfCntrlurl}. Also because the component type class for the intended component implementation classes with this kind of hierarchy, forms an ambiguous base, these dummy base classes are necessary for polymorphic method calls.  
+\item These dummy abstract base classes are extended by concrete implementation classes which provide different concrete implementations for all the inherited operations except the ones, which are already implemented in the component implementation abstract base class. Template method pattern \cite{TemplatePattern} is used in these concrete component implementation classes.
+\item As it is a necessity to have only one instantiable concrete implementation per component \cite{EvoRAVCodeAr}\cite{SpecMetamodel}\cite{CompBasedProcess}, all the concrete implementations are inherited one last time in a component implementation class. This instance is now deployable on the hardware platform.
 \end{itemize}
  
 \textbf{For our example OBSW model}:
 \begin{itemize}
-\item \texttt{Component\allowbreak Implementation} concrete implementation class in the namespace \texttt{Component\_Caller} inherits from the abstract base class \texttt{Component\_Type} in namespace \texttt{Component\allowbreak\_Caller} as shown in \cref{fig: Component implementation Caller UML}. It provides implementation for all the inherited pure virtual methods
+\item \texttt{Component\allowbreak Implementation} concrete implementation class in the namespace \texttt{Component\_Caller} inherits from the abstract base class \texttt{Component\_Type} in namespace \texttt{Component\allowbreak\_Caller} as shown in \cref{fig: Component implementation Caller UML}. It provides implementation for all the inherited pure virtual methods.
 \item Because the \texttt{ComponentType} in the namespace \texttt{Component\_Callee} has two provided interface ports namely, \texttt{Provided\allowbreak Interface\allowbreak Port1} and \texttt{Provided\allowbreak Interface\allowbreak Port2}, which refer to \texttt{InterfaceB}, the following classes as shown in \cref{fig: Component implementation Callee UML} are created in the namespace \texttt{Component\_Callee}:
 \begin{itemize}
-\item \texttt{ComponentImplementation\allowbreak Base} which is an abstract base class, but provides implementation for inherited pure virtual methods related to acquiring and releasing of semaphores
-\item \texttt{Component\allowbreak Implementation\allowbreak Base\_\allowbreak Provided\allowbreak Interface\allowbreak Port1\allowbreak} and \texttt{Component\allowbreak Implementation\allowbreak Base\_\allowbreak Provided\allowbreak Interface\allowbreak Port2\allowbreak} which are two dummy abstract base classes
-\item \texttt{Component\allowbreak Implementation\_\allowbreak Provided\allowbreak Interface\allowbreak Port1} and \texttt{Component\allowbreak Impl\allowbreak emen\allowbreak tation\_\allowbreak Provided\allowbreak Interface\allowbreak Port2} which provide different implementations for all the inherited operations except the ones implemented in \texttt{Component\allowbreak Implementation\allowbreak Base}
-\item \texttt{Component\allowbreak Implementation} which inherits from both \texttt{Component\allowbreak Implemen\allowbreak tation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Inter\allowbreak face2}
+\item \texttt{ComponentImplementation\allowbreak Base} which is an abstract base class, but provides implementation for inherited pure virtual methods related to acquiring and releasing of semaphores.
+\item \texttt{Component\allowbreak Implementation\allowbreak Base\_\allowbreak Provided\allowbreak Interface\allowbreak Port1\allowbreak} and \texttt{Component\allowbreak Implementation\allowbreak Base\_\allowbreak Provided\allowbreak Interface\allowbreak Port2\allowbreak} which are two dummy abstract base classes.
+\item \texttt{Component\allowbreak Implementation\_\allowbreak Provided\allowbreak Interface\allowbreak Port1} and \texttt{Component\allowbreak Impl\allowbreak emen\allowbreak tation\_\allowbreak Provided\allowbreak Interface\allowbreak Port2} which provide different implementations for all the inherited operations except the ones implemented in \texttt{Component\allowbreak Implementation\allowbreak Base}.
+\item \texttt{Component\allowbreak Implementation} which inherits from both \texttt{Component\allowbreak Implemen\allowbreak tation\allowbreak Provided\allowbreak Interface1} and \texttt{Component\allowbreak Implementation\allowbreak Provided\allowbreak Inter\allowbreak face2}.
 \end{itemize}   
 \end{itemize}
 
@@ -571,23 +574,25 @@ In case of components that promote multiple provided interface ports which refer
 \subsubsection{\textbf{Provided interface ports}}
 A provided interface port is mapped to an abstract base class and a corresponding concrete implementation class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}. The provided interface promoted by a particular component type has various operations that are provided and each operation has a desired release pattern attached as a non-functional/extra-functional property \cite{SpecMetamodel}\cite{CompBasedProcess}. Each provided interface port refers to one interface type and for each operation in the provided interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether these operations are requested with a synchronous release pattern or an asynchronous release pattern.
 
+\newpage
 In case of interface operations:
 \begin{itemize}
-\item If the interface operation on the provided interface is expected to be called synchronously, then the signature of the method in the abstract base class is same as the corresponding method in the abstract base class for the interface, as shown in \cref{fig: Provided interface port1 UML} for \texttt{OperationAdd}
-\item If the interface operation on the provided interface is expected to be called asynchronously, then the signature of the method in the abstract base class is changed as shown in \cref{fig: Provided interface port2 UML} for \texttt{OperationAdd}, to accept a data structure designed to carry the values of the parameters for the operation along with a function-wrapper for the call-back function     
+\item If the interface operation on the provided interface is expected to be called synchronously, then the signature of the method in the abstract base class is same as the corresponding method in the abstract base class for the interface, as shown in \cref{fig: Provided interface port1 UML} for \texttt{OperationAdd}.
+\item If the interface operation on the provided interface is expected to be called asynchronously, then the signature of the method in the abstract base class is changed as shown in \cref{fig: Provided interface port2 UML} for \texttt{OperationAdd}, to accept a data structure sent by the required interface port, designed to carry the values of the parameters for the operation along with a polymorphic function-wrapper for the call-back function.     
 \end{itemize}   
 
+\newpage
 In case of interface attributes:
 \begin{itemize}
-\item For the operations which set and get the values of the interface attributes synchronously, the signatures of the methods in the abstract base class are same as the corresponding method in the abstract base class for the interface
-\item For the operations which set and get the values of the interface attributes asynchronously, the signatures of the methods in the abstract base class are changed to accept a data structure designed to carry the values of the interface attribute, as shown in \cref{fig: Provided interface port2 UML}. The data structure would also contain a valid function-wrapper for the call-back function in case of getter operation for the interface attribute.  
+\item For the operations which set and get the values of the interface attributes synchronously, the signatures of the methods in the abstract base class are same as the corresponding method in the abstract base class for the interface.
+\item For the operations which set and get the values of the interface attributes asynchronously, the signatures of the methods in the abstract base class are changed to accept a data structure sent by the required interface port, designed to carry the values of the interface attribute, as shown in \cref{fig: Provided interface port2 UML}. The data structure would also contain a valid polymorphic function-wrapper for the call-back function in case of getter operation for the interface attribute.  
 \end{itemize}
 
 The following additional pure virtual methods are added to the abstract class for a provided interface port:
 \begin{itemize}
-\item For each interface operation and interface attribute setter/getter operation which is called asynchronously, an additional pure virtual method is added to store the address of the task channel, to which the data structure corresponding to the operation needs to be pushed
-\item An additional pure virtual method for storing the reference to their corresponding component implementation base class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}
-\item An additional pure virtual method as shown in \cref{fig: Provided interface port UML}, for storing the reference of the task from tasking framework which is responsible for periodically requesting the service in the provided interface port which has the interaction kind set to \texttt{cyclic}. 
+\item For each interface operation and interface attribute setter/getter operation which is called asynchronously, an additional pure virtual method is added to store the address of the task channel, to which the data structure corresponding to the operation needs to be pushed. Refer figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty} in \cref{subsection: asynchronous patterns} of \cref{chap: Progamming model}, where a diagrammatic representations of the required pushes onto the task channel are depicted. 
+\item An additional pure virtual method for storing the reference to their corresponding component implementation base class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}. Using a reference to the component implementation, the service can be scheduled immediately in case of synchronous service release requests. 
+\item An additional pure virtual method as shown in \cref{fig: Provided interface port UML}, for storing the reference of the task from tasking framework which is responsible for periodically requesting the service in the provided interface port which has the interaction kind set to \texttt{cyclic}. Using this reference to the task, it is possible to ask the task to start its operation immediately or if necessary, after an initial offset \cite{CompBasedProcess}. 
 \end{itemize}
 
 \begin{figure}[h]
@@ -611,7 +616,7 @@ The following additional pure virtual methods are added to the abstract class fo
 	\label{fig: Provided interface port UML}
 \end{figure}   
 
-The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. If the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. 
+The concrete implementation for the above mentioned pure-virtual methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. If the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. 
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
@@ -627,7 +632,7 @@ General::OperationAddReport ProvidedInterfacePort1_Component_Callee_inst::Operat
 \label{Listing: Provided interface port1 Impl}
 \end{Listing}
 
-The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in code excerpt in \cref{Listing: Provided interface port2 Impl} . A diagrammatic representation of the push that is required, is already shown in figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty}, in the section which deals with the required code archetypes in the programming model for asynchronous release patterns.
+The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in code excerpt in \cref{Listing: Provided interface port2 Impl} . A diagrammatic representation of the push that is required, is already shown in figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty}, in \cref{subsection: asynchronous patterns} of \cref{chap: Progamming model}.
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
@@ -639,7 +644,7 @@ void ProvidedInterfacePort2_Component_Callee_inst::OperationAdd_Receiver (Genera
 \label{Listing: Provided interface port2 Impl}
 \end{Listing}
 
-The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released with non-functional property as \texttt{cyclic}, then is a simple call to start the task using the reference to the task as shown in the code excerpt in \cref{Listing: Provided interface port Impl}.
+The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released with non-functional property as \texttt{cyclic}, then it is a simple call to start the task using the reference to the task as shown in the code excerpt in \cref{Listing: Provided interface port Impl}.
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
@@ -653,25 +658,25 @@ void ProvidedInterfacePort_Component_Caller_inst::CallOperationAdd(void) {
 
 \textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Provided interface port1 UML}, \cref{fig: Provided interface port2 UML}, \cref{fig: Provided interface port UML} are defined:
 \begin{itemize}
-\item \texttt{Provided\allowbreak Interface\allowbreak Port1\_\allowbreak Base\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port1\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} concrete implementation class
-\item \texttt{Provided\allowbreak Interface\allowbreak Port2\_\allowbreak Base\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port2\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} concrete implementation class
-\item \texttt{Provided\allowbreak Interface\allowbreak Port\_\allowbreak Base\allowbreak Component\_\allowbreak Caller\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port\_\allowbreak Component\_\allowbreak Caller\_\allowbreak inst} concrete implementation class 
+\item \texttt{Provided\allowbreak Interface\allowbreak Port1\_\allowbreak Base\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port1\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} concrete implementation class.
+\item \texttt{Provided\allowbreak Interface\allowbreak Port2\_\allowbreak Base\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port2\_\allowbreak Component\_\allowbreak Callee\_\allowbreak inst} concrete implementation class.
+\item \texttt{Provided\allowbreak Interface\allowbreak Port\_\allowbreak Base\allowbreak Component\_\allowbreak Caller\_\allowbreak inst} abstract base class and its corresponding \texttt{Provided\allowbreak Interface\allowbreak Port\_\allowbreak Component\_\allowbreak Caller\_\allowbreak inst} concrete implementation class. 
 \end{itemize} 
 
 All the abstract base classes have pure virtual methods as per the general description given above and they have to be implemented in the corresponding concrete implementation classes. The concrete implementations are in line with the description as in the general case above.
 
 \subsubsection{\textbf{Tasks from the Tasking framework}}
-In the discussions about designing a programming model for OSRA in the \cref{chap: Progamming model}, it was clear that the threads of control might contain tasks from the Tasking framework. Each task is mapped to an abstract base class and a concrete implementation class in C++. A task would have instances of the required task inputs, task event as per the required threads of control explained in detail in the chapter on arriving at a programming model for OSRA.
+In the discussions about designing a programming model for OSRA in \cref{chap: Progamming model}, it was clear that the threads of control might contain tasks from the Tasking framework. Each task is mapped to an abstract base class and a concrete implementation class in C++. A task would have instances of the required task inputs, task event as per the required threads of control explained \cref{chap: Progamming model}.
 
 Each task stores a reference to the base class of the component implementation in order to access the services implemented in the respective component implementations.  
 
 \textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Periodic task UML}, \cref{fig: Sporadic task UML}, \cref{fig: Status value getter setter task UML}, \cref{fig: Event receiver task UML} are defined:
 \begin{itemize}
-\item \texttt{CallOperationAdd\allowbreak Periodic\allowbreak TaskBase\_\allowbreak Provided\allowbreak Interface\allowbreak Slot} abstract base class and \texttt{Call\allowbreak OperationAdd\allowbreak Periodic\allowbreak Task\_\allowbreak Provided\allowbreak Interface\allowbreak Slot} concrete implementation class, in order to call operation \texttt{Call\allowbreak OperationAdd} in the \texttt{Provided\allowbreak Interface\allowbreak Slot} perioidically every 2s
-\item \texttt{OperationAdd\allowbreak Sporadic\allowbreak TaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Operation\allowbreak Add\allowbreak Sporadic\allowbreak Task\_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to call operation \texttt{Operation\allowbreak Add} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2} sporadically with an MIAT of 2s
-\item \texttt{StatusValue\allowbreak SetterTaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Setter\allowbreak Task\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to provide asynchronous access to the setter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2}
-\item \texttt{StatusValue\allowbreak GetterTaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Getter\allowbreak Task\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to provide asynchronous access to the getter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2}
-\item \texttt{Failure\allowbreak Event\allowbreak Receiver\allowbreak Task\allowbreak Base} abstract base class and a corresponding \texttt{Failure\allowbreak Event\allowbreak Receiver\allowbreak Task} concrete implementation class, for the reception of \texttt{Failure\allowbreak Event} which are emitted by the \texttt{Component\allowbreak\_Callee} asynchronously and to forward it to \texttt{Component\allowbreak\_Caller} 
+\item \texttt{CallOperationAdd\allowbreak Periodic\allowbreak TaskBase\_\allowbreak Provided\allowbreak Interface\allowbreak Slot} abstract base class and \texttt{Call\allowbreak OperationAdd\allowbreak Periodic\allowbreak Task\_\allowbreak Provided\allowbreak Interface\allowbreak Slot} concrete implementation class, in order to call operation \texttt{Call\allowbreak OperationAdd} in the \texttt{Provided\allowbreak Interface\allowbreak Slot} perioidically every 2s.
+\item \texttt{OperationAdd\allowbreak Sporadic\allowbreak TaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Operation\allowbreak Add\allowbreak Sporadic\allowbreak Task\_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to call operation \texttt{Operation\allowbreak Add} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2} sporadically with a MIAT of 2s.
+\item \texttt{StatusValue\allowbreak SetterTaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Setter\allowbreak Task\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to provide asynchronous access to the setter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2}.
+\item \texttt{StatusValue\allowbreak GetterTaskBase\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} abstract base class and a corresponding \texttt{Status\allowbreak Value\allowbreak Getter\allowbreak Task\allowbreak \_\allowbreak Provided\allowbreak Interface\allowbreak Slot2} concrete implementation class, in order to provide asynchronous access to the getter operation of the interface attribute \texttt{Status\allowbreak Value} in the \texttt{Provided\allowbreak Interface\allowbreak Slot2}.
+\item \texttt{Failure\allowbreak Event\allowbreak Receiver\allowbreak Task\allowbreak Base} abstract base class and a corresponding \texttt{Failure\allowbreak Event\allowbreak Receiver\allowbreak Task} concrete implementation class, for the reception of \texttt{Failure\allowbreak Event} which are emitted by the \texttt{Component\allowbreak\_Callee} asynchronously and to forward it to \texttt{Component\allowbreak\_Caller}. 
 \end{itemize} 
 
 \begin{figure}[h]
@@ -703,41 +708,41 @@ Each task stores a reference to the base class of the component implementation i
 \end{figure}
 
 \subsubsection{\textbf{Component containers}}
-A container of a component can be mapped to a class in C++ as in \cite{EvoRAVCodeAr}. A component container consists of the following things:
+A container of a component can be mapped to a class in C++ as in \cite{EvoRAVCodeAr}. A component container consists of the following entities:
 
 \begin{itemize}
-\item Instances of required interface ports
-\item Instance of component implementation 
-\item Instances of tasks which are necessary to handle services which are called asynchronously 
-\item Instances of tasks which are necessary to receive asynchronous events
-\item Instances of event emitter ports
+\item Instances of required interface ports.
+\item Instance of component implementation.
+\item Instances of tasks which are necessary to handle services which are called asynchronously. 
+\item Instances of tasks which are necessary to receive asynchronous events.
+\item Instances of event emitter ports.
 \end{itemize}
 
 A component container is also responsible for initializing the following:
 
 \begin{itemize}
-\item The instantiated component instance by providing references of the event emitter ports
-\item The event emitter port by providing reference of the task channel to which the emitter port needs to push the information about the event
+\item The instantiated component instance by providing references of the event emitter ports.
+\item The event emitter ports by providing reference of the corresponding task channel to which a emitter port needs to push an instance of the event.
 \item The provided interface ports by:
 \begin{itemize}
-\item Triggering the operations in the provided interface ports which have the desired non-function property set as \texttt{cyclic} 	
-\item Providing reference of the component instance in order to access the service
-\item Providing references of the different task channels they need to push the data structures associated with the operations onto, in order to handle the services which have the interaction kind specifies as \texttt{asynchronous} 
+\item Triggering the operations in the provided interface ports which have the desired non-function property set as \texttt{cyclic}. 	
+\item Providing reference of the component instance in order to access the service directly in case the service is requested to be released synchronously.
+\item Providing references of the different task channels they need to push the data structures associated with the operations onto, in order to handle the services which are requested to be released asynchronously. 
 \end{itemize}
-\item The instances of tasks with reference of component instance in order to schedule the execution of the services
+\item The instances of tasks with reference of component instance in order to schedule the execution of the services.
 \item The required interface ports by providing references of:
 \begin{itemize}
-\item The instantiated component instance, in order to initialize the data structures of the operations with correct function wrappers for call-back functions
-\item The respective provided interface port each one of them is bound to 
+\item The instantiated component instance, in order to initialize the data structures of the operations with correct function wrappers for call-back functions.
+\item The respective provided interface port each one of them is bound to. 
 \end{itemize}
-\item The event receiver tasks with references of the component instance and the channels which needs to be associated with their respective task inputs      
+\item The event receiver tasks with reference of the corresponding component instance and the corresponding channels which needs to be associated with their respective task inputs.      
 \end{itemize}
 
 \textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Component container caller UML} and \cref{fig: Component container callee UML} are defined:
 
 \begin{itemize}
-\item \texttt{Container} in the namespace \texttt{Component\allowbreak\_Caller} which is the container for the component instance \texttt{Component\allowbreak\_Caller\allowbreak\_impl\allowbreak\_inst} and its provided and required interface slots
-\item \texttt{Container} in the namespace \texttt{Component\allowbreak\_Callee} which is the container for the component instance \texttt{Component\allowbreak\_Callee\allowbreak\_impl\allowbreak\_inst} and its provided interface slots 
+\item \texttt{Container} in the namespace \texttt{Component\allowbreak\_Caller} which is the container for the component instance \texttt{Component\allowbreak\_Caller\allowbreak\_inst} and its provided and required interface slots.
+\item \texttt{Container} in the namespace \texttt{Component\allowbreak\_Callee} which is the container for the component instance \texttt{Component\allowbreak\_Callee\allowbreak\_inst} and its provided interface slots. 
 \end{itemize}
 
 \begin{figure}[h]
