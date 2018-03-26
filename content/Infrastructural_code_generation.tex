@@ -15,12 +15,12 @@ A detailed description of all the modeling entities that the software architect 
 
 \item [Component type] A component type is an entity which specifies the external interfaces of a software component which are defined in isolation and are used to declare relationships with the other components and system in general. It conforms to the principle of encapsulation and as a consequence, all the interactions with other components are performed exclusively via its explicitly declared interface. A component type usually encompasses:
 \begin{itemize}
-\item A definite number of provided interface ports
-\item A definite number of required interface ports
-\item A definite number of dataset emitter ports 
-\item A definite number of dataset receiver ports
-\item A definite number of event emitter ports
-\item A definite number of event receiver ports 
+\item A definite number of provided interface ports.
+\item A definite number of required interface ports.
+\item A definite number of dataset emitter ports.
+\item A definite number of dataset receiver ports.
+\item A definite number of event emitter ports.
+\item A definite number of event receiver ports. 
 \end{itemize}
 
 \item [Component implementation] It is an entity that represents a concrete realization of a component type. It is functionally identical to the component type, except that the source code is added to the component implementation and may also define number of component implementation attributes.
@@ -38,9 +38,9 @@ On analyzing the specifications of the metamodel for the OSRA component model \c
 The different corner cases which can arise are:
 
 \begin{itemize}
-\item Multiple provided interfaces which refer to the same interface type are promoted by the container of a component
-\item Multiple required interfaces which refer to the same interface type are subsumed by the container of a component
-\item Multiple interfaces provide exact same operations
+\item Multiple provided interfaces which refer to the same interface type are promoted by the container of a component.
+\item Multiple required interfaces which refer to the same interface type are subsumed by the container of a component.
+\item Multiple interfaces provide exact same operations.
 \end{itemize}
 
 The first and second corner cases are handled in the following example. But, the other case will be treated directly in the later section, which deals with the software design for the generated infrastructure code. 
@@ -89,7 +89,7 @@ In this simple example, two simple components namely \texttt{Caller} and \texttt
 \item Event receiver port \texttt{FailureEvent\allowbreak ReceiverPort} which refers to \texttt{Failure\allowbreak Event}.
 \end{itemize}
 
-The desired interaction kind for the operations in the required interface ports of \texttt{Component\allowbreak\_Caller} are as shown in \cref{table: NFP RI Ports}
+The desired interaction kind for the operations in the required interface ports of \texttt{Component\allowbreak\_Caller} are as shown in \cref{table: NFP RI Ports}.
 
 \begin{table}[]
 	\centering
@@ -143,7 +143,7 @@ Two component instances as shown in \cref{fig: Ex. Component instances} are defi
 
 \item [Step 7: Specification of non-functional attributes] The non-functional properties are defined on the component instances and the component bindings defined in the previous step. The non-functional properties language unit of the specification of a metamodel provides a Value Specification Language (VSL) unit, which permits the specification of the the non-functional properties qualified with a measurement unit \cite{SpecMetamodel}. The VSL is used here to define values of non-functional properties with a measurement unit.
 
-For the provided interface slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_inst}, a non-functional property is specified as shown in \cref{table: NFP PI Ports1}
+For the provided interface slot in the component instance \texttt{Component\allowbreak\_caller\allowbreak\_inst}, a non-functional property is specified as shown in \cref{table: NFP PI Ports1}.
 
 \begin{table}[]
 	\centering
@@ -156,7 +156,7 @@ For the provided interface slot in the component instance \texttt{Component\allo
 	\end{tabular}
 \end{table}
 
-For the provided interface slots in the component instance \texttt{Component\allowbreak\_callee\_inst}, non-functional properties are specified as shown in \cref{table: NFP PI Ports2}
+For the provided interface slots in the component instance \texttt{Component\allowbreak\_callee\_inst}, non-functional properties are specified as shown in \cref{table: NFP PI Ports2}.
 
 \begin{table}[]
 	\centering
@@ -222,14 +222,14 @@ Each of the following sub-sections, is divided into two parts:
 
 The standard notations from UML class diagrams are used. The following additional legends are introduced:
 \begin{itemize}
-\item A UML class in dotted notation means that the explanation for that particular has already been given in the previous sections or would be given later in the following sections 
-\item A package notation from UML is used to indicate the namespaces that the respective classes in the UML diagram can be found
+\item A UML class in dotted notation means that the explanation for that particular has already been given in the previous sections or would be given later in the following sections. 
+\item A package notation from UML is used to indicate the namespaces that the respective classes in the UML diagram can be found.
 \end{itemize}  
 
 \subsubsection{\textbf{Namespaces}}
 Namespaces from C++ (similar to packages in Ada as shown in \cite{EvoRAVCodeAr} for the Artemis JU CHESS project) are used to differentiate component types, component implementations, etc. of different components. The names for the namespaces are obtained from the names of the component types in the OBSW model. The name of each component type is a namespace and this namespace holds all the code entities which are related to its corresponding component type. An additional namespace called \texttt{General} is used to define all the code entities which would be shared across all components.   
 
-\textbf{For our example OBSW model}: Three namespaces, namely \texttt{General}, \texttt{Component\_Caller} and \texttt{Component\_Callee} are created as shown in \cref{fig: PackagesUML}
+\textbf{For our example OBSW model}: Three namespaces, namely \texttt{General}, \texttt{Component\_Caller} and \texttt{Component\_Callee} are created as shown in \cref{fig: PackagesUML}.
 
 \begin{figure}[h]
 	\centering
@@ -243,15 +243,15 @@ A data type from the OBSW model is translated into a simple \texttt{typedef} sta
 
 \textbf{For our example OBSW model}:
 \begin{itemize}
-\item The data type \texttt{IntegerType}, is translated to \texttt{typedef\allowbreak \ int8\_t IntegerType}
-\item The data type \texttt{StringType}, is translated to \texttt{typedef\allowbreak \ std::string StringType} 
+\item The data type \texttt{IntegerType}, is translated to \texttt{typedef\allowbreak \ int8\_t IntegerType}.
+\item The data type \texttt{StringType}, is translated to \texttt{typedef\allowbreak \ std::string StringType}.
 \end{itemize}
 
 A subset of all possible data types from the OSRA Component Model can be translated to simple \texttt{typedef} statements as shown above. More information about the subset of data types for which this successfully works is given in the next chapter. 
 
 The exception types from the OBSW models are translated into simple enumeration literals from C++ as shown in \cite{ExceptionClasses}. These exceptions, which can be thrown by a particular operation are grouped under an enumeration. This enumeration is further instantiated in a C++ struct as shown in \cite{ExceptionClasses}.
 
-\textbf{For our example OBSW model}: The three exceptions \texttt{Operand\allowbreak Exception}, \texttt{Memory\allowbreak Exception} and \texttt{Overflow\allowbreak Exception} are translated to enumeration literals. These exceptions can be thrown by \texttt{OperationAdd}, which is defined in \texttt{InterfaceB}. Hence the enumeration literals, corresponding to the exceptions, are stored together as an enumeration named \texttt{OperationAdd\allowbreak Exception\allowbreak\_InterfaceB} as shown in the \cref{fig: ExceptionsUML}. This exception is further instantiated in a C++ struct \texttt{OperationAdd\allowbreak Report\allowbreak\_InterfaceB} as shown in the \cref{fig: ExceptionsUML} 
+\textbf{For our example OBSW model}: The three exceptions \texttt{Operand\allowbreak Exception}, \texttt{Memory\allowbreak Exception} and \texttt{Overflow\allowbreak Exception} are translated to enumeration literals. These exceptions can be thrown by \texttt{OperationAdd}, which is defined in \texttt{InterfaceB}. Hence the enumeration literals, corresponding to the exceptions, are stored together as an enumeration named \texttt{OperationAdd\allowbreak Exception\allowbreak\_InterfaceB} as shown in the \cref{fig: ExceptionsUML}. This exception is further instantiated in a C++ struct \texttt{OperationAdd\allowbreak Report\allowbreak\_InterfaceB} as shown in the \cref{fig: ExceptionsUML}. 
 
 \begin{figure}[h]
 	\centering
@@ -352,8 +352,8 @@ public:
 \begin{itemize}
 \item \texttt{InterfaceA\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceA} and which implements the pure virtual method in the parent interface \texttt{InterfaceA}. The implementation contains a simple call to a new pure virtual method added to the original method name from the parent interface as shown in the \cref{Listing: Interface helper Impl}.
 
-\item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. Each implementation contain a simple call to the new pure virtual methods added. The \texttt{InterfaceB\allowbreak\_Helper} class is designed and implemented the same way as \texttt{InterfaceA\allowbreak\_Helper} is designed in the code excerpt in \cref{Listing: Interface helper Impl}   
-\end{itemize}.
+\item \texttt{InterfaceB\allowbreak\_Helper} is defined, which inherits from the interface \texttt{InterfaceB} and which implements all the pure virtual methods in the parent interface \texttt{InterfaceB}. Each implementation contain a simple call to the new pure virtual methods added. The \texttt{InterfaceB\allowbreak\_Helper} class is designed and implemented the same way as \texttt{InterfaceA\allowbreak\_Helper} is designed in the code excerpt in \cref{Listing: Interface helper Impl}.   
+\end{itemize}
 
 The combined effect is that now, more than one original parent interfaces (resembling model entities) can have same operations and interface attributes. The refined interfaces redefine the methods from the original parent interfaces, so that there are no confusions between operations from different interfaces. Of course, a straight forward solution would have been to incorporate the concept of namespaces from C++, but it is not suitable for this design and the reason is explained later in this section while discussing about mapping for component types. 
 
@@ -361,8 +361,8 @@ For each interface operation and interface attribute in an interface, a C++ stru
 
 \textbf{For our example OBSW model}:
 \begin{itemize}
-\item A struct \texttt{OperationAdd\allowbreak Struct\_\allowbreak InterfaceB} is defined as shown in \cref{fig: Operation structs UML}
-\item A struct \texttt{StatusValue\allowbreak Struct\_\allowbreak InterfaceB} is defined as shown in \cref{fig: Operation structs UML}
+\item A struct \texttt{OperationAdd\allowbreak Struct\_\allowbreak InterfaceB} is defined as shown in \cref{fig: Operation structs UML}.
+\item A struct \texttt{StatusValue\allowbreak Struct\_\allowbreak InterfaceB} is defined as shown in \cref{fig: Operation structs UML}.
 \end{itemize} 
 
 \begin{figure}[h]
@@ -572,7 +572,7 @@ In case of components that promote multiple provided interface ports which refer
 \end{figure}
 
 \subsubsection{\textbf{Provided interface ports}}
-A provided interface port is mapped to an abstract base class and a corresponding concrete implementation class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}. The provided interface promoted by a particular component type has various operations that are provided and each operation has a desired release pattern attached as a non-functional/extra-functional property \cite{SpecMetamodel}\cite{CompBasedProcess}. Each provided interface port refers to one interface type and for each operation in the provided interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether these operations are requested with a synchronous release pattern or an asynchronous release pattern.
+A provided interface port is mapped to an abstract base class and a corresponding concrete implementation class as shown in \cref{fig: Provided interface port1 UML} and \cref{fig: Provided interface port2 UML}. The provided interface promoted by a particular component type has various operations that are provided and each operation has a desired release pattern attached as a non-functional/extra-functional property \cite{SpecMetamodel}\cite{CompBasedProcess}. How the provided interface ports can be mapped to classes is illustrated in \cite{CBSEExample}. Each provided interface port refers to one interface type and for each operation in the provided interface port, a pure virtual method is added to the abstract base class. The signatures of these methods depend on whether these operations are requested with a synchronous release pattern or an asynchronous release pattern.
 
 \newpage
 In case of interface operations:
@@ -616,7 +616,9 @@ The following additional pure virtual methods are added to the abstract class fo
 	\label{fig: Provided interface port UML}
 \end{figure}   
 
-The concrete implementation for the above mentioned pure-virtual methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. If the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. 
+\cite{CBSEExample} mentions about two kinds of provided interface ports, namely, Behavioral provided interface ports and Delegating provided interface ports. A Behavioral provided interface port, any incoming message is simply forwarded to the containing object and in case of a Delegating provided interface port, messages are simply forwarded to the other objects called 'parts' in UML. In case of OSRA, there can be a combination of Behavioral and Delegating provided interface ports as each operation in a provided interface port can be called synchronously or asynchronously.  
+
+The concrete implementation for the above mentioned pure-virtual methods, in case the corresponding operation is requested to be released synchronously, consists of a simple call to the corresponding method in the referenced component implementation base class as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. This can be compared to the simple passing of the received message to the containing object, in case of Behavioral provided interface port, as shown in \cite{CBSEExample}. When the non-functional property attached with release of the operation on the provided interface side is \texttt{Protected}, then the implementation also includes acquiring and releasing of semaphore associated with the operation as shown in code excerpt in \cref{Listing: Provided interface port1 Impl}. 
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
@@ -632,7 +634,7 @@ General::OperationAddReport ProvidedInterfacePort1_Component_Callee_inst::Operat
 \label{Listing: Provided interface port1 Impl}
 \end{Listing}
 
-The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in code excerpt in \cref{Listing: Provided interface port2 Impl} . A diagrammatic representation of the push that is required, is already shown in figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty}, in \cref{subsection: asynchronous patterns} of \cref{chap: Progamming model}.
+The concrete implementation for the above pure-virtual methods, in case the corresponding operation is requested to be released asynchronously, consist of pushing the data structure associated with the operation onto the corresponding task channel as shown in code excerpt in \cref{Listing: Provided interface port2 Impl}. This can be compared to the simple passing of the received message to a nested object such as a 'part', in case of Delegating provided interface port, as shown in \cite{CBSEExample}. The 'part' in our example can be considered to be a task or a task channel from Tasking framework to which the data structure (message) is pushed onto. A diagrammatic representation of such a push that is required, is already shown in figures \cref{fig: Asynchronous sporadic}, \cref{fig: Asynchronous protected}, \cref{fig: Asynchronous bursty}, in \cref{subsection: asynchronous patterns} of \cref{chap: Progamming model}.
 
 \begin{Listing}
 \begin{lstlisting}[language=C++]
@@ -668,7 +670,7 @@ All the abstract base classes have pure virtual methods as per the general descr
 \subsubsection{\textbf{Tasks from the Tasking framework}}
 In the discussions about designing a programming model for OSRA in \cref{chap: Progamming model}, it was clear that the threads of control might contain tasks from the Tasking framework. Each task is mapped to an abstract base class and a concrete implementation class in C++. A task would have instances of the required task inputs, task event as per the required threads of control explained \cref{chap: Progamming model}.
 
-Each task stores a reference to the base class of the component implementation in order to access the services implemented in the respective component implementations.  
+Each task stores a reference to the base class of the component implementation in order to access the services implemented in the respective component implementation.  
 
 \textbf{For our example OBSW model}: The following classes as shown in \cref{fig: Periodic task UML}, \cref{fig: Sporadic task UML}, \cref{fig: Status value getter setter task UML}, \cref{fig: Event receiver task UML} are defined:
 \begin{itemize}
@@ -763,11 +765,11 @@ Both the containers have instances of their respective different components as e
 
 \section{Code generation using Xtend}
 \label{section: code generation}
-The reference implementation of the OSRA component model consists in a set of .ecore metamodels \cite{SpecMetamodel}. Ecore is an implementation of the \ac{emof}, the meta-meta language by the OMG for the specification of meta-models \cite{SpecMetamodel}. The main advantage of using Ecore is the ready availability of graphical editors for the specification of metamodels and powerful support provided by the Eclipse Modeling Framework (EMF), which is a framework of the Eclipse development platform that permits to generate a code implementation of the metamodel entities, basic editors for the creation of models conforming to the metamodel under development \cite{SpecMetamodel}. 
+The reference implementation of the OSRA component model consists in a set of .ecore metamodels \cite{SpecMetamodel}. Ecore is an implementation of the \ac{emof}, the meta-meta language by the \ac{omg} for the specification of meta-models \cite{SpecMetamodel}. The main advantage of using Ecore is the ready availability of graphical editors for the specification of metamodels and powerful support provided by the Eclipse Modeling Framework (EMF), which is a framework of the Eclipse development platform that permits to generate a code implementation of the metamodel entities, basic editors for the creation of models conforming to the metamodel under development \cite{SpecMetamodel}. 
 
-It is an implementation decision in this Master thesis to use Xtend for the code generation. Xtend is a general purpose Java-like language that is completely operable with Java \cite{Xtend}\cite{XtendDoc}. Xtend has a more concise syntax than Java and provides powerful features such as type inference, extension methods, dispatch methods, an lambda expressions and the all important multiline template expressions, which are useful when writing code generators \cite{Xtend}\cite{XtendDoc}. Xtend also provides powerful features that make model visiting and traversing really easy, straightforward, and natural to read and maintain. 
+It is an implementation decision in this Master thesis to use Xtend for the code generation. Xtend is a general purpose Java-like language that is completely operable with Java \cite{Xtend}\cite{XtendDoc}. Other alternative would have been to use Xpand as in the 'Case study: Embedded Component Infrastructures' in \cite{MDSDBook}, but writing the code generator using Xtend has various advantages like better IDE support, speed, debuggability, better extendability as listed in \cite{XtendAdvantages}. Xtend also has a more concise syntax than Java and provides powerful features such as type inference, extension methods, dispatch methods, an lambda expressions and the all important multiline template expressions, which are useful when writing code generators \cite{Xtend}\cite{XtendDoc}. Xtend also provides powerful features that make model visiting and traversing really easy, straightforward, and natural to read and maintain \cite{XtendDoc}. 
 
-Xtext is an eclipse framework for implementing programming languages and \ac{dsl} \cite{Xtend}. Xtext helps to implement languages quickly, and most of all, it covers all the aspects of a complete language infrastructure like parser, code generator etc. Xtext uses Google Guice, which is a dependency injection framework to create and call a code generator \cite{Xtend}. The dependency injection pattern basically allows to inject implementation objects into a class hierarchy in a consistent way \cite{InvOfCntrlurl}. The Xtext's generator support can be used in Xtend directly to build code generators for non-Xtext based models, such as the OBSW models constructed using the OSRA component model \cite{CodeGenEclXtend}. 
+Xtext is an eclipse framework for implementing programming languages and \ac{dsl} \cite{Xtend}. Xtext helps to implement languages quickly, and most of all, it covers all the aspects of a complete language infrastructure like parser, code generator etc. Xtext uses Google Guice, which is a dependency injection framework to create and call a code generator \cite{Xtend}. The dependency injection pattern basically allows to inject implementation objects into a class hierarchy in a consistent way \cite{InvOfCntrlurl}. The Xtext's generator support can be used in Xtend directly to build code generators for non-Xtext based models, such as the OBSW models which are constructed using the non Xtext based OSRA component model \cite{CodeGenEclXtend}. 
 
 The tutorial in \cite{CodeGenNonXtext} is used as a base in this Master thesis to construct a code generator using Xtend for non-Xtext based models and also provide a UI integration for the code generator.
 
@@ -775,16 +777,16 @@ The tutorial in \cite{CodeGenNonXtext} is used as a base in this Master thesis t
 \label{section: Code organization}
 As explained in the previous sections, adopting separation of concerns even at the implementation level is one of the primary goals of this chapter and we have successfully achieved it in the discussions on software design for the infrastructural code in \cref{subsection: Software design approach}. 
 
-To further emphasize on separation of concerns at the implementation level, it is necessary to properly separate the generated infrastructure code into a meaningful files and a suitable file structure helping the third party software supplier to separate the automatically generated code from the code that needs to be supplied. This is of prime importance for the third party software supplier to not accidentally lose the implementations in successive code generation cycles. 
+To further emphasize on separation of concerns at the implementation level, it is necessary to properly separate the generated infrastructure code into a meaningful files in a suitable file structure helping the third party software supplier to separate the automatically generated code from the code that needs to be supplied \cite{MDSDBook}. This is of prime importance for the third party software supplier to not accidentally lose the implementations in successive code generation cycles. 
 
 The overall idea would be to:
 \begin{itemize}
 \item Generate two types of folders to clearly separate the infrastructural code entities, at the component type level from the infrastructural code entities at the component instance level. The number of folders at the component instance level, depends on the actual number of component instances.   
 \begin{itemize}
-\item The first folder type would hold C++ classes related to its component type, required interface ports, event emitter ports, event receiver ports in the sub-folder named as \texttt{AutogeneratedCode}. It also contains C++ classes related to component implementations and because it is the unit of sub-contract, it is placed in a separate sub-folder named as \texttt{UserCode}. The third-party software supplier can alter the code in this folder safely without the fear of the code being overwritten by successive code generation cycles. Care is taken in the code generator to generate the classes in these files only once  
-\item The second folder type would hold the C++ classes related to its component instances, namely, provided interface ports, component containers in the sub-folder named as \texttt{AutogeneratedCode}. As already explained the component container class for a component instance would contain provided and required interface slots, component instance itself   
+\item The first folder type would hold C++ classes related to its component type, required interface ports, event emitter ports, event receiver ports in the sub-folder named as \texttt{AutogeneratedCode}. It also contains C++ classes related to component implementations and because it is the unit of sub-contract, it is placed in a separate sub-folder named as \texttt{UserCode}. The third-party software supplier can alter the code in this folder safely without the fear of the code being overwritten by successive code generation cycles. Care is taken in the code generator to generate the classes in these files only once. 
+\item The second folder type would hold the C++ classes related to its component instances, namely, provided interface ports, component containers in the sub-folder named as \texttt{AutogeneratedCode}. As already explained the component container class for a component instance would contain provided and required interface slots and the component instance itself.   
 \end{itemize} 
-\item The folder named as \texttt{Datatypes\allowbreak Interfaces\allowbreak EventsAnd\allowbreak Exceptions} would hold C++ classes related to the data types, exceptions, events, parameter channel and their corresponding parameter queues 
+\item The folder named as \texttt{Datatypes\allowbreak Interfaces\allowbreak EventsAnd\allowbreak Exceptions} would hold C++ classes related to the data types, exceptions, events, parameter channel and their corresponding parameter queues. 
 \end{itemize}
 
 The folder structure for our running example is listed in \cref{chap: File structure}.

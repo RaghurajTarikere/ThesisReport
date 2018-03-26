@@ -67,11 +67,11 @@ When a provided interface port, promoted by the container of the component handl
 Because the task inputs are not marked as final, the task is activated only after both its task inputs are activated. When activated, the functions of the task will then be to:
  
 \begin{description}
-\item [Step 1] Unpack the packaged data
-\item [Step 2] Acquire the semaphore provided by the Tasking framework associated with the service
-\item [Step 3] Execute the desired service
-\item [Step 4] Reset the task event attached to the task
-\item [Step 5] Release the semaphore acquired 
+\item [Step 1] Unpack the packaged data.
+\item [Step 2] Acquire the semaphore provided by the Tasking framework associated with the service.
+\item [Step 3] Execute the desired service.
+\item [Step 4] Reset the task event attached to the task.
+\item [Step 5] Release the semaphore acquired. 
 \item [Step 6] Return the results and the exceptions associated with the service request back to the service requester making use of the information of the service requester packaged by the required interface port. 
 \end{description}
 
